@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "deploy": "./deploy.sh"
+    "deploy": "./deploy.sh",
+    "test": "./deploy.sh"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0-rc.1",
