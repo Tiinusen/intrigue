@@ -1,5 +1,5 @@
 {
-  "name": "website",
+  "name": "intrigue",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "lodash": "^4.17.11",
     "roboto-fontface": "*",
     "vue": "^2.5.17",
+    "vue-headful": "^2.0.1",
     "vue-long-press-directive": "^1.0.2",
     "vue-router": "^3.0.1",
     "vue2-leaflet": "^1.2.3",

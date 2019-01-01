@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <vue-headful title="Intrigue Map" description="Intrigue Map is a tool dedicated to game masters of Kult Divinity Lost"/>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Intrigue</span>
@@ -13,12 +14,14 @@
 </template>
 
 <script>
+import vueHeadful from 'vue-headful';
 export default {
-  name: 'App',
+  name: "Intrigue Map",
   data: function() {
-    return {
-
-    }
+    return {};
+  },
+  components:{
+    vueHeadful
   }
-}
+};
 </script>
