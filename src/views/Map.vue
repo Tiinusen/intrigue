@@ -75,15 +75,16 @@ export default {
         return;
       }
       State.ActiveSession.Init();
+      setTimeout(() => {
+        State.ActiveSession.Cursor.ShowCursor = false;
+      }, 10);
     },
     onsaveload() {
+      State.ActiveSession.Cursor.ShowCursor = false;
       State.ActiveSession.ShowSaveLoadDialog = true;
-    },
-    onaddhub() {
-      let hub = new Hub();
-      Vue.nextTick(() => {
-        hub.state.showEditForm = true;
-      });
+      setTimeout(() => {
+        State.ActiveSession.Cursor.ShowCursor = false;
+      }, 10);
     }
   },
   data: function() {
