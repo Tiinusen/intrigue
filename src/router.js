@@ -11,17 +11,20 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: Index
+      component: Index,
+      meta: {title: 'Intrigue Map'}
     },
     {
       path: '/map',
       name: 'map',
-      component: Map
+      component: Map,
+      meta: {title: 'Intrigue Map'}
     },
     {
       path: '/what/about/kult',
       name: 'kult',
-      component: WhatAboutKult
+      component: WhatAboutKult,
+      meta: {title: 'What about Kult'}
     }
   ]
 })
