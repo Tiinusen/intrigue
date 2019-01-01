@@ -1,4 +1,12 @@
 language: node_js
 node_js:
-  - "iojs"
   - "7"
+  jobs:
+  include:
+    - stage: deploy
+      env: TEST_SUITE=none
+      install: skip # bundle install is not required
+      script: ./deploy.sh
+before_install:
+  - npm i -g yarn
+  - yarn install
