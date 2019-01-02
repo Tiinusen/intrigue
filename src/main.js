@@ -9,8 +9,6 @@ import { L } from 'vue2-leaflet'
 import 'leaflet/dist/leaflet.css'
 import VueAnalytics from 'vue-analytics'
 
-import longpress from 'vue-long-press-directive'
-
 // this part resolve an issue where the markers would not appear
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -24,7 +22,7 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-Vue.use(longpress, { duration: 1000 })
 Vue.use(VueAnalytics, {
-  id: 'UA-52309409-4'
+  id: 'UA-52309409-4',
+  router
 })
