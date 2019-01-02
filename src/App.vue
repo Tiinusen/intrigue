@@ -16,7 +16,7 @@
 <script>
 import vueHeadful from 'vue-headful';
 export default {
-  name: "Intrigue Map",
+  name: "IntrigueMap",
   data: function() {
     return {};
   },
