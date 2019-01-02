@@ -36,13 +36,6 @@
               <AvatarDesigner v-bind:avatar="hub.avatar" v-if="hub.type == 'character'"></AvatarDesigner>
             </v-flex>
           </v-layout>
-          <v-text-field
-            xs2
-            v-model="hub.identities[0].name"
-            label="Name"
-            v-if="(hub.identities[0].firstName == '' && hub.identities[0].lastName == '') || hub.type !== 'character'"
-            required
-          ></v-text-field>
           <v-layout row wrap>
             <v-flex xs6>
               <v-text-field
@@ -63,6 +56,13 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
+          <v-text-field
+            xs2
+            v-model="hub.identities[0].name"
+            label="Name"
+            v-if="(hub.identities[0].firstName == '' && hub.identities[0].lastName == '') || hub.type !== 'character'"
+            required
+          ></v-text-field>
         </v-container>
       </v-form>
     </v-card>

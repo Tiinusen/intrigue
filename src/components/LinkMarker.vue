@@ -1,5 +1,5 @@
 <template>
-  <l-polygon :lat-lngs="LatLng" :color="Color" :weight="link.Importance*15"></l-polygon>
+  <l-polygon :lat-lngs="LatLng" :color="Color" :weight="link.LineThickness*15"></l-polygon>
 </template>
 
 <script>
@@ -17,7 +17,7 @@ export default {
       return true;
     },
     Color(){
-        return "Red";
+        return this.link.Color;
     },
     LatLng() {
       return [this.link.HubA.position, this.link.HubB.position];

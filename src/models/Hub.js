@@ -43,10 +43,13 @@ export class Hub {
 
     get name() {
         var name = this.identities[0].fullName.trim();
-        if (name.trim() == "") {
-            return this.id;
+        if (name == "") {
+            name = this.id.substr(this.id.indexOf("#")+1).replace(/\-/g,' ');
         }
-        return name;
+        if(name.length <= 16){
+            return name;
+        }
+        return name.substr(0, 11)+" ...";
     }
 
     Serialize() {

@@ -1,13 +1,22 @@
 import { State } from './Session';
 import { GenerateUUID } from './UUID';
 
+function CheckHubTypes(a, b, typeA, typeB) {
+    if (a.type == typeA && b.type == typeB) {
+        return true;
+    } else if (a.type == typeB && b.type == typeA) {
+        return true;
+    }
+    return false;
+}
+
 export class Link {
     constructor(source = null) {
         this.HubA = null;
         this.HubB = null;
-        this.IsPreset = true;
-        this.Preset = "relation";
-        this.Importance = 1;
+        this.Preset = "Input";
+        this.Color = "black";
+        this.LineThickness = 1;
         this.AtoB = "";
         this.BtoA = "";
         if (source === null) {
@@ -22,6 +31,9 @@ export class Link {
             State.ActiveSession.Links.push(this);
             State.ActiveSession.LinksByID[this.id] = this;
         }
+    }
+    IsPreset() {
+        return this.Preset !== "Input";
     }
 
     CopyFrom(source) {
@@ -42,8 +54,23 @@ export class Link {
         }
         this.AtoB = source.AtoB;
         this.BtoA = source.BtoA;
-        this.Importance = source.Importance;
+        this.LineThickness = source.LineThickness;
         this.Preset = source.Preset;
+        this.Color = source.Color;
+    }
+    get Type() {
+        if (this.HubA === null || this.HubB === null) {
+            return "";
+        }
+        let types = ["character", "event", "place", "group_organization"];
+        for (let ia = 0; ia < types.length; ia++) {
+            for (let ib = 0; ib < types.length; ib++) {
+                if (CheckHubTypes(this.HubA, this.HubB, types[ia], types[ib])) {
+                    return types[ia] + "_" + types[ib];
+                }
+            }
+        }
+        return "unknown (" + this.HubA.type + " " + this.HubB.type + ")";
     }
 
     Serialize() {
@@ -51,7 +78,6 @@ export class Link {
             id: this.id,
             HubA: this.HubA === null ? null : this.HubA.id,
             HubB: this.HubB === null ? null : this.HubB.id,
-            IsPreset: this.IsPreset,
             Preset: this.Preset,
             AtoB: this.AtoB,
             BtoA: this.BtoA,
