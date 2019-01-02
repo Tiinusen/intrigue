@@ -4,7 +4,6 @@
     :zoom="20"
     :maxZoom="20"
     :minZoom="20"
-    :center="[0, 0]"
     :options="{zoomControl: false}"
     @click="onclick"
   >
