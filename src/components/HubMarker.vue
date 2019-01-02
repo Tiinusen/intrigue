@@ -23,6 +23,9 @@
           style="width:100px;height:100px"
           contain
         />
+        <div fas class="text-xs-center" style="width:100px;background-color:#fafafa;border:thin solid black;position:relative;top:-10px;">
+            {{ hub.name }}
+        </div>
       </l-icon>
     </l-marker>
     <slot></slot>
@@ -60,7 +63,7 @@ export default {
         State.ActiveSession.LastActiveState = null;
         if (lastActive === this.hub.state) {
           return;
-        }else{
+        } else {
           State.ActiveSession.HubSelectedForConnectA = lastActive.hub;
           State.ActiveSession.HubSelectedForConnectB = this.hub;
           State.ActiveSession.ShowConnectDialog = true;
