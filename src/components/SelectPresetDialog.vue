@@ -22,23 +22,23 @@
               v-model="toggle"
               v-if="showToggle"
             />
-            <v-card-title v-if="!showToggle" style="font-size:1.2em;" >Must be edited</v-card-title>
+            <v-card-title v-if="!showToggle" style="font-size:1.1em;" >Must be edited</v-card-title>
           </v-flex>
           <v-flex xs6>
             <v-btn
               large
-              color="secondary"
+              color="red"
               dark
-              style="width:100%;"
+              style="width:94%;"
               @click="onclick('Input', false)"
-            >Custom Defined</v-btn>
+            >Custom</v-btn>
           </v-flex>
         </v-layout>
       </v-container>
       <v-btn
         large
         color="primary"
-        style="width:47%;"
+        style="width:45%;"
         dark
         @click="onclick(name, toggle)"
         v-bind:key="n"

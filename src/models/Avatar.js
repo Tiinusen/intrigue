@@ -75,18 +75,18 @@ export class Avatar {
     CopyFrom(source, inspire) {
         this.avatarStyle = source.avatarStyle;
         this.skin = source.skin;
-        this.topType = source.topType;
         this.clothes = source.clothes;
         this.clothesColor = source.clothesColor;
+        this.eye = source.eye;
+        this.eyebrow = source.eyebrow;
+        this.mouth = source.mouth;
         if (inspire) {
             return;
         }
+        this.topType = source.topType;
         this.accessories = source.accessories;
         this.facial = source.facial;
         this.facialColor = source.facialColor;
         this.hair = source.hair;
-        this.eye = source.eye;
-        this.eyebrow = source.eyebrow;
-        this.mouth = source.mouth;
     }
 }

@@ -3,10 +3,10 @@
     v-model="visible"
     dark
     persistent
-    max-width="600px"
+    max-width="330px"
     style="position:relative;z-index:2000;"
   >
-    <ColorPicker v-model="color" style="width:100%;overflow:hidden;height:300px;"/>
+    <ColorPicker v-model="color" style="width:100%;overflow:hidden;height:500px;"/>
   </v-dialog>
 </template>
 <script>

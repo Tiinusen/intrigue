@@ -81,7 +81,8 @@ export class Link {
             Preset: this.Preset,
             AtoB: this.AtoB,
             BtoA: this.BtoA,
-            Importance: this.Importance
+            LineThickness: this.LineThickness,
+            Color: this.Color
         };
     }
 

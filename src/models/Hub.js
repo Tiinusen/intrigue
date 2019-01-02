@@ -44,12 +44,12 @@ export class Hub {
     get name() {
         var name = this.identities[0].fullName.trim();
         if (name == "") {
-            name = this.id.substr(this.id.indexOf("#")+1).replace(/\-/g,' ');
+            name = this.id.substr(this.id.indexOf("#") + 1).replace(/\-/g, ' ');
         }
-        if(name.length <= 16){
+        if (name.length <= 16) {
             return name;
         }
-        return name.substr(0, 11)+" ...";
+        return name.substr(0, 11) + " ...";
     }
 
     Serialize() {
@@ -73,8 +73,11 @@ export class Hub {
     CopyFrom(source, inspire) {
         this.type = source.type;
         this.characterType = source.characterType;
+        this.identities.splice(0, this.identities.length);
         source.identities.forEach((identity) => {
-            this.identities.push(new Identity(identity));
+            if (this.identities.length === 0) {
+                this.identities.push(new Identity(identity, inspire));
+            }
         });
         this.avatar.CopyFrom(source.avatar, inspire);
         if (inspire) {

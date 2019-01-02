@@ -43,41 +43,31 @@
           </v-layout>
         </v-card-title>
         <v-form @submit.prevent>
-          <v-container grid-list-md text-xs-center>
-            <v-layout wrap>
-              <v-flex xs4>
-                <v-btn
-                  large
-                  :color="color"
-                  dark
-                  @click="onClickSelectColor"
-                >Color</v-btn>
+          <v-container>
+            <v-layout row wrap align-center justify-center>
+              <v-flex d-inline-flex>
+                <v-btn large :color="color" dark @click="onClickSelectColor">Color</v-btn>
               </v-flex>
-              <v-flex xs3>
-                <v-select :items="lineThicknesses" v-model="lineThickness" box label="Thickness"></v-select>
+              <v-flex d-inline-flex>
+                <v-select :items="lineThicknesses" v-model="lineThickness" label="Thickness"></v-select>
               </v-flex>
-              <v-flex xs5>
-                <v-select
-                  :items="presets"
-                  v-model="preset"
-                  box
-                  label="Preset"
-                  @change="onPresetChange"
-                ></v-select>
+              <v-flex d-inline-flex>
+                <v-select :items="presets" v-model="preset" label="Preset" @change="onPresetChange"></v-select>
               </v-flex>
-              <v-flex xs12>
-                <v-btn
-                  dark
-                  fab
-                  @click="onswap"
-                  style="margin-right:10px;margin-top:10px;"
-                  title="Swaps"
-                  v-if="showSwap"
-                >
-                  <v-icon class="fas fa-exchange-alt" style="margin-left:auto;margin-right:auto;"/>
+            </v-layout>
+          </v-container>
+          <v-container>
+            <v-layout align-center justify-center row fill-height>
+              <v-flex xs2>
+                <v-btn dark fab @click="onswap" title="Swaps" v-if="showSwap">
+                  <v-icon class="fas fa-exchange-alt"/>
                 </v-btn>
               </v-flex>
-              <v-flex xs6>
+            </v-layout>
+          </v-container>
+          <v-container>
+            <v-layout row wrap align-center justify-center>
+              <v-flex xs6 style="min-width:240px">
                 <v-text-field
                   xs2
                   v-model="link.AtoB"
@@ -86,7 +76,7 @@
                   required
                 ></v-text-field>
               </v-flex>
-              <v-flex xs6>
+              <v-flex xs6 style="min-width:240px">
                 <v-text-field
                   xs2
                   v-model="link.BtoA"
@@ -199,9 +189,10 @@ export default {
     }
   },
   methods: {
-    onClickSelectColor(){
-      this.$refs.colorpicker.pick((color) => {
+    onClickSelectColor() {
+      this.$refs.colorpicker.pick(color => {
         this.color = color;
+        this.link.Color = color;
       });
     },
     onpick(name, editAfterwards) {
@@ -386,6 +377,14 @@ export default {
             "group_organization_group_organization",
             "place_group_organization"
           ], // For which link types this preset is valid for
+          "blue"
+        ],
+        "Is located": [
+          // Name of preset
+          "is located in", // HubA relation to HubB
+          "is the location of", // HubB relation to HubA
+          ["event", "group_organization", "place"], // Type(s) with priority on slot A (swaps A and B if B is of valid type but not A)
+          ["place_place"], // For which link types this preset is valid for
           "blue"
         ],
         "Took place": [
