@@ -19,16 +19,16 @@
         :transition="'slide-y-reverse-transition'"
       >
         <v-btn fab dark large color="red" v-bind:onmousedown="addOrganizationButtonCMD">
-          <v-icon class="fas fa-campground" title="Add related Organization"></v-icon>
+          <v-icon class="fas fa-campground" title="Add Organization"></v-icon>
         </v-btn>
         <v-btn fab dark large color="orange" v-bind:onmousedown="addPlaceButtonCMD">
-          <v-icon class="fas fa-map" title="Add related Place"></v-icon>
+          <v-icon class="fas fa-map" title="Add Place"></v-icon>
         </v-btn>
         <v-btn fab dark large color="blue" v-bind:onmousedown="addEventButtonCMD">
-          <v-icon class="fas fa-book" title="Add related Event"></v-icon>
+          <v-icon class="fas fa-book" title="Add Event"></v-icon>
         </v-btn>
         <v-btn fab dark large color="green" v-bind:onmousedown="addCharacterButtonCMD">
-          <v-icon class="fas fa-user" title="Add related Character"></v-icon>
+          <v-icon class="fas fa-user" title="Add Character"></v-icon>
         </v-btn>
       </v-speed-dial>
       <Avatar @click="State.ActiveSession.Cursor.Reset()" style="width:100px;height:117px;"/>
