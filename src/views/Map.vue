@@ -9,22 +9,6 @@
     @click="onclick"
   >
     <l-control position="topright">
-      <v-container grid-list-md text-xs-center>
-        <v-layout row wrap>
-          <button
-            class="fas fa-trash"
-            style="font-size:5.5em;margin-right:0.5em"
-            @click="onclear()"
-            title="Clear"
-          ></button>
-          <button
-            class="fas fa-save"
-            style="font-size:6em;margin-right:0.3em"
-            @click="onsaveload"
-            title="Save Load"
-          ></button>
-        </v-layout>
-      </v-container>
       <HubDialog v-bind:hub="hub" v-for="hub in hubs" v-bind:key="hub.id+'KeyA'"></HubDialog>
       <LinkDialog/>
       <LoadSaveDialog v-bind:display="showSaveLoadDialog"/>
@@ -69,22 +53,6 @@ export default {
   methods: {
     onclick(event) {
       State.ActiveSession.Cursor.Show(event.latlng);
-    },
-    onclear() {
-      if (!confirm("Do you really want to clear the whole intrigue map?")) {
-        return;
-      }
-      State.ActiveSession.Init();
-      setTimeout(() => {
-        State.ActiveSession.Cursor.ShowCursor = false;
-      }, 10);
-    },
-    onsaveload() {
-      State.ActiveSession.Cursor.ShowCursor = false;
-      State.ActiveSession.ShowSaveLoadDialog = true;
-      setTimeout(() => {
-        State.ActiveSession.Cursor.ShowCursor = false;
-      }, 10);
     }
   },
   data: function() {
