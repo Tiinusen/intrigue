@@ -1,5 +1,5 @@
 # Intrigue Map
-Intrigue Map (Gamemaster Tool for Kult Divinity Lost)
+Intrigue Map (DM Tool)
 
 Head over to https://intrigue.app/ and try it out
 

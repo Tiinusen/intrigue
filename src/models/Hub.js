@@ -1,105 +1,109 @@
-import { State } from './Session';
-import { Identity } from './Identity';
-import { HubActionsState } from './HubActionsState';
-import { Avatar } from './Avatar';
-import { GenerateUUID } from './UUID';
-import PlaceImage from "../assets/place.png";
-import GroupOrganizationImage from "../assets/group-organization.png";
-import EventImage from "../assets/event.png";
+import { Copy, IsEmpty } from "../utils/Entity";
+import { GenerateUUID } from "../utils/UUID";
+import { Avatar } from './Avatar'
+
+export const HubTypes = {
+    "Character": [
+        "Identity",
+        "NPC",
+        "PC",
+        "Threat"
+    ],
+    "Event": [
+        "NA"
+    ],
+    "Place": [
+        "NA"
+    ],
+    "Organization / Group": [
+        "NA"
+    ]
+};
+
+export const HubTypeNames = Object.keys(HubTypes);
 
 export class Hub {
     constructor(source = null, inspire = false) {
-        this.id = "Hub#" + GenerateUUID();
-        this.position = {
+        this.id = GenerateUUID();
+        this.latlng = {
             lat: 0,
             lng: 0
         };
-        this.identities = [];
-        this.type = "character";
-        this.characterType = "npc";
         this.avatar = new Avatar();
-        this.links = [];
-        if (source !== null) {
-            this.CopyFrom(source, inspire)
-        } else {
-            this.identities.push(new Identity());
-        }
-        this.state = new HubActionsState(this);
-        State.ActiveSession.Hubs.push(this);
-        State.ActiveSession.HubsByID[this.id] = this;
+        this.hubType = HubTypes[0]
+        this.hubSubType = HubTypes[HubTypeNames[0]][0];
+        this.Copy(source, inspire);
     }
 
-    get image() {
-        switch (this.type) {
-            case "group_organization":
-                return GroupOrganizationImage;
-            case "event":
-                return EventImage;
-            case "place":
-            default:
-                return PlaceImage;
+    get lat() {
+        if (typeof this.latlng === 'undefined' || this.latlng === null) {
+            return null;
         }
+        return this.latlng.lat;
+    }
+
+    get lng() {
+        if (typeof this.latlng === 'undefined' || this.latlng === null) {
+            return null;
+        }
+        return this.latlng.lng;
+    }
+
+    set lat(lat = null) {
+        if (typeof lat === 'undefined' || lat === null) {
+            return;
+        }
+        this.latlng.lat = lat;
+    }
+
+    set lng(lng = null) {
+        if (typeof lng === 'undefined' || lng === null) {
+            return;
+        }
+        this.latlng.lng = lng;
+    }
+
+    get key() {
+        return "Hub#" + this.id;
     }
 
     get name() {
-        var name = this.identities[0].fullName.trim();
-        if (name == "") {
-            name = this.id.substr(this.id.indexOf("#") + 1).replace(/\-/g, ' ');
+        return this.id;
+    }
+
+    get type() {
+        return "session/hub";
+    }
+
+    get url() {
+        return GenerateURL(this);
+    }
+    /**
+     * 
+     * @param {Avatar} source 
+     * @param {boolean} sibling // Inspire instead of just copy
+     */
+    Copy(source, sibling = false) {
+        if (typeof source === 'undefined' || source === null) {
+            return this;
         }
-        if (name.length <= 16) {
-            return name;
+        Copy(this, source, [
+            "hubType",
+            "hubSubType"
+        ]);
+        if ('avatar' in source) {
+            this.avatar.Copy(source.avatar, sibling);
         }
-        return name.substr(0, 11) + " ...";
-    }
-
-    Serialize() {
-        var identities = [];
-        this.identities.forEach((identity) => {
-            identities.push(identity.Serialize());
-        });
-        return {
-            id: this.id,
-            position: {
-                lat: this.position.lat,
-                lng: this.position.lng
-            },
-            type: this.type,
-            identities: identities,
-            characterType: this.characterType,
-            avatar: this.avatar.Serialize(),
-        };
-    }
-
-    CopyFrom(source, inspire) {
-        this.type = source.type;
-        this.characterType = source.characterType;
-        this.identities.splice(0, this.identities.length);
-        source.identities.forEach((identity) => {
-            if (this.identities.length === 0) {
-                this.identities.push(new Identity(identity, inspire));
-            }
-        });
-        this.avatar.CopyFrom(source.avatar, inspire);
-        if (inspire) {
-            return;
+        if (sibling) {
+            return this;
         }
-        this.position = source.position;
-        this.id = source.id;
-    }
-
-    Clone(inspire) {
-        return new Hub(this, inspire);
-    }
-
-    Remove() {
-        State.ActiveSession.Hubs.splice(State.ActiveSession.Hubs.indexOf(this), 1);
-        delete State.ActiveSession.HubsByID[this.id];
-        var links = [];
-        this.links.forEach((link) => {
-            links.push(link);
-        });
-        links.forEach((link) => {
-            link.Remove();
-        });
+        Copy(this, source, [
+            "id",
+            "hubType",
+            "hubSubType",
+            "lat",
+            "lng"
+        ]);
+        return this;
     }
 }
