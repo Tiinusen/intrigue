@@ -15,7 +15,13 @@
       @click="onSetCursorCoordinate"
     >
       <!-- Markers -->
-      <l-marker :key="hub.key" v-for="hub in hubs" :lat-lng.sync="hub.latlng">
+      <l-marker
+        :key="hub.key"
+        v-for="hub in hubs"
+        :lat-lng="hub.latlng"
+        @update:latLng="onMarkerDragComplete"
+        :draggable="selectedHub === hub && showHubSpeedDial === 1"
+      >
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
             v-model="TRUE"
@@ -126,6 +132,17 @@ export default {
   },
   methods: {
     proxy,
+    onMarkerDragComplete(latlng) {
+      this.hideCursor();
+      if (this.selectedHub === null) {
+        return;
+      }
+      this.$store.dispatch("session/hub", {
+        id: this.selectedHub.id,
+        lat: latlng.lat,
+        lng: latlng.lng
+      });
+    },
     async onAddOrganization(event) {
       let hub = new Hub({
         hubType: "Organization / Group",
