@@ -1,5 +1,6 @@
 <template>
   <div class="maximize">
+    <!-- Dialogs -->
     <AvatarDesigner ref="AvatarDesigner"/>
     <l-map
       class="maximize"
@@ -16,6 +17,24 @@
       <!-- Markers -->
       <l-marker :key="hub.key" v-for="hub in hubs" :lat-lng.sync="hub.latlng">
         <l-icon :icon-anchor="[50, 60]">
+          <v-speed-dial
+            v-model="TRUE"
+            v-if="selectedHub === hub"
+            :top="false"
+            :bottom="false"
+            :right="false"
+            :left="false"
+            :direction="'top'"
+            :open-on-hover="false"
+            :transition="'slide-y-reverse-transition'"
+          >
+            <v-btn fab dark large color="orange" v-bind:onmousedown="proxy(onAddPlace)">
+              <v-icon class="fas fa-map" title="Add Place"></v-icon>
+            </v-btn>
+            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onAddOrganization)">
+              <v-icon class="fas fa-trash" title="Delete Hub"></v-icon>
+            </v-btn>
+          </v-speed-dial>
           <Avatar
             class="marker-icon"
             v-show="hub.hubType === 'Character'"
@@ -33,7 +52,7 @@
       </l-marker>
 
       <!-- Cursor -->
-      <l-marker :lat-lng.sync="cursorPosition" v-if="showCursor">
+      <l-marker :lat-lng.sync="cursorPosition" v-if="isCursorVisible">
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
             v-model="showCursor"
@@ -61,7 +80,7 @@
           <Avatar
             style="width:100px;height:117px;"
             avatarStyle="Circle"
-            :onmouseup="proxy(onCursorClick,100)"
+            :onmouseup="proxy(onCursorClick)"
           />
         </l-icon>
       </l-marker>
@@ -131,7 +150,15 @@ export default {
       this.$store.commit(hub);
     },
     async onHubClick(hub) {
+      this.lastCursorClickPosition.lat = null;
+      this.lastCursorClickPosition.lng = null;
       this.showCursor = false;
+      if (this.selectedHub === hub) {
+        this.selectedHub = null;
+      } else {
+        this.selectedHub = hub;
+      }
+      return;
       let changes = await this.$root.AvatarDesigner.open(hub.avatar);
       this.showCursor = false;
       this.$store.dispatch("session/hub", {
@@ -179,6 +206,7 @@ export default {
   },
   data() {
     return {
+      TRUE: true,
       mapLastMouseDown: new Date(),
       lastCursorClickPosition: {
         lat: 0,
@@ -192,8 +220,18 @@ export default {
       showCursor: false,
       showCreationSpeedDial: false,
       showHubSpeedDial: false,
-      wasMapClickedRecently: false
+      wasMapClickedRecently: false,
+      selectedHub: null
     };
+  },
+  computed: {
+    isCursorVisible() {
+      return (
+        this.showCursor &&
+        this.cursorPosition.lat !== null &&
+        this.cursorPosition.lng !== null
+      );
+    }
   },
   mounted() {
     Vue.nextTick(() => {
