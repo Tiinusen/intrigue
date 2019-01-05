@@ -19,7 +19,7 @@
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
             v-model="TRUE"
-            v-if="selectedHub === hub"
+            v-if="selectedHub === hub && showHubSpeedDial === 1"
             :top="false"
             :bottom="false"
             :right="false"
@@ -28,11 +28,29 @@
             :open-on-hover="false"
             :transition="'slide-y-reverse-transition'"
           >
-            <v-btn fab dark large color="orange" v-bind:onmousedown="proxy(onEditHub)">
+            <v-btn fab dark large color="blue" v-bind:onmousedown="proxy(onEditHub)">
               <v-icon class="fas fa-edit" title="Edit"></v-icon>
             </v-btn>
             <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onDeleteHub)">
               <v-icon class="fas fa-trash" title="Delete"></v-icon>
+            </v-btn>
+          </v-speed-dial>
+          <v-speed-dial
+            v-model="TRUE"
+            v-if="selectedHub === hub && showHubSpeedDial === 2"
+            :top="false"
+            :bottom="false"
+            :right="false"
+            :left="false"
+            :direction="'top'"
+            :open-on-hover="false"
+            :transition="'slide-y-reverse-transition'"
+          >
+            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(abortHub)">
+              <v-icon class="fas fa-times" title="Abort"></v-icon>
+            </v-btn>
+            <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onConfirmDeleteHub)">
+              <v-icon class="fas fa-check" title="Confirm"></v-icon>
             </v-btn>
           </v-speed-dial>
           <Avatar
@@ -154,11 +172,20 @@ export default {
     },
     onEditHub(hub) {
       this.hideCursor();
-      console.log(hub);
     },
     onDeleteHub(hub) {
       this.hideCursor();
-      console.log(hub);
+      this.showHubSpeedDial = 2;
+    },
+    onConfirmDeleteHub(hub) {
+      this.hideCursor();
+      this.$store.dispatch("session/deleteHub", this.selectedHub);
+      this.abortHub();
+    },
+    abortHub() {
+      this.hideCursor();
+      this.showHubSpeedDial = 1;
+      this.selectedHub = null;
     },
     async onHubClick(hub) {
       this.hideCursor();
@@ -216,7 +243,7 @@ export default {
   },
   data() {
     return {
-      TRUE: true,
+      TRUE: true, // To force components relying on v-model to be viewed (commonly used with v-if="something else")
       mapLastMouseDown: new Date(),
       cursorLastHidden: new Date(), // Also a workaround to try to solve the timing issues with leaflet events
       lastCursorClickPosition: {
@@ -228,9 +255,10 @@ export default {
         lng: 0
       },
       hubs: this.$store.state.session.hubs,
+      links: this.$store.state.session.hubs,
       showCursor: false,
       showCreationSpeedDial: false,
-      showHubSpeedDial: false,
+      showHubSpeedDial: 1,
       wasMapClickedRecently: false,
       selectedHub: null
     };
