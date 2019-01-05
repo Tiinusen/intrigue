@@ -53,12 +53,6 @@ let Call = Vue._.debounce(function (key, event) {
     } catch (e) {
         console.error(e);
     }
-
-    // All following lines are just for event propagation prevention
-    WasProxyActiveRecently = true;
-    setTimeout(() => {
-        WasProxyActiveRecently = false;
-    }, 50);
 }, 2);
 
 

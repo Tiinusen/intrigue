@@ -28,11 +28,11 @@
             :open-on-hover="false"
             :transition="'slide-y-reverse-transition'"
           >
-            <v-btn fab dark large color="orange" v-bind:onmousedown="proxy(onAddPlace)">
-              <v-icon class="fas fa-map" title="Add Place"></v-icon>
+            <v-btn fab dark large color="orange" v-bind:onmousedown="proxy(onEditHub)">
+              <v-icon class="fas fa-edit" title="Edit"></v-icon>
             </v-btn>
-            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onAddOrganization)">
-              <v-icon class="fas fa-trash" title="Delete Hub"></v-icon>
+            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onDeleteHub)">
+              <v-icon class="fas fa-trash" title="Delete"></v-icon>
             </v-btn>
           </v-speed-dial>
           <Avatar
@@ -114,45 +114,54 @@ export default {
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.showCursor = false;
+      this.hideCursor();
       this.$store.commit(hub);
     },
     onAddPlace() {
-      this.showCursor = false;
       let hub = new Hub({
         hubType: "Place",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.showCursor = false;
+      this.hideCursor();
       this.$store.commit(hub);
     },
     onAddEvent() {
-      this.showCursor = false;
       let hub = new Hub({
         hubType: "Event",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.showCursor = false;
+      this.hideCursor();
       this.$store.commit(hub);
     },
     async onAddCharacter(event) {
-      this.showCursor = false;
       let hub = new Hub({
         hubType: "Character",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
+      this.hideCursor();
       let changes = await this.$root.AvatarDesigner.open(hub.avatar);
-      this.showCursor = false;
       Copy(hub.avatar, changes, Object.keys(changes));
       this.$store.commit(hub);
     },
-    async onHubClick(hub) {
+    hideCursor() {
       this.lastCursorClickPosition.lat = null;
       this.lastCursorClickPosition.lng = null;
       this.showCursor = false;
+      this.cursorLastHidden = new Date();
+    },
+    onEditHub(hub) {
+      this.hideCursor();
+      console.log(hub);
+    },
+    onDeleteHub(hub) {
+      this.hideCursor();
+      console.log(hub);
+    },
+    async onHubClick(hub) {
+      this.hideCursor();
       if (this.selectedHub === hub) {
         this.selectedHub = null;
       } else {
@@ -183,7 +192,8 @@ export default {
           if (
             this.lastCursorClickPosition.lat === null ||
             this.lastCursorClickPosition.lng === null ||
-            new Date().getTime() - this.mapLastMouseDown.getTime() > 500
+            new Date().getTime() - this.mapLastMouseDown.getTime() > 500 ||
+            new Date().getTime() - this.cursorLastHidden.getTime() < 500
           ) {
             return; // Don't do any actions if no new coordinates has been set (this due to problems with button interaction on the map)
           }
@@ -200,7 +210,7 @@ export default {
     },
     onCursorClick() {
       Vue.nextTick(() => {
-        this.showCursor = false;
+        this.hideCursor();
       });
     }
   },
@@ -208,6 +218,7 @@ export default {
     return {
       TRUE: true,
       mapLastMouseDown: new Date(),
+      cursorLastHidden: new Date(), // Also a workaround to try to solve the timing issues with leaflet events
       lastCursorClickPosition: {
         lat: 0,
         lng: 0
