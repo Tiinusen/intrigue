@@ -1,5 +1,5 @@
 <template>
-  <v-img v-bind:src="url" aspect-ratio="1" @click="onClick"></v-img>
+  <v-img v-bind:src="url" aspect-ratio="1" @click="onClick" contain></v-img>
 </template>
 
 <script>

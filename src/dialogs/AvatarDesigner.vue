@@ -16,11 +16,12 @@
         >
           <v-icon class="fas fa-times-circle"/>
         </v-btn>
-        <Avatar class="avatar-preview" v-bind:avatar="modifiedAvatar"/>
+        <Avatar class="avatar-preview" avatarStyle="Transparent" v-bind:avatar="modifiedAvatar"/>
         <Avatar
           v-for="name in filteredPartNames"
           :key="name"
           class="avatar-part-option"
+          avatarStyle="Transparent"
           :clotheType="['clotheColor'].indexOf(name) !== -1?'CollarSweater':(['graphicType'].indexOf(name) !== -1?'GraphicShirt':null)"
           :clotheColor="name === 'graphicType'?'Black':Parts[name][3]"
           :facialHairType="name==='facialHairColor'?'BeardLight':null"
@@ -39,6 +40,7 @@
           v-for="name in options"
           :key="name"
           class="avatar-part-option"
+          avatarStyle="Transparent"
           :avatar="modifiedAvatar"
           :attrName="lastSelectedPartType"
           :attrValue="name"

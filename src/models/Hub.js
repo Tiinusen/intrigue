@@ -1,8 +1,10 @@
+import { ArrayToObject } from "../utils/Convert";
 import { Copy, IsEmpty } from "../utils/Entity";
 import { GenerateUUID } from "../utils/UUID";
 import { Avatar } from './Avatar'
 
-export const HubTypes = {
+
+export const HubTypes = ArrayToObject({
     "Character": [
         "Identity",
         "NPC",
@@ -10,15 +12,72 @@ export const HubTypes = {
         "Threat"
     ],
     "Event": [
-        "NA"
+        {
+            "Gathering": [
+                "Meeting",
+                "Party",
+                "Other"
+            ],
+            "Mission": [
+                "Retrieval",
+                "Assasination",
+                "Abduction",
+                "Arrest",
+                "Other"
+            ],
+            "Crime": [
+                "Assault",
+                "Murder",
+                "Theft",
+                "Rape",
+                "Kidnapping",
+                "Other"
+            ]
+        },
+        "Other"
     ],
-    "Place": [
-        "NA"
-    ],
-    "Organization / Group": [
-        "NA"
+    "Place": {
+        "Country": [
+            "Nation",
+            "Region",
+            "City",
+            "Town"
+        ],
+        "Building": [
+            {
+                "House": [
+                    "Ordinary",
+                    "Fancy",
+                    "Decayed"
+                ]
+            },
+            "Apartment Building",
+            "Mansion",
+            "Hotel",
+            "Villa",
+            "Hidden",
+            "Other"
+        ],
+        "Location": [
+            "Point",
+            "Area"
+        ]
+    },
+    "Group": [
+        "People",
+        "Mob",
+        {
+            "Organization": [
+                "Business",
+                "Secret",
+                "Government",
+                "Other"
+            ]
+        },
+        "Gang",
+        "Worshippers"
     ]
-};
+});
 
 export const HubTypeNames = Object.keys(HubTypes);
 
@@ -30,8 +89,7 @@ export class Hub {
             lng: 0
         };
         this.avatar = new Avatar();
-        this.hubType = HubTypes[0]
-        this.hubSubType = HubTypes[HubTypeNames[0]][0];
+        this.hubType = "Character.Identity"
         this.Copy(source, inspire);
     }
 
@@ -75,8 +133,25 @@ export class Hub {
         return "session/hub";
     }
 
+    get subType() {
+        let parts = this.hubType.split(".");
+        return parts[parts.length - 1];
+    }
+
+    get hubFullType() {
+        return this.hubType;
+    }
+
+    ofType(path) {
+        return path === this.hubType.substr(0, path.length);
+    }
+
     get url() {
-        return GenerateURL(this);
+        if (this.ofType("Character")) {
+            return this.avatar.url;
+        } else {
+            return "/icons/" + this.hubFullType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
+        }
     }
     /**
      * 
@@ -88,8 +163,7 @@ export class Hub {
             return this;
         }
         Copy(this, source, [
-            "hubType",
-            "hubSubType"
+            "hubType"
         ]);
         if ('avatar' in source) {
             this.avatar.Copy(source.avatar, sibling);
@@ -99,8 +173,6 @@ export class Hub {
         }
         Copy(this, source, [
             "id",
-            "hubType",
-            "hubSubType",
             "lat",
             "lng"
         ]);

@@ -2,6 +2,8 @@
   <div class="maximize">
     <!-- Dialogs -->
     <AvatarDesigner ref="AvatarDesigner"/>
+    <SubTypeSelector ref="SubTypeSelector"/>
+    <!-- Map -->
     <l-map
       class="maximize"
       :zoom="20"
@@ -59,19 +61,7 @@
               <v-icon class="fas fa-check" title="Confirm"></v-icon>
             </v-btn>
           </v-speed-dial>
-          <Avatar
-            class="marker-icon"
-            v-show="hub.hubType === 'Character'"
-            avatarStyle="Circle"
-            :avatar="hub.avatar"
-            :onmouseup="proxy(onHubClick,0, hub)"
-          />
-          <v-img
-            class="marker-icon"
-            v-show="hub.hubType !== 'Character'"
-            avatarStyle="Circle"
-            :onmouseup="proxy(onHubClick,0, hub)"
-          />
+          <v-img class="marker-icon" :src="hub.url" :onmouseup="proxy(onHubClick,0, hub)" contain/>
         </l-icon>
       </l-marker>
 
@@ -117,8 +107,9 @@ import Vue from "vue";
 import { LMap, LMarker, LTileLayer, LIcon, LControl } from "vue2-leaflet";
 import { WasProxyActiveRecently, proxy } from "../utils/Proxy";
 import Avatar from "../components/Avatar";
-import { Hub } from "../models/Hub";
+import { Hub, HubTypes } from "../models/Hub";
 import AvatarDesigner from "../dialogs/AvatarDesigner";
+import SubTypeSelector from "../dialogs/SubTypeSelector";
 import { Copy } from "../utils/Entity";
 export default {
   components: {
@@ -128,7 +119,8 @@ export default {
     LMarker,
     LControl,
     Avatar,
-    AvatarDesigner
+    AvatarDesigner,
+    SubTypeSelector
   },
   methods: {
     proxy,
@@ -144,39 +136,51 @@ export default {
       });
     },
     async onAddOrganization(event) {
+      this.hideCursor();
       let hub = new Hub({
-        hubType: "Organization / Group",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.hideCursor();
+      hub.hubType = await this.$root.SubTypeSelector.open(
+        "Group",
+        HubTypes["Group"]
+      );
       this.$store.commit(hub);
     },
-    onAddPlace() {
+    async onAddPlace() {
+      this.hideCursor();
       let hub = new Hub({
-        hubType: "Place",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.hideCursor();
+      hub.hubType = await this.$root.SubTypeSelector.open(
+        "Place",
+        HubTypes["Place"]
+      );
       this.$store.commit(hub);
     },
-    onAddEvent() {
+    async onAddEvent() {
+      this.hideCursor();
       let hub = new Hub({
-        hubType: "Event",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.hideCursor();
+      hub.hubType = await this.$root.SubTypeSelector.open(
+        "Event",
+        HubTypes["Event"]
+      );
       this.$store.commit(hub);
     },
     async onAddCharacter(event) {
+      this.hideCursor();
       let hub = new Hub({
-        hubType: "Character",
         lat: this.cursorPosition.lat,
         lng: this.cursorPosition.lng
       });
-      this.hideCursor();
+      hub.hubType = await this.$root.SubTypeSelector.open(
+        "Character",
+        HubTypes["Character"]
+      );
       let changes = await this.$root.AvatarDesigner.open(hub.avatar);
       Copy(hub.avatar, changes, Object.keys(changes));
       this.$store.commit(hub);
@@ -206,6 +210,7 @@ export default {
     },
     async onHubClick(hub) {
       this.hideCursor();
+      this.showHubSpeedDial = 1;
       if (this.selectedHub === hub) {
         this.selectedHub = null;
       } else {
@@ -219,7 +224,7 @@ export default {
         avatar: { ...changes }
       });
     },
-    // This part below is to deal with click and touch events not fireing correctly
+    // This part below is to deal with click and touch events not fireing correctly when inside a leaflet component
     onSetCursorCoordinate(event) {
       this.mapLastMouseDown = new Date();
       this.lastCursorClickPosition = event.latlng;
@@ -292,6 +297,7 @@ export default {
   mounted() {
     Vue.nextTick(() => {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
+      this.$root.SubTypeSelector = this.$refs.SubTypeSelector;
     });
   }
 };

@@ -21,12 +21,12 @@ export function GenerateAvataaarURL(avatar = null, props = null) {
 export class Avatar {
     constructor(source = null, inspire = false) {
         this.topType = "NoHair";
-        this.avatarStyle = "Transparent";
+        this.avatarStyle = "Circle";
         this.Copy(source, inspire);
     }
 
     get url() {
-        return GenerateURL(this);
+        return GenerateAvataaarURL(this);
     }
     /**
      * 

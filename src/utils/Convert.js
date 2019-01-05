@@ -19,7 +19,7 @@ export function ArrayToObject(obj) {
                 newObj[item] = {};
                 break;
             case "object":
-                tObj = ArrayToObject(item);
+                let tObj = ArrayToObject(item);
                 for (var key in tObj) {
                     newObj[key] = tObj[key];
                 }
