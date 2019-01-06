@@ -138,10 +138,6 @@ export class Hub {
         return parts[parts.length - 1];
     }
 
-    get hubFullType() {
-        return this.hubType;
-    }
-
     ofType(path) {
         return path === this.hubType.substr(0, path.length);
     }
@@ -150,7 +146,7 @@ export class Hub {
         if (this.ofType("Character")) {
             return this.avatar.url;
         } else {
-            return "/icons/" + this.hubFullType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
+            return "/icons/" + this.hubType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
         }
     }
     /**

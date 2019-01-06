@@ -3,6 +3,7 @@
     <!-- Dialogs -->
     <AvatarDesigner ref="AvatarDesigner"/>
     <SubTypeSelector ref="SubTypeSelector"/>
+    <LinkTypeSelector ref="LinkTypeSelector"/>
     <!-- Map -->
     <l-map
       class="maximize"
@@ -22,12 +23,12 @@
         v-for="hub in hubs"
         :lat-lng="hub.latlng"
         @update:latLng="onMarkerDragComplete"
-        :draggable="selectedHub === hub && showHubSpeedDial === 1"
+        :draggable="selectedHubA === hub && showHubSpeedDial === 1"
       >
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
             v-model="TRUE"
-            v-if="selectedHub === hub && showHubSpeedDial === 1"
+            v-if="selectedHubA === hub && showHubSpeedDial === 1"
             :top="false"
             :bottom="false"
             :right="false"
@@ -45,7 +46,7 @@
           </v-speed-dial>
           <v-speed-dial
             v-model="TRUE"
-            v-if="selectedHub === hub && showHubSpeedDial === 2"
+            v-if="selectedHubA === hub && showHubSpeedDial === 2"
             :top="false"
             :bottom="false"
             :right="false"
@@ -59,6 +60,24 @@
             </v-btn>
             <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onConfirmDeleteHub)">
               <v-icon class="fas fa-check" title="Confirm"></v-icon>
+            </v-btn>
+          </v-speed-dial>
+          <v-speed-dial
+            v-model="TRUE"
+            v-if="selectedHubB === hub && showHubSpeedDial === 3"
+            :top="false"
+            :bottom="false"
+            :right="false"
+            :left="false"
+            :direction="'top'"
+            :open-on-hover="false"
+            :transition="'slide-y-reverse-transition'"
+          >
+            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(abortHub)">
+              <v-icon class="fas fa-times" title="Abort"></v-icon>
+            </v-btn>
+            <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onAddLink)">
+              <v-icon class="fas fa-link" title="Create Link"></v-icon>
             </v-btn>
           </v-speed-dial>
           <v-img class="marker-icon" :src="hub.url" :onmouseup="proxy(onHubClick,0, hub)" contain/>
@@ -108,8 +127,10 @@ import { LMap, LMarker, LTileLayer, LIcon, LControl } from "vue2-leaflet";
 import { WasProxyActiveRecently, proxy } from "../utils/Proxy";
 import Avatar from "../components/Avatar";
 import { Hub, HubTypes } from "../models/Hub";
+import { Link, LinkTypes } from "../models/Link";
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
+import LinkTypeSelector from "../dialogs/LinkTypeSelector";
 import { Copy } from "../utils/Entity";
 export default {
   components: {
@@ -120,20 +141,60 @@ export default {
     LControl,
     Avatar,
     AvatarDesigner,
-    SubTypeSelector
+    SubTypeSelector,
+    LinkTypeSelector
+  },
+  data() {
+    return {
+      TRUE: true, // To force components relying on v-model to be viewed (commonly used with v-if="something else")
+      mapLastMouseDown: new Date(),
+      cursorLastHidden: new Date(), // Also a workaround to try to solve the timing issues with leaflet events
+      lastCursorClickPosition: {
+        lat: 0,
+        lng: 0
+      },
+      cursorPosition: {
+        lat: 0,
+        lng: 0
+      },
+      hubs: this.$store.state.session.hubs,
+      links: this.$store.state.session.hubs,
+      showCursor: false,
+      showCreationSpeedDial: false,
+      showHubSpeedDial: 1,
+      wasMapClickedRecently: false,
+      selectedHubA: null,
+      selectedHubB: null
+    };
   },
   methods: {
     proxy,
     onMarkerDragComplete(latlng) {
       this.hideCursor();
-      if (this.selectedHub === null) {
+      if (this.selectedHubA === null) {
         return;
       }
       this.$store.dispatch("session/hub", {
-        id: this.selectedHub.id,
+        id: this.selectedHubA.id,
         lat: latlng.lat,
         lng: latlng.lng
       });
+    },
+    async onAddLink() {
+      let link = new Link();
+      link.hubA = this.selectedHubA;
+      link.hubB = this.selectedHubB;
+      this.hideCursor();
+      let linkType = await this.$root.LinkTypeSelector.open(link);
+      if (linkType === null) {
+        return;
+      }
+      link.ApplyLinkType(linkType);
+      // Edit form dialog, put in here
+      this.$store.commit(link);
+      this.hideCursor();
+      this.selectedHubB = null;
+      this.showHubSpeedDial = 1;
     },
     async onAddOrganization(event) {
       this.hideCursor();
@@ -190,6 +251,12 @@ export default {
       this.lastCursorClickPosition.lng = null;
       this.showCursor = false;
       this.cursorLastHidden = new Date();
+      Vue.nextTick(() => {
+        this.lastCursorClickPosition.lat = null;
+        this.lastCursorClickPosition.lng = null;
+        this.showCursor = false;
+        this.cursorLastHidden = new Date();
+      });
     },
     onEditHub(hub) {
       this.hideCursor();
@@ -200,29 +267,35 @@ export default {
     },
     onConfirmDeleteHub(hub) {
       this.hideCursor();
-      this.$store.dispatch("session/deleteHub", this.selectedHub);
+      this.$store.dispatch("session/deleteHub", this.selectedHubA);
       this.abortHub();
     },
     abortHub() {
       this.hideCursor();
       this.showHubSpeedDial = 1;
-      this.selectedHub = null;
+      this.selectedHubA = null;
+      this.selectedHubB = null;
     },
     async onHubClick(hub) {
       this.hideCursor();
       this.showHubSpeedDial = 1;
-      if (this.selectedHub === hub) {
-        this.selectedHub = null;
+      if (this.selectedHubA === hub) {
+        if (this.selectedHubB !== null) {
+          this.selectedHubB = null;
+        } else {
+          this.selectedHubA = null;
+        }
+      } else if (this.selectedHubA !== null) {
+        if (this.selectedHubB === hub) {
+          this.selectedHubB = null;
+          this.showHubSpeedDial = 1;
+        } else {
+          this.selectedHubB = hub;
+          this.showHubSpeedDial = 3;
+        }
       } else {
-        this.selectedHub = hub;
+        this.selectedHubA = hub;
       }
-      return;
-      let changes = await this.$root.AvatarDesigner.open(hub.avatar);
-      this.showCursor = false;
-      this.$store.dispatch("session/hub", {
-        id: hub.id,
-        avatar: { ...changes }
-      });
     },
     // This part below is to deal with click and touch events not fireing correctly when inside a leaflet component
     onSetCursorCoordinate(event) {
@@ -263,28 +336,6 @@ export default {
       });
     }
   },
-  data() {
-    return {
-      TRUE: true, // To force components relying on v-model to be viewed (commonly used with v-if="something else")
-      mapLastMouseDown: new Date(),
-      cursorLastHidden: new Date(), // Also a workaround to try to solve the timing issues with leaflet events
-      lastCursorClickPosition: {
-        lat: 0,
-        lng: 0
-      },
-      cursorPosition: {
-        lat: 0,
-        lng: 0
-      },
-      hubs: this.$store.state.session.hubs,
-      links: this.$store.state.session.hubs,
-      showCursor: false,
-      showCreationSpeedDial: false,
-      showHubSpeedDial: 1,
-      wasMapClickedRecently: false,
-      selectedHub: null
-    };
-  },
   computed: {
     isCursorVisible() {
       return (
@@ -298,6 +349,7 @@ export default {
     Vue.nextTick(() => {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
       this.$root.SubTypeSelector = this.$refs.SubTypeSelector;
+      this.$root.LinkTypeSelector = this.$refs.LinkTypeSelector;
     });
   }
 };

@@ -1,0 +1,41 @@
+[
+    [
+        "Input",
+        "",
+        "",
+        [
+            [
+                "",
+                ""
+            ]
+        ],
+        "#000000",
+        1
+    ],
+    [
+        "Acquaintance",
+        "acquaintance with",
+        "acquaintance with",
+        [
+            [
+                "Character",
+                "Character"
+            ]
+        ],
+        "#000000",
+        1
+    ],
+    [
+        "Friends",
+        "acquaintance with",
+        "acquaintance with",
+        [
+            [
+                "Character",
+                "Character"
+            ]
+        ],
+        "#000000",
+        1
+    ]
+]

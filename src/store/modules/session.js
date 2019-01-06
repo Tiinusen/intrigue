@@ -69,7 +69,7 @@ const mutations = {
       return;
     }
     state.ids[key] = link;
-    state.hubs.push(link);
+    state.links.push(link);
   }
 }
 
