@@ -17,7 +17,14 @@
       :onmouseup="proxy(onMap, 50)"
       @click="onSetCursorCoordinate"
     >
-      <!-- Markers -->
+      <!-- Links -->
+      <l-polygon
+        :key="link.key"
+        v-for="link in links"
+        :lat-lngs="[[link.hubA.lat, link.hubA.lng],[link.hubB.lat, link.hubB.lng]]"
+        :color="link.color"
+      ></l-polygon>
+      <!-- Hubs -->
       <l-marker
         :key="hub.key"
         v-for="hub in hubs"
@@ -123,7 +130,14 @@
 
 <script>
 import Vue from "vue";
-import { LMap, LMarker, LTileLayer, LIcon, LControl } from "vue2-leaflet";
+import {
+  LMap,
+  LMarker,
+  LTileLayer,
+  LIcon,
+  LControl,
+  LPolygon
+} from "vue2-leaflet";
 import { WasProxyActiveRecently, proxy } from "../utils/Proxy";
 import Avatar from "../components/Avatar";
 import { Hub, HubTypes } from "../models/Hub";
@@ -142,7 +156,8 @@ export default {
     Avatar,
     AvatarDesigner,
     SubTypeSelector,
-    LinkTypeSelector
+    LinkTypeSelector,
+    LPolygon
   },
   data() {
     return {
@@ -158,7 +173,7 @@ export default {
         lng: 0
       },
       hubs: this.$store.state.session.hubs,
-      links: this.$store.state.session.hubs,
+      links: this.$store.state.session.links,
       showCursor: false,
       showCreationSpeedDial: false,
       showHubSpeedDial: 1,
@@ -190,8 +205,7 @@ export default {
         return;
       }
       link.ApplyLinkType(linkType);
-      // Edit form dialog, put in here
-      this.$store.commit(link);
+      this.$store.dispatch(link);
       this.hideCursor();
       this.selectedHubB = null;
       this.showHubSpeedDial = 1;
@@ -206,7 +220,7 @@ export default {
         "Group",
         HubTypes["Group"]
       );
-      this.$store.commit(hub);
+      this.$store.dispatch(hub);
     },
     async onAddPlace() {
       this.hideCursor();
@@ -218,7 +232,7 @@ export default {
         "Place",
         HubTypes["Place"]
       );
-      this.$store.commit(hub);
+      this.$store.dispatch(hub);
     },
     async onAddEvent() {
       this.hideCursor();
@@ -230,7 +244,7 @@ export default {
         "Event",
         HubTypes["Event"]
       );
-      this.$store.commit(hub);
+      this.$store.dispatch(hub);
     },
     async onAddCharacter(event) {
       this.hideCursor();
@@ -244,7 +258,7 @@ export default {
       );
       let changes = await this.$root.AvatarDesigner.open(hub.avatar);
       Copy(hub.avatar, changes, Object.keys(changes));
-      this.$store.commit(hub);
+      this.$store.dispatch(hub);
     },
     hideCursor() {
       this.lastCursorClickPosition.lat = null;

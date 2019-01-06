@@ -88,6 +88,7 @@ export class Hub {
             lat: 0,
             lng: 0
         };
+        this.links = [];
         this.avatar = new Avatar();
         this.hubType = "Character.Identity"
         this.Copy(source, inspire);

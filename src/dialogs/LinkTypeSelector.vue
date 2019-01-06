@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Sub Type Dialog -->
-    <v-dialog v-model="dialog" dark max-width="600px" class="dialog">
+    <v-dialog v-model="dialog" persistent dark max-width="600px" class="dialog">
       <v-card>
         <v-btn
           large
