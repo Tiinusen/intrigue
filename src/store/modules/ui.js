@@ -1,22 +1,7 @@
-// initial state
-const state = {
-
-}
-
-// getters
-const getters = {
-
-}
-
-// actions
-const actions = {
-    
-}
-
-// mutations
-const mutations = {
-    
-}
+import state from './ui/state'
+import getters from './ui/getters'
+import actions from './ui/actions'
+import mutations from './ui/mutations'
 
 export default {
     namespaced: true,
@@ -24,4 +9,4 @@ export default {
     getters,
     actions,
     mutations
-}
+};
