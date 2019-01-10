@@ -94,6 +94,16 @@ export class Hub {
         this.Copy(source, inspire);
     }
 
+    Serialize() {
+        return {
+            id: this.id,
+            lat: this.lat,
+            lng: this.lng,
+            avatar: this.avatar.Serialize(),
+            hubType: this.hubType
+        };
+    }
+
     get lat() {
         if (typeof this.latlng === 'undefined' || this.latlng === null) {
             return null;
@@ -150,6 +160,7 @@ export class Hub {
             return "/icons/" + this.hubType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
         }
     }
+
     /**
      * 
      * @param {Avatar} source 

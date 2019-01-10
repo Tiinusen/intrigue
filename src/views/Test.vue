@@ -1,29 +1,17 @@
-<template>
-  <div style=width:400px;height:400px;>
-      <AvatarDesigner ref="AvatarDesigner"/>
-  </div>
-</template>
-
+<template></template>
 <script>
-import AvatarComp from '../components/Avatar'
-import AvatarDesigner from '../dialogs/AvatarDesigner'
+import Vue from "vue";
 export default {
-  components: {
-      Avatar: AvatarComp,
-      AvatarDesigner,
+  components: {},
+  methods: {},
+  async mounted() {
+    //let result = await this.$root.GooglePicker.open("*.intrigue");
+    //let result = await this.$root.GooglePicker.save("test", {"Test": "Test"});
+    //this.$store.dispatch("session/connect", { gsession: this.$root.gsession });
+    // console.log(result);
   },
-  methods:{
-      testa(){
-          this.$store.dispatch("session/load", this.$store.state.session.txt);
-      }
-  },
-  data(){
-      return {
-          
-      };
-  },
-  mounted(){
-      this.$root.AvatarDesigner = this.$refs.AvatarDesigner
+  data() {
+    return {};
   }
 };
 </script>

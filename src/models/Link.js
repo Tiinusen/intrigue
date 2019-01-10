@@ -84,6 +84,19 @@ export class Link {
         this.Copy(source, inspire);
     }
 
+    Serialize() {
+        return {
+            id: this.id,
+            hubA: this.hubA.key,
+            hubB: this.hubB.key,
+            AtoB: this.AtoB,
+            BtoA: this.BtoA,
+            linkType: this.linkType,
+            color: this.color,
+            linkThickness: this.linkThickness
+        };
+    }
+
     get validLinkTypeNames() {
         if (this.hubA === null || this.hubB === null) {
             return [];

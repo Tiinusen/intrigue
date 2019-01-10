@@ -25,6 +25,14 @@ export class Avatar {
         this.Copy(source, inspire);
     }
 
+    Serialize() {
+        var obj = {};
+        PartNames.forEach((partName) => {
+            obj[partName] = this[partName];
+        });
+        return obj;
+    }
+
     get url() {
         return GenerateAvataaarURL(this);
     }

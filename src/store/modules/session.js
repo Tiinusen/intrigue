@@ -17,15 +17,13 @@ const getters = {
 // actions
 const actions = {
   async clear({ commit, state }, filename) {
-    state.hubs.splice(0, state.hubs.length);
-    state.links.splice(0, state.links.length);
-    state.ids = {};
+    await commit('clear');
   },
   async hub({ commit, state }, hub) {
-    commit('hub', hub);
+    await commit('hub', hub);
   },
   async link({ commit, state }, link) {
-    commit('link', link);
+    await commit('link', link);
   },
   async deleteHub({ commit, state }, hub) {
     commit('deleteHub', hub);
@@ -34,12 +32,32 @@ const actions = {
     });
   },
   async deleteLink({ commit, state }, link) {
-    commit('deleteLink', link);
+    await commit('deleteLink', link);
   },
+  async load({ commit, state, dispatch }, data) {
+    await dispatch('clear');
+    if (typeof data !== 'object' || !('hubs' in state) || !('links' in state)) {
+      return console.error("File doesn't contain Intrigue Map data");
+    }
+    for (var i = 0; i < data.hubs.length; i++) {
+      await dispatch("hub", new Hub(data.hubs[i]));
+    }
+    for (var i = 0; i < data.links.length; i++) {
+      var link = new Link(data.links[i]);
+      link.hubA = state.ids[link.hubA];
+      link.hubB = state.ids[link.hubB];
+      await dispatch("link", link);
+    }
+  }
 }
 
 // mutations
 const mutations = {
+  clear(state) {
+    state.hubs.splice(0, state.hubs.length);
+    state.links.splice(0, state.links.length);
+    state.ids = {};
+  },
   deleteHub(state, hub) {
     let key = 'key' in hub ? hub.key : "Hub#" + hub.id;
     if (!(key in state.ids)) {
