@@ -1,9 +1,10 @@
 <template>
   <div class="maximize">
     <!-- Dialogs -->
-    <AvatarDesigner ref="AvatarDesigner"/>
-    <SubTypeSelector ref="SubTypeSelector"/>
-    <LinkTypeSelector ref="LinkTypeSelector"/>
+    <avatar-designer ref="AvatarDesigner"/>
+    <sub-type-selector ref="SubTypeSelector"/>
+    <link-type-selector ref="LinkTypeSelector"/>
+    <hub-edit ref="HubEdit"/>
     <!-- Map -->
     <l-map
       class="maximize"
@@ -23,13 +24,14 @@
         v-for="link in links"
         :lat-lngs="[[link.hubA.lat, link.hubA.lng],[link.hubB.lat, link.hubB.lng]]"
         :color="link.color"
+        :lineThickness="link.lineThickness"
       ></l-polygon>
       <!-- Hubs -->
       <l-marker
         :key="hub.key"
         v-for="hub in hubs"
         :lat-lng="hub.latlng"
-        @update:latLng="onMarkerDragComplete"
+        @update:latLng="onMarkerDragComplete(hub, $event)"
         :draggable="selectedHubA === hub && showHubSpeedDial === 1"
       >
         <l-icon :icon-anchor="[50, 60]">
@@ -138,14 +140,18 @@ import {
   LControl,
   LPolygon
 } from "vue2-leaflet";
-import { WasProxyActiveRecently, proxy } from "../utils/Proxy";
+
 import Avatar from "../components/Avatar";
-import { Hub, HubTypes } from "../models/Hub";
-import { Link, LinkTypes } from "../models/Link";
+
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
 import LinkTypeSelector from "../dialogs/LinkTypeSelector";
-import { Copy } from "../utils/Entity";
+
+import HubEdit from "../dialogs/HubEdit";
+import methods from "./map/methods";
+import data from "./map/data";
+import computed from "./map/computed";
+
 export default {
   components: {
     LMap,
@@ -157,213 +163,18 @@ export default {
     AvatarDesigner,
     SubTypeSelector,
     LinkTypeSelector,
-    LPolygon
+    LPolygon,
+    HubEdit
   },
-  data() {
-    return {
-      TRUE: true, // To force components relying on v-model to be viewed (commonly used with v-if="something else")
-      mapLastMouseDown: new Date(),
-      cursorLastHidden: new Date(), // Also a workaround to try to solve the timing issues with leaflet events
-      lastCursorClickPosition: {
-        lat: 0,
-        lng: 0
-      },
-      cursorPosition: {
-        lat: 0,
-        lng: 0
-      },
-      hubs: this.$store.state.session.hubs,
-      links: this.$store.state.session.links,
-      showCursor: false,
-      showCreationSpeedDial: false,
-      showHubSpeedDial: 1,
-      wasMapClickedRecently: false,
-      selectedHubA: null,
-      selectedHubB: null
-    };
-  },
-  methods: {
-    proxy,
-    onMarkerDragComplete(latlng) {
-      this.hideCursor();
-      if (this.selectedHubA === null) {
-        return;
-      }
-      this.$store.dispatch("session/hub", {
-        id: this.selectedHubA.id,
-        lat: latlng.lat,
-        lng: latlng.lng
-      });
-    },
-    async onAddLink() {
-      let link = new Link();
-      link.hubA = this.selectedHubA;
-      link.hubB = this.selectedHubB;
-      this.hideCursor();
-      let linkType = await this.$root.LinkTypeSelector.open(link);
-      if (linkType === null) {
-        return;
-      }
-      link.ApplyLinkType(linkType);
-      this.$store.dispatch(link);
-      this.hideCursor();
-      this.selectedHubB = null;
-      this.showHubSpeedDial = 1;
-    },
-    async onAddOrganization(event) {
-      this.hideCursor();
-      let hub = new Hub({
-        lat: this.cursorPosition.lat,
-        lng: this.cursorPosition.lng
-      });
-      hub.hubType = await this.$root.SubTypeSelector.open(
-        "Group",
-        HubTypes["Group"]
-      );
-      this.$store.dispatch(hub);
-    },
-    async onAddPlace() {
-      this.hideCursor();
-      let hub = new Hub({
-        lat: this.cursorPosition.lat,
-        lng: this.cursorPosition.lng
-      });
-      hub.hubType = await this.$root.SubTypeSelector.open(
-        "Place",
-        HubTypes["Place"]
-      );
-      this.$store.dispatch(hub);
-    },
-    async onAddEvent() {
-      this.hideCursor();
-      let hub = new Hub({
-        lat: this.cursorPosition.lat,
-        lng: this.cursorPosition.lng
-      });
-      hub.hubType = await this.$root.SubTypeSelector.open(
-        "Event",
-        HubTypes["Event"]
-      );
-      this.$store.dispatch(hub);
-    },
-    async onAddCharacter(event) {
-      this.hideCursor();
-      let hub = new Hub({
-        lat: this.cursorPosition.lat,
-        lng: this.cursorPosition.lng
-      });
-      hub.hubType = await this.$root.SubTypeSelector.open(
-        "Character",
-        HubTypes["Character"]
-      );
-      let changes = await this.$root.AvatarDesigner.open(hub.avatar);
-      Copy(hub.avatar, changes, Object.keys(changes));
-      this.$store.dispatch(hub);
-    },
-    hideCursor() {
-      this.lastCursorClickPosition.lat = null;
-      this.lastCursorClickPosition.lng = null;
-      this.showCursor = false;
-      this.cursorLastHidden = new Date();
-      Vue.nextTick(() => {
-        this.lastCursorClickPosition.lat = null;
-        this.lastCursorClickPosition.lng = null;
-        this.showCursor = false;
-        this.cursorLastHidden = new Date();
-      });
-    },
-    onEditHub(hub) {
-      this.hideCursor();
-    },
-    onDeleteHub(hub) {
-      this.hideCursor();
-      this.showHubSpeedDial = 2;
-    },
-    onConfirmDeleteHub(hub) {
-      this.hideCursor();
-      this.$store.dispatch("session/deleteHub", this.selectedHubA);
-      this.abortHub();
-    },
-    abortHub() {
-      this.hideCursor();
-      this.showHubSpeedDial = 1;
-      this.selectedHubA = null;
-      this.selectedHubB = null;
-    },
-    async onHubClick(hub) {
-      this.hideCursor();
-      this.showHubSpeedDial = 1;
-      if (this.selectedHubA === hub) {
-        if (this.selectedHubB !== null) {
-          this.selectedHubB = null;
-        } else {
-          this.selectedHubA = null;
-        }
-      } else if (this.selectedHubA !== null) {
-        if (this.selectedHubB === hub) {
-          this.selectedHubB = null;
-          this.showHubSpeedDial = 1;
-        } else {
-          this.selectedHubB = hub;
-          this.showHubSpeedDial = 3;
-        }
-      } else {
-        this.selectedHubA = hub;
-      }
-    },
-    // This part below is to deal with click and touch events not fireing correctly when inside a leaflet component
-    onSetCursorCoordinate(event) {
-      this.mapLastMouseDown = new Date();
-      this.lastCursorClickPosition = event.latlng;
-      this.onMap({ type: "mouseup" });
-    },
-    onMap(event) {
-      switch (event.type) {
-        case "touchstart":
-        case "mousedown":
-          this.mapLastMouseDown = new Date();
-          break;
-        case "touchend":
-        case "mouseup":
-          if (
-            this.lastCursorClickPosition.lat === null ||
-            this.lastCursorClickPosition.lng === null ||
-            new Date().getTime() - this.mapLastMouseDown.getTime() > 500 ||
-            new Date().getTime() - this.cursorLastHidden.getTime() < 500
-          ) {
-            return; // Don't do any actions if no new coordinates has been set (this due to problems with button interaction on the map)
-          }
-          this.showCursor = false;
-          setTimeout(() => {
-            this.cursorPosition.lat = this.lastCursorClickPosition.lat;
-            this.cursorPosition.lng = this.lastCursorClickPosition.lng;
-            this.lastCursorClickPosition.lat = null;
-            this.lastCursorClickPosition.lng = null;
-            this.showCursor = true;
-          }, 20);
-          break;
-      }
-    },
-    onCursorClick() {
-      Vue.nextTick(() => {
-        this.hideCursor();
-      });
-    }
-  },
-  computed: {
-    isCursorVisible() {
-      return (
-        this.showCursor &&
-        this.cursorPosition.lat !== null &&
-        this.cursorPosition.lng !== null
-      );
-    }
-  },
+  data,
+  methods,
+  computed,
   mounted() {
     Vue.nextTick(() => {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
       this.$root.SubTypeSelector = this.$refs.SubTypeSelector;
       this.$root.LinkTypeSelector = this.$refs.LinkTypeSelector;
+      this.$root.HubEdit = this.$refs.HubEdit;
     });
   }
 };

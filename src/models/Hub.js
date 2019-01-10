@@ -137,7 +137,19 @@ export class Hub {
     }
 
     get name() {
-        return this.id;
+        return (this.firstName + " " + this.lastName).trim();
+    }
+
+    set name(value) {
+        value = value.replace(/  /g, " ");
+        let parts = value.split(" ", 2);
+        this.firstName = parts[0];
+        this.lastName = parts[1];
+    }
+
+    get displayName() {
+        if (this.name)
+            return this.key;
     }
 
     get type() {
