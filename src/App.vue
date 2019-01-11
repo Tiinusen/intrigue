@@ -19,7 +19,10 @@
           <v-list-tile @click="onSignOutClick" v-if="$store.state.google.isSignedIn">
             <v-list-tile-title>Sign out</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click="onSaveLoadClick" :disabled="!($store.state.google.isSignedIn && $store.state.session.hubs > 0)">
+          <v-list-tile
+            @click="onSaveLoadClick"
+            :disabled="!$store.state.google.isSignedIn || ($store.state.session.hubs.length === 0 && $store.state.google.files.length === 0)"
+          >
             <v-list-tile-title>Save / Load</v-list-tile-title>
           </v-list-tile>
           <v-list-tile @click="onClearClick" :disabled="$store.state.session.hubs.length === 0">
@@ -61,6 +64,9 @@ export default {
   },
   methods: {
     onClearClick() {
+      if (!confirm("Are you sure you wish to clear the Intrigue Map?")) {
+        return;
+      }
       this.$store.dispatch("session/clear");
     },
     onSignInClick() {

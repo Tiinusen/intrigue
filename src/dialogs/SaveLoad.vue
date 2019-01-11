@@ -22,14 +22,14 @@
           <v-container fluid>
             <v-layout row>
               <v-flex>
-                <v-text-field :disabled="loading" v-model="sessionName" label="Session name"></v-text-field>
+                <v-text-field :disabled="loading || $store.state.session.hubs.length === 0" v-model="sessionName" label="Session name"></v-text-field>
                 <v-progress-linear
                   v-show="selectedFileId === null && loading"
                   :indeterminate="true"
                   color="white"
                 />
               </v-flex>
-              <v-btn v-show="!loading && $store.state.session.hubs > 0" icon ripple @click="onSaveAs" style="padding-right:2em;">
+              <v-btn v-show="!loading && $store.state.session.hubs.length > 0" icon ripple @click="onSaveAs" style="padding-right:2em;">
                 <v-icon color="white">Save as ..</v-icon>
               </v-btn>
             </v-layout>
@@ -119,6 +119,8 @@ export default {
       await this.$store.dispatch("google/loadFileListIntoState");
       this.loading = false;
       this.selectedFileId = null;
+      this.sessionName = "";
+      this.dialog = false;
     },
     async onDelete(fileId) {
       if (!confirm("Are you sure you wish to delete this session file?")) {
@@ -130,6 +132,9 @@ export default {
       await this.$store.dispatch("google/loadFileListIntoState");
       this.loading = false;
       this.selectedFileId = null;
+      if(this.$store.state.session.hubs.length === 0 && this.$store.state.google.files.length === 0){
+        this.dialog = false;
+      }
     },
     async onSave(fileId) {
       if (!confirm("Are you sure you wish to overwrite this session file?")) {
@@ -141,6 +146,7 @@ export default {
       await this.$store.dispatch("google/loadFileListIntoState");
       this.loading = false;
       this.selectedFileId = null;
+      this.dialog = false;
     },
     async onLoad(fileId) {
       if (
@@ -166,9 +172,8 @@ export default {
     },
     async onOpen() {
       this.selectedFileId = null;
-      this.loading = true;
-      await this.$store.dispatch("google/loadFileListIntoState");
       this.loading = false;
+      await this.$store.dispatch("google/loadFileListIntoState");
     },
     onClose() {
       this.resolve();
