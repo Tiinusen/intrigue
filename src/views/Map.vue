@@ -7,11 +7,11 @@
     <hub-edit ref="HubEdit"/>
     <!-- Map -->
     <l-map
-      class="maximize"
+      class="maximize map"
       :zoom="20"
       :maxZoom="20"
       :minZoom="20"
-      :options="{zoomControl: false}"
+      :options="{zoomControl: false, attributionControl: false}"
       :ontouchstart="proxy(onMap, null)"
       :ontouchend="proxy(onMap, 50)"
       :onmousedown="proxy(onMap, null)"
@@ -106,17 +106,45 @@
             :open-on-hover="false"
             :transition="'slide-y-reverse-transition'"
           >
-            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onAddOrganization)">
-              <v-icon class="fas fa-campground" title="Add Organization"></v-icon>
+            <v-btn
+              fab
+              dark
+              large
+              color="red"
+              v-bind:onmousedown="proxy(onAddOrganization)"
+              title="Add Organization"
+            >
+              <img class="speed-dial-icon" contain src="/icons/group/organization.png" />
             </v-btn>
-            <v-btn fab dark large color="orange" v-bind:onmousedown="proxy(onAddPlace)">
-              <v-icon class="fas fa-map" title="Add Place"></v-icon>
+            <v-btn
+              fab
+              dark
+              large
+              color="orange"
+              v-bind:onmousedown="proxy(onAddPlace)"
+              title="Add Place"
+            >
+              <v-icon class="fas fa-map"></v-icon>
             </v-btn>
-            <v-btn fab dark large color="blue" v-bind:onmousedown="proxy(onAddEvent)">
-              <v-icon class="fas fa-book" title="Add Event"></v-icon>
+            <v-btn
+              fab
+              dark
+              large
+              color="blue"
+              v-bind:onmousedown="proxy(onAddEvent)"
+              title="Add Event"
+            >
+              <v-icon class="fas fa-book"></v-icon>
             </v-btn>
-            <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onAddCharacter)">
-              <v-icon class="fas fa-user" title="Add Character"></v-icon>
+            <v-btn
+              fab
+              dark
+              large
+              color="green"
+              v-bind:onmousedown="proxy(onAddCharacter)"
+              title="Add Character"
+            >
+              <v-icon class="fas fa-user"></v-icon>
             </v-btn>
           </v-speed-dial>
           <Avatar
@@ -146,8 +174,8 @@ import Avatar from "../components/Avatar";
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
 import LinkTypeSelector from "../dialogs/LinkTypeSelector";
-
 import HubEdit from "../dialogs/HubEdit";
+
 import methods from "./map/methods";
 import data from "./map/data";
 import computed from "./map/computed";
@@ -180,6 +208,9 @@ export default {
 };
 </script>
 <style scoped>
+.map {
+  background-color: transparent;
+}
 .maximize {
   width: 100%;
   height: 100%;
@@ -187,5 +218,11 @@ export default {
 .marker-icon {
   width: 100px;
   height: 117px;
+}
+.speed-dial-icon{
+  width:3em;
+  height:3em;
+  bottom:0.2em;
+  position: relative;
 }
 </style>
