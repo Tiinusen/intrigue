@@ -3,10 +3,11 @@ import { InjectScript } from './Inject'
 let _waitingForGoogleAPICallbacks = [];
 let _loadedAPIs = {};
 
-window.onGoogleAPILoaded = function () {
+window.onGoogleAPILoaded = async function () {
     delete window["onGoogleAPILoaded"];
+    await new Promise(resolve => setTimeout(resolve,  100));
     _waitingForGoogleAPICallbacks.forEach(resolve => resolve());
-    _waitingForGoogleAPICallbacks = [];
+    _waitingForGoogleAPICallbacks = true;
 }
 
 if (typeof gapi === 'undefined') {
@@ -14,14 +15,15 @@ if (typeof gapi === 'undefined') {
 }
 
 export function WaitForGoogleAPIToLoad() {
+    if (_waitingForGoogleAPICallbacks === true) {
+        return new Promise(resolve => setTimeout(resolve, 100 * 1000));
+    }
     return new Promise((resolve) => _waitingForGoogleAPICallbacks.push(resolve));
 }
 
 export function Load(name) {
     return new Promise(async (resolve, reject) => {
-        if (_waitingForGoogleAPICallbacks.length > 0) { // Waits if Google API hasn't been loaded yet
-            await WaitForGoogleAPIToLoad();
-        }
+        await WaitForGoogleAPIToLoad();
         if (!(name in _loadedAPIs)) {
             _loadedAPIs[name] = new Array();
             _loadedAPIs[name].push({ resolve, reject });

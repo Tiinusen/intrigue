@@ -1,4 +1,6 @@
 export default {
     isSignedIn: false,
-    isClientInitialized: false
+    isClientInitialized: false,
+    folderId: null,
+    files: []
 };
