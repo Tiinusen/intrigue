@@ -40,7 +40,7 @@
                 @click="onSaveAs"
                 style="padding-right:2em;"
               >
-                <v-icon color="white">Save as ..</v-icon>
+                <v-icon color="white">Save as</v-icon>
               </v-btn>
             </v-layout>
             <v-layout>
