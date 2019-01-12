@@ -134,7 +134,7 @@
               v-bind:onmousedown="proxy(onAddEvent)"
               title="Add Event"
             >
-              <v-icon class="fas fa-book"></v-icon>
+              <img class="speed-dial-icon" contain src="/icons/event/mission.png" />
             </v-btn>
             <v-btn
               fab
@@ -224,5 +224,8 @@ export default {
   height:3em;
   bottom:0.2em;
   position: relative;
+}
+.fas {
+  color: black !important;
 }
 </style>
