@@ -1,12 +1,15 @@
 export default {
-    isSignedIn(state, isSignedIn) {
-        state.isSignedIn = isSignedIn;
+    setSignedIn(state, signedIn) {
+        state.signedIn = signedIn;
     },
-    isClientInitialized(state, isClientInitialized) {
-        state.isClientInitialized = isClientInitialized;
+    setClientInitialized(state, clientInitialized) {
+        state.clientInitialized = clientInitialized;
     },
     setFolderId(state, folderId) {
         state.folderId = folderId;
+    },
+    setLoadedFileId(state, fileId) {
+        state.loadedFileId = fileId;
     },
     clearFileList(state) {
         state.files.splice(0, state.files.length);
@@ -16,5 +19,8 @@ export default {
         files.forEach((file) => {
             state.files.push(file);
         });
+    },
+    setAutoSync(state, val) {
+        state.autoSyncIntervalRef = val;
     }
 };

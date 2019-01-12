@@ -4,8 +4,8 @@ const SavedSessionFolderName = "Saved Intrigue Map Sessions";
 
 export default {
     async initialize({ commit, state, dispatch }, { apiKey, clientId, discoveryDocs, scope }) {
-        if (!state.isClientInitialized) {
-            commit('isClientInitialized', true);
+        if (!state.clientInitialized) {
+            commit('setClientInitialized', true);
             await Load("client:auth2");
             await gapi.client.init({
                 apiKey: apiKey,
@@ -14,40 +14,72 @@ export default {
                 scope: scope
             });
             gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => {
-                commit('isSignedIn', isSignedIn);
+                commit('setSignedIn', isSignedIn);
                 if (state.isSignedIn) {
                     dispatch('loadFileListIntoState');
                 }
             });
-            commit('isSignedIn', gapi.auth2.getAuthInstance().isSignedIn.get());
-            if (state.isSignedIn) {
+            commit('setSignedIn', gapi.auth2.getAuthInstance().isSignedIn.get());
+            if (state.signedIn) {
                 await dispatch('loadFileListIntoState');
             }
         }
     },
     async signIn({ commit, state }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === true) {
+        if (state.signedIn === true) {
             return console.error("Already signed in");
         }
         gapi.auth2.getAuthInstance().signIn();
     },
     async signOut({ commit, state }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
             return console.error("Already signed out");
         }
         gapi.auth2.getAuthInstance().signOut();
     },
-    async loadFileListIntoState({ commit, state, dispatch }) {
-        if (!state.isClientInitialized) {
+    async toggleAutoSync({ commit, state, dispatch }) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
+            return console.error("You need to be signed in to use this feature");
+        }
+        if (state.loadedFileId === null) {
+            return console.error("You need to first save the session or load a already saved session");
+        }
+
+        if (state.autoSyncIntervalRef !== null) {
+            clearInterval(state.autoSyncIntervalRef);
+            commit('setAutoSync', null);
+            return;
+        }
+        commit('setAutoSync', setInterval(() => {
+            console.log(new Date().getTime());
+        },state.autoSyncInterval));
+    },
+    async sync({ commit, state, dispatch }) {
+        if (!state.clientInitialized) {
+            return console.error("Module not initialized (dispatch initialize first with config)");
+        }
+        if (state.signedIn === false) {
+            return console.error("You need to be signed in to use this feature");
+        }
+        if (state.loadedFileId === null) {
+            return console.error("You need to first save the session or load a already saved session");
+        }
+
+    },
+    async loadFileListIntoState({ commit, state, dispatch }) {
+        if (!state.clientInitialized) {
+            return console.error("Module not initialized (dispatch initialize first with config)");
+        }
+        if (state.signedIn === false) {
             return [];
         }
         // Update content
@@ -79,10 +111,10 @@ export default {
         }
     },
     async createSessionFolder({ commit, state }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
             return [];
         }
         let fileMetadata = {
@@ -96,21 +128,24 @@ export default {
         return file.id;
     },
     async delete({ commit, state, dispatch }, { fileId }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
             return false;
+        }
+        if (state.loadedFileId === fileId) {
+            commit('setLoadedFileId', null);
         }
         await gapi.client.drive.files.delete({
             fileId
         });
     },
     async load({ commit, state, dispatch }, { fileId }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
             return [];
         }
         let file = await gapi.client.drive.files.get({
@@ -120,13 +155,14 @@ export default {
         if (typeof file !== 'object' || file === null || !('result' in file) || typeof file.result !== 'object' || file.result === null) {
             console.error("Unable to load file");
         }
+        commit('setLoadedFileId', fileId);
         return await dispatch('session/load', file.result, { root: true })
     },
     async save({ commit, state, rootState, dispatch }, { fileId, sessionName }) {
-        if (!state.isClientInitialized) {
+        if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
-        if (state.isSignedIn === false) {
+        if (state.signedIn === false) {
             return [];
         }
         if (state.folderId === null) {
@@ -170,7 +206,7 @@ export default {
             );
             form.append("file", file);
 
-            return await new Promise((resolve, reject) => {
+            fileId = await new Promise((resolve, reject) => {
                 var xhr = new XMLHttpRequest();
                 xhr.open(
                     "post",
@@ -183,7 +219,11 @@ export default {
                 };
                 xhr.send(form);
             });
+            commit('setLoadedFileId', fileId);
+            return;
         }
+
+        commit('setLoadedFileId', fileId);
         // Update content
         return await gapi.client.request({
             path: '/upload/drive/v3/files/' + fileId,

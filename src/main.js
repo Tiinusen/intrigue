@@ -11,6 +11,8 @@ import 'leaflet/dist/leaflet.css'
 import VueAnalytics from 'vue-analytics'
 import VueLodash from 'vue-lodash'
 
+Vue.use(require('vue-shortkey'))
+
 // this part resolve an issue where the markers would not appear
 delete L.Icon.Default.prototype._getIconUrl;
 

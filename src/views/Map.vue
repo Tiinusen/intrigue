@@ -124,7 +124,7 @@
               v-bind:onmousedown="proxy(onAddPlace)"
               title="Add Place"
             >
-              <v-icon class="fas fa-map"></v-icon>
+              <img class="speed-dial-icon" contain src="/icons/place/country.png" />
             </v-btn>
             <v-btn
               fab
