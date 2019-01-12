@@ -1,6 +1,5 @@
 <template>
   <v-app :dark="isDarkThemeEnabled">
-    <google-picker :gconfig="gconfig" ref="GooglePicker"/>
     <save-load ref="SaveLoad"/>
     <privacy-policy ref="PrivacyPolicy"/>
     <preferences ref="Preferences"/>
@@ -76,14 +75,12 @@
 <script>
 import Vue from "vue";
 import { mapGetters } from "vuex";
-import GooglePicker from "./dialogs/GooglePicker";
 import SaveLoad from "./dialogs/SaveLoad";
 import PrivacyPolicy from "./dialogs/PrivacyPolicy";
 import Preferences from "./dialogs/Preferences";
 export default {
   name: "app",
   components: {
-    GooglePicker,
     SaveLoad,
     PrivacyPolicy,
     Preferences
@@ -175,7 +172,6 @@ export default {
   },
   async mounted() {
     Vue.nextTick(() => {
-      this.$root.GooglePicker = this.$refs.GooglePicker;
       this.$root.SaveLoad = this.$refs.SaveLoad;
       this.$root.PrivacyPolicy = this.$refs.PrivacyPolicy;
       this.$root.Preferences = this.$refs.Preferences;
