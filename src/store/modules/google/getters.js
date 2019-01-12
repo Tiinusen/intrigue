@@ -14,4 +14,7 @@ export default {
     hasFiles: state => {
         return state.files.length > 0;
     },
+    hasAppData: state => {
+        return state.appDataFileId !== null;
+    },
 };

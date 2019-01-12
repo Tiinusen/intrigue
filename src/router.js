@@ -6,11 +6,6 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'map',
-      component: () => import('./views/Map.vue')
-    },
-    {
       path: '/test',
       name: 'test',
       component: () => import('./views/Test.vue')
@@ -19,6 +14,11 @@ export default new Router({
       path: '/about',
       name: 'about',
       component: () => import('./views/About.vue')
-    }
+    },
+    {
+      path: '/*',
+      name: 'map',
+      component: () => import('./views/Map.vue')
+    },
   ]
 })

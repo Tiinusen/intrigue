@@ -8,6 +8,9 @@ export default {
     setFolderId(state, folderId) {
         state.folderId = folderId;
     },
+    setAppDataFileId(state, appDataFileId) {
+        state.appDataFileId = appDataFileId;
+    },
     setLoadedFileId(state, fileId) {
         state.loadedFileId = fileId;
     },

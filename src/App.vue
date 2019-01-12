@@ -1,24 +1,34 @@
 <template>
-  <v-app dark>
+  <v-app :dark="isDarkThemeEnabled">
     <google-picker :gconfig="gconfig" ref="GooglePicker"/>
     <save-load ref="SaveLoad"/>
     <privacy-policy ref="PrivacyPolicy"/>
+    <preferences ref="Preferences"/>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span style="color:red;">Intrigue</span>
         <span class="font-weight-light">Map</span>
       </v-toolbar-title>
       <v-spacer/>
-      <v-menu bottom left v-show="!loading">
-        <v-btn slot="activator" dark icon>
+      <v-menu bottom left v-show="!loading" style="z-index:3000;">
+        <v-btn slot="activator" :dark="isDarkThemeEnabled" icon>
           <v-icon class="fas fa-ellipsis-v"/>
         </v-btn>
         <v-list>
-          <v-list-tile @click="onSignInClick" v-if="!isSignedIn">
+          <v-list-tile @click="onSignInClick" v-show="!isSignedIn">
             <v-list-tile-title>Sign in (Google Drive)</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click="onSignOutClick" v-if="isSignedIn">
+          <v-list-tile @click="onSignOutClick" v-show="isSignedIn">
             <v-list-tile-title>Sign out</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile
+            title="Keyboard Shortcut: CTRL + P"
+            @click="onPreferencesClick"
+            v-shortkey="['ctrl', 'p']"
+            @shortkey.native="onPreferencesClick()"
+            v-show="isSignedIn"
+          >
+            <v-list-tile-title>Preferences</v-list-tile-title>
           </v-list-tile>
           <v-list-tile @click="onSaveLoadClick" :disabled="!isSignedIn || (isEmpty && !hasFiles)">
             <v-list-tile-title>Save / Load</v-list-tile-title>
@@ -28,7 +38,7 @@
             @click="onQuickSave"
             v-shortkey="['ctrl', 's']"
             @shortkey.native="onQuickSave()"
-            v-show="isFileLoaded && !isEmpty"
+            v-show="isFileLoaded && !isEmpty && isSignedIn"
           >
             <v-list-tile-title>Quick Save</v-list-tile-title>
           </v-list-tile>
@@ -37,7 +47,7 @@
             @click="onQuickLoad"
             v-shortkey="['ctrl', 'l']"
             @shortkey.native="onQuickLoad()"
-            v-show="isFileLoaded"
+            v-show="isFileLoaded && isSignedIn"
           >
             <v-list-tile-title>Quick Load</v-list-tile-title>
           </v-list-tile>
@@ -46,7 +56,7 @@
             @click="onToggleAutoSync"
             v-shortkey="['ctrl', 'u']"
             @shortkey.native="onToggleAutoSync()"
-            v-show="isFileLoaded"
+            v-show="isFileLoaded && isSignedIn"
           >
             <v-list-tile-title v-show="!isAutoSyncEnabled">Enable AutoSync</v-list-tile-title>
             <v-list-tile-title v-show="isAutoSyncEnabled">Disable AutoSync</v-list-tile-title>
@@ -69,12 +79,14 @@ import { mapGetters } from "vuex";
 import GooglePicker from "./dialogs/GooglePicker";
 import SaveLoad from "./dialogs/SaveLoad";
 import PrivacyPolicy from "./dialogs/PrivacyPolicy";
+import Preferences from "./dialogs/Preferences";
 export default {
   name: "app",
   components: {
     GooglePicker,
     SaveLoad,
-    PrivacyPolicy
+    PrivacyPolicy,
+    Preferences
   },
   data() {
     return {
@@ -87,7 +99,10 @@ export default {
         discoveryDocs: [
           "https://www.googleapis.com/discovery/v1/apis/drive/v3/rest"
         ],
-        scope: ["https://www.googleapis.com/auth/drive"].join(" ")
+        scope: [
+          "https://www.googleapis.com/auth/drive",
+          "https://www.googleapis.com/auth/drive.appdata"
+        ].join(" ")
       }
     };
   },
@@ -98,11 +113,22 @@ export default {
       isFileLoaded: "google/isFileLoaded",
       isInitialized: "google/isInitialized",
       isSignedIn: "google/isSignedIn",
-      isEmpty: "session/isEmpty"
+      isEmpty: "session/isEmpty",
+      isDarkThemeEnabled: "preferences/isDarkThemeEnabled"
     })
   },
   methods: {
+    async onPreferencesClick() {
+      if (!this.isSignedIn) {
+        return;
+      }
+      await this.$root.Preferences.open();
+      await this.$store.dispatch("google/saveUserData");
+    },
     async onQuickLoad() {
+      if (!this.isFileLoaded) {
+        return;
+      }
       this.loading = true;
       await this.$store.dispatch("google/load", {
         fileId: this.$store.state.google.loadedFileId
@@ -110,6 +136,9 @@ export default {
       this.loading = false;
     },
     async onQuickSave() {
+      if (!this.isFileLoaded) {
+        return;
+      }
       this.loading = true;
       await this.$store.dispatch("google/save", {
         fileId: this.$store.state.google.loadedFileId
@@ -117,6 +146,9 @@ export default {
       this.loading = false;
     },
     async onToggleAutoSync() {
+      if (!this.isFileLoaded) {
+        return;
+      }
       this.loading = true;
       await this.$store.dispatch("google/toggleAutoSync");
       this.loading = false;
@@ -146,13 +178,18 @@ export default {
       this.$root.GooglePicker = this.$refs.GooglePicker;
       this.$root.SaveLoad = this.$refs.SaveLoad;
       this.$root.PrivacyPolicy = this.$refs.PrivacyPolicy;
+      this.$root.Preferences = this.$refs.Preferences;
     });
     this.loading = true;
     await this.$store.dispatch("google/initialize", this.gconfig);
-    this.loading = false;
-    if (this.isSignedIn && this.hasFiles) {
-      this.$root.SaveLoad.open();
+    if (this.isSignedIn) {
+      if (this.hasAppData) {
+        await this.$root.Preferences.open();
+      } else if (this.hasFiles && !this.isFileLoaded) {
+        await this.$root.SaveLoad.open();
+      }
     }
+    this.loading = false;
   }
 };
 </script>

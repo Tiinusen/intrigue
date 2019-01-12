@@ -2,6 +2,24 @@ import { Load, WaitForGoogleAPIToLoad } from "../../../utils/Google";
 
 const SavedSessionFolderName = "Saved Intrigue Map Sessions";
 
+// Should be executed BEFORE any hash change has occurred.
+(function (namespace) { // Closure to protect local variable "var hash"
+    if ('replaceState' in history) { // Yay, supported!
+        namespace.replaceHash = function (newhash) {
+            if (('' + newhash).charAt(0) !== '#') newhash = '#' + newhash;
+            history.replaceState('', '', newhash);
+        }
+    } else {
+        var hash = location.hash;
+        namespace.replaceHash = function (newhash) {
+            if (location.hash !== hash) history.back();
+            location.hash = newhash;
+        };
+    }
+})(window);
+// This function can be namespaced. In this example, we define it on window:
+
+
 export default {
     async initialize({ commit, state, dispatch }, { apiKey, clientId, discoveryDocs, scope }) {
         if (!state.clientInitialized) {
@@ -13,15 +31,32 @@ export default {
                 discoveryDocs: discoveryDocs,
                 scope: scope
             });
-            gapi.auth2.getAuthInstance().isSignedIn.listen((isSignedIn) => {
+            gapi.auth2.getAuthInstance().isSignedIn.listen(async (isSignedIn) => {
                 commit('setSignedIn', isSignedIn);
                 if (state.isSignedIn) {
-                    dispatch('loadFileListIntoState');
+                    await dispatch('loadUserData');
+                    await dispatch('loadFileListIntoState');
                 }
             });
             commit('setSignedIn', gapi.auth2.getAuthInstance().isSignedIn.get());
             if (state.signedIn) {
+                await dispatch('loadUserData');
                 await dispatch('loadFileListIntoState');
+                let hash = window.location.hash.substr(2).trim(" ");
+                if (hash !== "") {
+                    let found = false;
+                    for (let file of state.files) {
+                        if (file.id === hash) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        replaceHash("");
+                        return;
+                    }
+                    await dispatch("load", { fileId: hash });
+                }
             }
         }
     },
@@ -60,8 +95,13 @@ export default {
             return;
         }
         commit('setAutoSync', setInterval(() => {
-            console.log(new Date().getTime());
-        },state.autoSyncInterval));
+            if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
+                clearInterval(state.autoSyncIntervalRef);
+                commit('setAutoSync', null);
+                return;
+            }
+            dispatch('sync');
+        }, state.autoSyncInterval));
     },
     async sync({ commit, state, dispatch }) {
         if (!state.clientInitialized) {
@@ -73,14 +113,111 @@ export default {
         if (state.loadedFileId === null) {
             return console.error("You need to first save the session or load a already saved session");
         }
+        // Not yet implemented
+    },
+    async saveUserData({ commit, state, dispatch, rootState }) {
+        if (!state.clientInitialized) {
+            return console.error("Module not initialized (dispatch initialize first with config)");
+        }
+        if (state.signedIn === false) {
+            return;
+        }
+        if (state.appDataFileId === null) {
+            var fileContent = JSON.stringify(rootState.preferences); // As a sample, upload a text file.
+            var file = new Blob([fileContent], { type: "text/plain" });
+            var metadata = {
+                name: "preferences.imap", // Filename at Google Drive
+                mimeType: "application/json", // mimeType at Google Drive
+                parents: ['appDataFolder'] // Folder ID at Google Drive
+            };
 
+            var accessToken = gapi.auth.getToken().access_token; // Here gapi is used for retrieving the access token.
+            var form = new FormData();
+            form.append(
+                "metadata",
+                new Blob([JSON.stringify(metadata)], { type: "application/json" })
+            );
+            form.append("file", file);
+
+            let fileId = await new Promise((resolve, reject) => {
+                var xhr = new XMLHttpRequest();
+                xhr.open(
+                    "post",
+                    "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id"
+                );
+                xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+                xhr.responseType = "json";
+                xhr.onload = () => {
+                    resolve(xhr.response.id);
+                };
+                xhr.send(form);
+            });
+            commit('setAppDataFileId', fileId);
+        }
+        await gapi.client.request({
+            path: '/upload/drive/v3/files/' + state.appDataFileId,
+            method: 'PATCH',
+            params: {
+                uploadType: 'media'
+            },
+            body: JSON.stringify(rootState.preferences)
+        });
+    },
+    async deleteUserData({ commit, state }) {
+        if (!state.clientInitialized) {
+            return console.error("Module not initialized (dispatch initialize first with config)");
+        }
+        if (state.signedIn === false) {
+            return;
+        }
+        if (state.appDataFileId === null) {
+            return;
+        }
+        
+        await gapi.client.drive.files.delete({
+            fileId: state.appDataFileId
+        });
+        commit('setAppDataFileId', null);
+    },
+    async loadUserData({ commit, state, dispatch, rootState }) {
+        if (!state.clientInitialized) {
+            return console.error("Module not initialized (dispatch initialize first with config)");
+        }
+        if (state.signedIn === false) {
+            return;
+        }
+        if (state.appDataFileId === null) {
+            let response = await gapi.client.drive.files.list({
+                spaces: 'appDataFolder',
+                'q': "mimeType = 'application/json' and name='preferences.imap' and trashed = false",
+                'fields': "files(id, name)"
+            });
+            let id = null;
+            response.result.files.forEach((file) => {
+                if (file.name === "preferences.imap") {
+                    id = file.id;
+                }
+            });
+            commit('setAppDataFileId', id);
+        }
+        if (state.appDataFileId === null) {
+            return;
+        }
+        let file = await gapi.client.drive.files.get({
+            fileId: state.appDataFileId,
+            alt: 'media'
+        });
+        if (typeof file !== 'object' || file === null || !('result' in file) || typeof file.result !== 'object' || file.result === null) {
+            console.error("Unable to load file");
+        }
+        await dispatch('preferences/load', file.result, { root: true })
     },
     async loadFileListIntoState({ commit, state, dispatch }) {
         if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
         if (state.signedIn === false) {
-            return [];
+            return;
         }
         // Update content
         let response = await gapi.client.drive.files.list({
@@ -115,7 +252,7 @@ export default {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
         if (state.signedIn === false) {
-            return [];
+            return null;
         }
         let fileMetadata = {
             'name': SavedSessionFolderName,
@@ -146,7 +283,7 @@ export default {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
         if (state.signedIn === false) {
-            return [];
+            return;
         }
         let file = await gapi.client.drive.files.get({
             fileId,
@@ -156,7 +293,8 @@ export default {
             console.error("Unable to load file");
         }
         commit('setLoadedFileId', fileId);
-        return await dispatch('session/load', file.result, { root: true })
+        replaceHash(fileId);
+        await dispatch('session/load', file.result, { root: true })
     },
     async save({ commit, state, rootState, dispatch }, { fileId, sessionName }) {
         if (!state.clientInitialized) {
@@ -224,6 +362,7 @@ export default {
         }
 
         commit('setLoadedFileId', fileId);
+        replaceHash(fileId);
         // Update content
         return await gapi.client.request({
             path: '/upload/drive/v3/files/' + fileId,

@@ -22,14 +22,24 @@
           <v-container fluid>
             <v-layout row>
               <v-flex>
-                <v-text-field :disabled="loading || $store.state.session.hubs.length === 0" v-model="sessionName" label="Session name"></v-text-field>
+                <v-text-field
+                  :disabled="loading || isEmpty"
+                  v-model="sessionName"
+                  label="Session name"
+                ></v-text-field>
                 <v-progress-linear
                   v-show="selectedFileId === null && loading"
                   :indeterminate="true"
                   color="white"
                 />
               </v-flex>
-              <v-btn v-show="!loading && $store.state.session.hubs.length > 0" icon ripple @click="onSaveAs" style="padding-right:2em;">
+              <v-btn
+                v-show="!loading && !isEmpty"
+                icon
+                ripple
+                @click="onSaveAs"
+                style="padding-right:2em;"
+              >
                 <v-icon color="white">Save as ..</v-icon>
               </v-btn>
             </v-layout>
@@ -45,24 +55,34 @@
                         :indeterminate="true"
                       />
                     </v-list-tile-content>
-                    <v-list-tile-action v-show="!loading">
+                    <v-list-tile-action v-show="!loading" class="hidden-md-and-down">
                       <v-btn flat button @click="onDelete(file.id)">
                         <v-icon color="white">Delete</v-icon>
                       </v-btn>
                     </v-list-tile-action>
-                    <v-list-tile-action v-show="!loading">
-                      <v-btn
-                        flat
-                        button
-                        :disabled="$store.state.session.hubs.length === 0"
-                        @click="onSave(file.id)"
-                      >
+                    <v-list-tile-action v-show="!loading" class="hidden-md-and-down">
+                      <v-btn flat button :disabled="isEmpty" @click="onSave(file.id)">
                         <v-icon color="white">Save</v-icon>
                       </v-btn>
                     </v-list-tile-action>
-                    <v-list-tile-action v-show="!loading">
+                    <v-list-tile-action v-show="!loading" class="hidden-md-and-down">
                       <v-btn flat button @click="onLoad(file.id)">
                         <v-icon color="white">Load</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                    <v-list-tile-action v-show="!loading" class="hidden-lg-and-up">
+                      <v-btn icon button @click="onDelete(file.id)">
+                        <v-icon color="white">D</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                    <v-list-tile-action v-show="!loading" class="hidden-lg-and-up">
+                      <v-btn icon button :disabled="isEmpty" @click="onSave(file.id)">
+                        <v-icon color="white">S</v-icon>
+                      </v-btn>
+                    </v-list-tile-action>
+                    <v-list-tile-action v-show="!loading" class="hidden-lg-and-up">
+                      <v-btn icon button @click="onLoad(file.id)">
+                        <v-icon color="white">L</v-icon>
                       </v-btn>
                     </v-list-tile-action>
                   </v-list-tile>
@@ -78,6 +98,8 @@
 
 <script>
 import { IsEmpty } from "../utils/Entity";
+import { mapGetters } from "vuex";
+
 import Vue from "vue";
 export default {
   watch: {
@@ -100,6 +122,12 @@ export default {
       selectedFileId: null,
       loading: false
     };
+  },
+  computed: {
+    ...mapGetters({
+      hasFiles: "google/hasFiles",
+      isEmpty: "session/isEmpty"
+    })
   },
   methods: {
     async onSaveAs() {
@@ -132,7 +160,7 @@ export default {
       await this.$store.dispatch("google/loadFileListIntoState");
       this.loading = false;
       this.selectedFileId = null;
-      if(this.$store.state.session.hubs.length === 0 && this.$store.state.google.files.length === 0){
+      if (this.isEmpty && !this.hasFiles) {
         this.dialog = false;
       }
     },
@@ -149,10 +177,7 @@ export default {
       this.dialog = false;
     },
     async onLoad(fileId) {
-      if (
-        this.$store.state.session.hubs.length > 0 &&
-        !confirm("Are you sure?")
-      ) {
+      if (!this.isEmpty && !confirm("Are you sure?")) {
         return;
       }
       this.loading = true;
@@ -178,8 +203,7 @@ export default {
     onClose() {
       this.resolve();
     }
-  },
-  computed: {}
+  }
 };
 </script>
 <style scoped>
@@ -190,6 +214,9 @@ export default {
 .v-list__tile__action {
   margin-left: 1em;
 }
-@media screen and (min-width: 500px) {
+@media screen and (max-width: 500px) {
+  .v-list__tile__action {
+    margin-left: 0.1em !important;
+  }
 }
 </style>
