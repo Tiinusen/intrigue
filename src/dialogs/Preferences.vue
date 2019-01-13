@@ -16,7 +16,7 @@
         >
           <v-icon class="fas fa-times-circle"/>
         </v-btn>
-        <v-card-title class="headline">Intrigue App Preferences</v-card-title>
+        <v-card-title class="headline">Preferences</v-card-title>
         <v-card-text>
           <v-container fluid>
             <v-layout>
