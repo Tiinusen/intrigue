@@ -20,7 +20,7 @@
     >
       <!-- StoryMode Component -->
       <l-control position="topleft">
-        <story-mode/>
+        <story-mode @click.native="onTimelineClick" :ontouchstart="proxy(onTimelineClick, 100)" />
       </l-control>
 
       <!-- Agreed Link and Text for Permission to use -->
