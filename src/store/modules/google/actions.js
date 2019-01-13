@@ -317,12 +317,12 @@ export default {
             'mimeType': 'application/vnd.google-apps.folder'
         };
         commit('setLoading', true);
-        let file = await gapi.client.drive.files.create({
+        let response = await gapi.client.drive.files.create({
             resource: fileMetadata,
             fields: 'id'
         });
         commit('setLoading', false);
-        return file.id;
+        commit('setFolderId', response.result.id);
     },
     async delete({ commit, state, dispatch }, { fileId }) {
         if (!state.clientInitialized) {
@@ -375,7 +375,7 @@ export default {
             return;
         }
         if (state.folderId === null) {
-            await dispatch('createSessionFolder')
+            await dispatch('createSessionFolder');
         }
 
         let autoSyncWasEnabled = state.autoSyncIntervalRef !== null;
