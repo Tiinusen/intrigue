@@ -39,15 +39,42 @@ export default {
                 // Changes for each File version
             }
         }
+        // Adds / Updates Hubs and Links
+        let addedHubsIDs = [];
         for (let hub of data.hubs) {
-            await dispatch("hub", new Hub(hub));
+            hub = new Hub(hub);
+            addedHubsIDs.push(hub.id);
+            await dispatch("hub", hub);
         }
+        let addedLinksIDs = [];
         for (let link of data.links) {
             link = new Link(link);
             link.hubA = state.ids[link.hubA];
             link.hubB = state.ids[link.hubB];
+            addedLinksIDs.push(link.id);
             await dispatch("link", link);
         }
+
+        // Removes deleted hubs and links
+        let hubsToBeRemovedKeys = [];
+        state.hubs.forEach((hub) => {
+            if (addedHubsIDs.indexOf(hub.id) === -1) {
+                hubsToBeRemovedKeys.push(hub.key);
+            }
+        });
+        let linksToBeRemovedKeys = [];
+        state.links.forEach((link) => {
+            if (addedLinksIDs.indexOf(link.id) === -1) {
+                linksToBeRemovedKeys.push(link.key);
+            }
+        });
+        hubsToBeRemovedKeys.forEach((key) => {
+            commit('deleteHub', state.ids[key]);
+        });
+        linksToBeRemovedKeys.forEach((key) => {
+            commit('deleteLink', state.ids[key]);
+        });
+
         if (upgraded) {
             await dispatch('google/save', { fileId: rootState.google.loadedFileId }, { root: true });
         }
