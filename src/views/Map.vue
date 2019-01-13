@@ -82,8 +82,8 @@
             :open-on-hover="false"
             :transition="'slide-y-reverse-transition'"
           >
-            <v-btn fab dark large color="red" v-bind:onmousedown="proxy(abortHub)">
-              <v-icon class="fas fa-times" title="Abort"></v-icon>
+            <v-btn fab dark large color="blue" v-bind:onmousedown="proxy(selectHub)">
+              <v-icon class="fas fa-mouse-pointer" title="Select"></v-icon>
             </v-btn>
             <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onAddLink)">
               <v-icon class="fas fa-link" title="Create Link"></v-icon>
@@ -114,7 +114,7 @@
               v-bind:onmousedown="proxy(onAddOrganization)"
               title="Add Organization"
             >
-              <img class="speed-dial-icon" contain src="/icons/group/organization.png" />
+              <img class="speed-dial-icon" contain src="/icons/group/organization.png">
             </v-btn>
             <v-btn
               fab
@@ -124,7 +124,7 @@
               v-bind:onmousedown="proxy(onAddPlace)"
               title="Add Place"
             >
-              <img class="speed-dial-icon" contain src="/icons/place/country.png" />
+              <img class="speed-dial-icon" contain src="/icons/place/country.png">
             </v-btn>
             <v-btn
               fab
@@ -134,7 +134,7 @@
               v-bind:onmousedown="proxy(onAddEvent)"
               title="Add Event"
             >
-              <img class="speed-dial-icon" contain src="/icons/event/mission.png" />
+              <img class="speed-dial-icon" contain src="/icons/event/mission.png">
             </v-btn>
             <v-btn
               fab
@@ -219,10 +219,10 @@ export default {
   width: 100px;
   height: 117px;
 }
-.speed-dial-icon{
-  width:3em;
-  height:3em;
-  bottom:0.2em;
+.speed-dial-icon {
+  width: 3em;
+  height: 3em;
+  bottom: 0.2em;
   position: relative;
 }
 .fas {
