@@ -91,6 +91,8 @@ export class Hub {
         this.links = [];
         this.avatar = new Avatar();
         this.hubType = "Character.Identity"
+        this.created = null;
+        this.expired = null;
         this.Copy(source, inspire);
     }
 
@@ -100,7 +102,9 @@ export class Hub {
             lat: this.lat,
             lng: this.lng,
             avatar: this.avatar.Serialize(),
-            hubType: this.hubType
+            hubType: this.hubType,
+            created: this.created === null ? null : this.created.getTime(),
+            expired: this.expired === null ? null : this.expired.getTime()
         };
     }
 
@@ -165,6 +169,20 @@ export class Hub {
         return path === this.hubType.substr(0, path.length);
     }
 
+    /**
+     * Checks if hub is relevant for time
+     * @param {Date} time 
+     */
+    isRelevant(time) {
+        if (this.created !== null && this.created.getTime() > time.getTime()) {
+            return false;
+        }
+        if (this.expired !== null && this.expired.getTime() < time.getTime()) {
+            return false;
+        }
+        return true;
+    }
+
     get url() {
         if (this.ofType("Character")) {
             return this.avatar.url;
@@ -190,6 +208,18 @@ export class Hub {
         }
         if (sibling) {
             return this;
+        }
+        if ('created' in source) {
+            if (typeof source.created !== 'object') {
+                source.created = new Date(source.created);
+            }
+            this.created = source.created;
+        }
+        if ('expired' in source) {
+            if (typeof source.expired !== 'object') {
+                source.expired = new Date(source.expired);
+            }
+            this.expired = source.expired;
         }
         Copy(this, source, [
             "id",
