@@ -14,6 +14,18 @@ export default {
     setLoadedFileId(state, fileId) {
         state.loadedFileId = fileId;
     },
+    setSessionLastModified(state, sessionLastModified) {
+        if (typeof sessionLastModified === 'string') {
+            sessionLastModified = new Date(sessionLastModified);
+        }
+        state.sessionLastModified = sessionLastModified;
+    },
+    setAppDataLastModified(state, appDataLastModified) {
+        if (typeof appDataLastModified === 'string') {
+            appDataLastModified = new Date(appDataLastModified);
+        }
+        state.appDataLastModified = appDataLastModified;
+    },
     clearFileList(state) {
         state.files.splice(0, state.files.length);
     },
@@ -25,5 +37,8 @@ export default {
     },
     setAutoSync(state, val) {
         state.autoSyncIntervalRef = val;
+    },
+    setLoading(state, val) {
+        state.loading = val;
     }
 };

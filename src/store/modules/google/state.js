@@ -5,6 +5,9 @@ export default {
     loadedFileId: null,
     appDataFileId: null,
     autoSyncIntervalRef: null,
-    autoSyncInterval: 5 * 1000,
-    files: []
+    autoSyncInterval: 1 * 1000,
+    files: [],
+    sessionLastModified: null,
+    appDataLastModified: null,
+    loading: false
 };

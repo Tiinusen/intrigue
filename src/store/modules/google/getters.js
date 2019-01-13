@@ -11,6 +11,9 @@ export default {
     isInitialized: state => {
         return state.clientInitialized;
     },
+    isLoading: state => {
+        return state.loading;
+    },
     hasFiles: state => {
         return state.files.length > 0;
     },

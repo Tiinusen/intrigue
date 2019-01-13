@@ -1,3 +1,4 @@
 export default {
-    theme: 'dark'
+    theme: 'dark',
+    autoSync: false
 };

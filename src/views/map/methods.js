@@ -8,13 +8,16 @@ import Vue from "vue";
 
 export default {
     proxy,
-    onMarkerDragComplete(hub, event) {
+    async onMarkerDragComplete(hub, event) {
         this.hideCursor();
-        this.$store.dispatch("session/hub", {
+        await this.$store.dispatch("session/hub", {
             id: hub.id,
             lat: event.lat,
             lng: event.lng
         });
+        if (this.$store.state.google.sessionLastModified !== null) {
+            await this.$store.commit('google/setSessionLastModified', new Date());
+        }
     },
     async onAddLink() {
         let link = new Link();
@@ -30,6 +33,7 @@ export default {
         this.hideCursor();
         this.selectedHubB = null;
         this.showHubSpeedDial = 1;
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     async onAddOrganization(event) {
         this.hideCursor();
@@ -41,7 +45,8 @@ export default {
             "Group",
             HubTypes["Group"]
         );
-        this.$store.dispatch(hub);
+        await this.$store.dispatch(hub);
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     async onAddPlace() {
         this.hideCursor();
@@ -53,7 +58,8 @@ export default {
             "Place",
             HubTypes["Place"]
         );
-        this.$store.dispatch(hub);
+        await this.$store.dispatch(hub);
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     async onAddEvent() {
         this.hideCursor();
@@ -65,7 +71,8 @@ export default {
             "Event",
             HubTypes["Event"]
         );
-        this.$store.dispatch(hub);
+        await this.$store.dispatch(hub);
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     async onAddCharacter(event) {
         this.hideCursor();
@@ -79,7 +86,8 @@ export default {
         );
         let changes = await this.$root.AvatarDesigner.open(hub.avatar);
         Copy(hub.avatar, changes, Object.keys(changes));
-        this.$store.dispatch(hub);
+        await this.$store.dispatch(hub);
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     hideCursor() {
         this.lastCursorClickPosition.lat = null;
@@ -105,10 +113,11 @@ export default {
         this.hideCursor();
         this.showHubSpeedDial = 2;
     },
-    onConfirmDeleteHub(hub) {
+    async onConfirmDeleteHub(hub) {
         this.hideCursor();
-        this.$store.dispatch("session/deleteHub", this.selectedHubA);
+        await this.$store.dispatch("session/deleteHub", this.selectedHubA);
         this.abortHub();
+        await this.$store.commit('google/setSessionLastModified', new Date());
     },
     abortHub() {
         this.hideCursor();

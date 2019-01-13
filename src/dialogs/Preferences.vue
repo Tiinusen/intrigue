@@ -20,10 +20,18 @@
         <v-card-text>
           <v-container fluid>
             <v-layout>
-              <v-flex xs6>
+              <v-flex xs5>
                 <v-switch
                   v-model="dark"
                   :label="dark?'Dark Theme':'Light Theme'"
+                  color="black"
+                  hide-details
+                ></v-switch>
+              </v-flex>
+              <v-flex xs7>
+                <v-switch
+                  v-model="autoSync"
+                  :label="autoSync?'Auto Sync Default ON':'Auto Sync Default OFF'"
                   color="black"
                   hide-details
                 ></v-switch>
@@ -55,13 +63,17 @@ export default {
       } else {
         this.$store.commit("preferences/setTheme", "light");
       }
+    },
+    autoSync(val) {
+      this.$store.commit("preferences/setAutoSync", val);
     }
   },
   computed: {
     ...mapGetters({
       hasFiles: "google/hasFiles",
       isEmpty: "session/isEmpty",
-      isDarkThemeEnabled: "preferences/isDarkThemeEnabled"
+      isDarkThemeEnabled: "preferences/isDarkThemeEnabled",
+      isDefaultAutoSyncEnabled: "preferences/isDefaultAutoSyncEnabled"
     })
   },
   components: {},
@@ -72,7 +84,8 @@ export default {
       resolve: null,
       reject: null,
       loading: false,
-      dark: true
+      dark: true,
+      autoSync: false
     };
   },
   methods: {
@@ -88,6 +101,7 @@ export default {
     async onOpen() {
       this.loading = true;
       this.dark = this.isDarkThemeEnabled;
+      this.autoSync = this.isDefaultAutoSyncEnabled;
     },
     onClose() {
       this.resolve();

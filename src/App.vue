@@ -9,7 +9,7 @@
         <span class="font-weight-light">Map</span>
       </v-toolbar-title>
       <v-spacer/>
-      <v-menu bottom left v-show="!loading" style="z-index:3000;">
+      <v-menu bottom left v-show="!loading && !isLoading" style="z-index:3000;">
         <v-btn slot="activator" :dark="isDarkThemeEnabled" icon>
           <v-icon class="fas fa-ellipsis-v"/>
         </v-btn>
@@ -63,12 +63,18 @@
           <v-list-tile @click="onClearClick" :disabled="isEmpty">
             <v-list-tile-title>Clear Intrigue Map</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile @click="onToggleFullscreen">
+            <v-list-tile-title>{{ fullscreen ? "Exit" : "Enter" }} Fullscreen</v-list-tile-title>
+          </v-list-tile>
         </v-list>
       </v-menu>
     </v-toolbar>
     <v-content>
       <router-view/>
     </v-content>
+    <v-footer class="pa-3" v-show="isLoading || loading">
+      <v-progress-linear :indeterminate="true" :color="isDarkThemeEnabled?'white':'black'"></v-progress-linear>
+    </v-footer>
   </v-app>
 </template>
 
@@ -78,6 +84,29 @@ import { mapGetters } from "vuex";
 import SaveLoad from "./dialogs/SaveLoad";
 import PrivacyPolicy from "./dialogs/PrivacyPolicy";
 import Preferences from "./dialogs/Preferences";
+
+function launchIntoFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen();
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+function exitFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
+
 export default {
   name: "app",
   components: {
@@ -88,6 +117,7 @@ export default {
   data() {
     return {
       loading: true,
+      fullscreen: false,
       gconfig: {
         apiKey: "AIzaSyDboMfF7p2eXT5Jlpv_6ZdjP7VOlOdpwZI",
         appId: "465407703204",
@@ -110,11 +140,20 @@ export default {
       isFileLoaded: "google/isFileLoaded",
       isInitialized: "google/isInitialized",
       isSignedIn: "google/isSignedIn",
+      isLoading: "google/isLoading",
       isEmpty: "session/isEmpty",
       isDarkThemeEnabled: "preferences/isDarkThemeEnabled"
     })
   },
   methods: {
+    onToggleFullscreen() {
+      this.fullscreen = !this.fullscreen;
+      if (this.fullscreen) {
+        launchIntoFullscreen(document.getElementsByTagName("body")[0]);
+      } else {
+        exitFullscreen();
+      }
+    },
     async onPreferencesClick() {
       if (!this.isSignedIn) {
         return;

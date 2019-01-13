@@ -20,19 +20,36 @@ export default {
     async deleteLink({ commit, state }, link) {
         await commit('deleteLink', link);
     },
-    async load({ commit, state, dispatch }, data) {
-        await dispatch('clear');
-        if (typeof data !== 'object' || !('hubs' in state) || !('links' in state)) {
+    async load({ commit, state, dispatch, rootState }, data) {
+        if (typeof data !== 'object' || !('hubs' in data) || !('links' in data) || !('version' in data)) {
             return console.error("File doesn't contain Intrigue Map data");
         }
-        for (var i = 0; i < data.hubs.length; i++) {
-            await dispatch("hub", new Hub(data.hubs[i]));
+        if (state.version < data.version) {
+            // If the file has a newer version than the app version then it should reload the browser
+            self.location.reload(true);
+            return;
         }
-        for (var i = 0; i < data.links.length; i++) {
-            var link = new Link(data.links[i]);
+        let upgraded = false;
+        while (state.version !== data.version) { // Migrates the file to reach current version
+            data.version++;
+            upgraded = true;
+            switch (data.version) {
+                default: // If there is a gap or an unsupported version then throws error
+                    return console.error("Session file can't be migrated to current Intrigue Map version");
+                // Changes for each File version
+            }
+        }
+        for (let hub of data.hubs) {
+            await dispatch("hub", new Hub(hub));
+        }
+        for (let link of data.links) {
+            link = new Link(link);
             link.hubA = state.ids[link.hubA];
             link.hubB = state.ids[link.hubB];
             await dispatch("link", link);
+        }
+        if (upgraded) {
+            await dispatch('google/save', { fileId: rootState.google.loadedFileId }, { root: true });
         }
     }
 };

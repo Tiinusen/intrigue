@@ -67,7 +67,9 @@ export default {
         if (state.signedIn === true) {
             return console.error("Already signed in");
         }
-        gapi.auth2.getAuthInstance().signIn();
+        commit('setLoading', true);
+        await gapi.auth2.getAuthInstance().signIn();
+        commit('setLoading', false);
     },
     async signOut({ commit, state }) {
         if (!state.clientInitialized) {
@@ -76,7 +78,9 @@ export default {
         if (state.signedIn === false) {
             return console.error("Already signed out");
         }
-        gapi.auth2.getAuthInstance().signOut();
+        commit('setLoading', true);
+        await gapi.auth2.getAuthInstance().signOut();
+        commit('setLoading', false);
     },
     async toggleAutoSync({ commit, state, dispatch }) {
         if (!state.clientInitialized) {
@@ -89,18 +93,24 @@ export default {
             return console.error("You need to first save the session or load a already saved session");
         }
 
+        commit('setSessionLastModified', null);
         if (state.autoSyncIntervalRef !== null) {
             clearInterval(state.autoSyncIntervalRef);
             commit('setAutoSync', null);
             return;
         }
-        commit('setAutoSync', setInterval(() => {
-            if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
+        commit('setAutoSync', setInterval(async () => {
+            try {
+                if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
+                    throw new Error();
+                }
+                await dispatch('sync');
+            } catch (e) {
+                console.error(e);
                 clearInterval(state.autoSyncIntervalRef);
                 commit('setAutoSync', null);
-                return;
             }
-            dispatch('sync');
+
         }, state.autoSyncInterval));
     },
     async sync({ commit, state, dispatch }) {
@@ -113,7 +123,35 @@ export default {
         if (state.loadedFileId === null) {
             return console.error("You need to first save the session or load a already saved session");
         }
-        // Not yet implemented
+        if (state.sessionLastModified !== null && new Date().getTime() - state.sessionLastModified.getTime() < state.autoSyncInterval) {
+            return; // Avoids refreshing if changed within cycle
+        }
+        // Checks if the loaded session has been modified
+        let response = await gapi.client.drive.files.list({
+            'q': "mimeType = 'application/json' and trashed = false and '" + state.folderId + "' in parents",
+            'fields': "files(id, name, modifiedTime)",
+        });
+        let loadedFile = null;
+        response.result.files.forEach((file) => {
+            if (file.id === state.loadedFileId) {
+                loadedFile = file;
+            }
+        });
+        if (loadedFile === null) {
+            commit('setSessionLastModified', null);
+            commit('setLoadedFileId', null);
+            return;
+        }
+        loadedFile.modifiedTime = new Date(loadedFile.modifiedTime);
+        if (state.sessionLastModified === null) { // First
+            commit('setSessionLastModified', loadedFile.modifiedTime);
+        } else if (state.sessionLastModified.getTime() < loadedFile.modifiedTime.getTime()) { // Newer state on drive (Load)
+            commit('setSessionLastModified', null);
+            await dispatch("load", { fileId: state.loadedFileId });
+        } else if (state.sessionLastModified.getTime() > loadedFile.modifiedTime.getTime()) { // Local state is newer (Save)
+            commit('setSessionLastModified', null);
+            await dispatch("save", { fileId: state.loadedFileId });
+        }
     },
     async saveUserData({ commit, state, dispatch, rootState }) {
         if (!state.clientInitialized) {
@@ -138,7 +176,7 @@ export default {
                 new Blob([JSON.stringify(metadata)], { type: "application/json" })
             );
             form.append("file", file);
-
+            commit('setLoading', true);
             let fileId = await new Promise((resolve, reject) => {
                 var xhr = new XMLHttpRequest();
                 xhr.open(
@@ -152,8 +190,10 @@ export default {
                 };
                 xhr.send(form);
             });
+            commit('setLoading', false);
             commit('setAppDataFileId', fileId);
         }
+        commit('setLoading', true);
         await gapi.client.request({
             path: '/upload/drive/v3/files/' + state.appDataFileId,
             method: 'PATCH',
@@ -162,6 +202,7 @@ export default {
             },
             body: JSON.stringify(rootState.preferences)
         });
+        commit('setLoading', false);
     },
     async deleteUserData({ commit, state }) {
         if (!state.clientInitialized) {
@@ -173,10 +214,13 @@ export default {
         if (state.appDataFileId === null) {
             return;
         }
-        
+
+        commit('setLoading', true);
         await gapi.client.drive.files.delete({
             fileId: state.appDataFileId
         });
+        commit('setLoading', false);
+
         commit('setAppDataFileId', null);
     },
     async loadUserData({ commit, state, dispatch, rootState }) {
@@ -187,26 +231,33 @@ export default {
             return;
         }
         if (state.appDataFileId === null) {
+            commit('setLoading', true);
             let response = await gapi.client.drive.files.list({
                 spaces: 'appDataFolder',
                 'q': "mimeType = 'application/json' and name='preferences.imap' and trashed = false",
-                'fields': "files(id, name)"
+                'fields': "files(id, name, modifiedTime)"
             });
+            commit('setLoading', false);
             let id = null;
+            let appDataLastModified = null;
             response.result.files.forEach((file) => {
                 if (file.name === "preferences.imap") {
                     id = file.id;
+                    appDataLastModified = file.modifiedTime;
                 }
             });
             commit('setAppDataFileId', id);
+            commit('setAppDataLastModified', appDataLastModified);
         }
         if (state.appDataFileId === null) {
             return;
         }
+        commit('setLoading', true);
         let file = await gapi.client.drive.files.get({
             fileId: state.appDataFileId,
             alt: 'media'
         });
+        commit('setLoading', false);
         if (typeof file !== 'object' || file === null || !('result' in file) || typeof file.result !== 'object' || file.result === null) {
             console.error("Unable to load file");
         }
@@ -219,12 +270,13 @@ export default {
         if (state.signedIn === false) {
             return;
         }
-        // Update content
+        commit('setLoading', true);
         let response = await gapi.client.drive.files.list({
             'pageSize': 1000,
             'q': "mimeType = 'application/vnd.google-apps.folder' and trashed = false",
             'fields': "nextPageToken, files(id, name)"
         });
+        commit('setLoading', false);
         let id = null;
 
         response.result.files.forEach((folder) => {
@@ -233,15 +285,21 @@ export default {
             }
         });
         commit("setFolderId", id);
-        if (id !== null) {
+        if (state.folderId !== null) {
+            commit('setLoading', true);
             let response = await gapi.client.drive.files.list({
-                'pageSize': 1000,
-                'q': "mimeType = 'application/json' and trashed = false and '" + id + "' in parents",
-                'fields': "nextPageToken, files(id, name)",
+                'q': "mimeType = 'application/json' and trashed = false and '" + state.folderId + "' in parents",
+                'fields': "files(id, name, modifiedTime)",
             });
             for (let i = 0; i < response.result.files.length; i++) {
-                response.result.files[i].name = response.result.files[i].name.substr(0, response.result.files[i].name.length - ".imap".length);
+                let file = response.result.files[i];
+                file.name = file.name.substr(0, file.name.length - ".imap".length);
+                file.modifiedTime = new Date(file.modifiedTime);
+                if (file.id === state.loadedFileId) {
+                    commit('setSessionLastModified', file.modifiedTime);
+                }
             }
+            commit('setLoading', false);
             commit("setFileList", response.result.files);
         } else {
             commit("clearFileList");
@@ -258,10 +316,12 @@ export default {
             'name': SavedSessionFolderName,
             'mimeType': 'application/vnd.google-apps.folder'
         };
+        commit('setLoading', true);
         let file = await gapi.client.drive.files.create({
             resource: fileMetadata,
             fields: 'id'
         });
+        commit('setLoading', false);
         return file.id;
     },
     async delete({ commit, state, dispatch }, { fileId }) {
@@ -274,17 +334,24 @@ export default {
         if (state.loadedFileId === fileId) {
             commit('setLoadedFileId', null);
         }
+        commit('setLoading', true);
         await gapi.client.drive.files.delete({
             fileId
         });
+        commit('setLoading', false);
     },
-    async load({ commit, state, dispatch }, { fileId }) {
+    async load({ commit, state, dispatch, rootState }, { fileId }) {
         if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
         if (state.signedIn === false) {
             return;
         }
+        let autoSyncWasEnabled = state.autoSyncIntervalRef !== null;
+        if (autoSyncWasEnabled) {
+            await dispatch('toggleAutoSync');
+        }
+        commit('setLoading', true);
         let file = await gapi.client.drive.files.get({
             fileId,
             alt: 'media'
@@ -294,19 +361,29 @@ export default {
         }
         commit('setLoadedFileId', fileId);
         replaceHash(fileId);
-        await dispatch('session/load', file.result, { root: true })
+        await dispatch('session/load', file.result, { root: true });
+        if (autoSyncWasEnabled || rootState.preferences.autoSync) {
+            await dispatch('toggleAutoSync');
+        }
+        commit('setLoading', false);
     },
     async save({ commit, state, rootState, dispatch }, { fileId, sessionName }) {
         if (!state.clientInitialized) {
             return console.error("Module not initialized (dispatch initialize first with config)");
         }
         if (state.signedIn === false) {
-            return [];
+            return;
         }
         if (state.folderId === null) {
             await dispatch('createSessionFolder')
         }
+
+        let autoSyncWasEnabled = state.autoSyncIntervalRef !== null;
+        if (autoSyncWasEnabled) {
+            await dispatch('toggleAutoSync');
+        }
         let data = {
+            version: rootState.session.version,
             hubs: [],
             links: []
         };
@@ -343,7 +420,7 @@ export default {
                 new Blob([JSON.stringify(metadata)], { type: "application/json" })
             );
             form.append("file", file);
-
+            commit('setLoading', true);
             fileId = await new Promise((resolve, reject) => {
                 var xhr = new XMLHttpRequest();
                 xhr.open(
@@ -358,13 +435,20 @@ export default {
                 xhr.send(form);
             });
             commit('setLoadedFileId', fileId);
+            replaceHash(fileId);
+            await dispatch('loadFileListIntoState');
+            if (autoSyncWasEnabled || rootState.preferences.autoSync) {
+                await dispatch('toggleAutoSync');
+            }
+            commit('setLoading', false);
             return;
         }
 
         commit('setLoadedFileId', fileId);
         replaceHash(fileId);
         // Update content
-        return await gapi.client.request({
+        commit('setLoading', true);
+        await gapi.client.request({
             path: '/upload/drive/v3/files/' + fileId,
             method: 'PATCH',
             params: {
@@ -372,5 +456,10 @@ export default {
             },
             body: data
         });
+        await dispatch('loadFileListIntoState');
+        if (autoSyncWasEnabled || rootState.preferences.autoSync) {
+            await dispatch('toggleAutoSync');
+        }
+        commit('setLoading', false);
     }
 };
