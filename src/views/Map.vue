@@ -18,6 +18,11 @@
       :onmouseup="proxy(onMap, 100)"
       @click="onSetCursorCoordinate"
     >
+      <!-- StoryMode Component -->
+      <l-control position="topleft">
+        <story-mode/>
+      </l-control>
+
       <!-- Agreed Link and Text for Permission to use -->
       <l-control position="bottomleft">
         <a
@@ -153,7 +158,7 @@
         @update:latLng="onMarkerDragComplete(hub, $event)"
         :draggable="selectedHubA === hub && showHubSpeedDial === 1"
       >
-        <l-icon :icon-anchor="[50, 60]">
+        <l-icon :icon-anchor="[50, 78]">
           <v-speed-dial
             class="hidden-md-and-down"
             v-model="TRUE"
@@ -211,13 +216,15 @@
               <v-icon class="fas fa-link" title="Create Link"></v-icon>
             </v-btn>
           </v-speed-dial>
+          <span class="fas fa-arrows-alt marker-symbol" v-show="selectedHubA === hub"></span>
+          <span class="fas fa-link marker-symbol" v-show="selectedHubB === hub"></span>
           <v-img class="marker-icon" :src="hub.url" :onmouseup="proxy(onHubClick,0, hub)" contain/>
         </l-icon>
       </l-marker>
 
       <!-- Cursor -->
       <l-marker :lat-lng.sync="cursorPosition" v-if="isCursorVisible">
-        <l-icon :icon-anchor="[50, 60]">
+        <l-icon :icon-anchor="[50, 78]">
           <v-speed-dial
             class="hidden-md-and-down"
             v-model="showCursor"
@@ -270,6 +277,7 @@
               <v-icon class="fas fa-user"></v-icon>
             </v-btn>
           </v-speed-dial>
+          <span class="fas fa-plus-circle marker-symbol"></span>
           <Avatar
             style="width:100px;height:117px;"
             avatarStyle="Circle"
@@ -294,6 +302,7 @@ import {
 } from "vue2-leaflet";
 
 import Avatar from "../components/Avatar";
+import StoryMode from "../components/StoryMode";
 
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
@@ -312,6 +321,7 @@ export default {
     LMarker,
     LControl,
     Avatar,
+    StoryMode,
     AvatarDesigner,
     SubTypeSelector,
     LinkTypeSelector,
@@ -322,9 +332,10 @@ export default {
   data,
   methods,
   computed,
-  watch:{
-    TRUE(){
-      Vue.nextTick(() => { // Since speed-dial buttons v-model gets changed on press
+  watch: {
+    TRUE() {
+      Vue.nextTick(() => {
+        // Since speed-dial buttons v-model gets changed on press
         this.TRUE = true;
       });
     }
@@ -351,15 +362,22 @@ export default {
   width: 100px;
   height: 117px;
 }
+.fas {
+  color: black !important;
+}
+.marker-symbol {
+  position: absolute;
+  font-size: 3em;
+  z-index: 100;
+  color: red !important;
+}
 .speed-dial-icon {
   width: 3em;
   height: 3em;
   bottom: 0.2em;
   position: relative;
 }
-.fas {
-  color: black !important;
-}
+
 @media screen and (max-width: 500px) {
 }
 </style>
