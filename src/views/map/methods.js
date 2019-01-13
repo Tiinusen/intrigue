@@ -126,10 +126,12 @@ export default {
         this.selectedHubB = null;
     },
     selectHub() {
-        this.hideCursor();
-        this.showHubSpeedDial = 1;
-        this.selectedHubA = this.selectedHubB;
-        this.selectedHubB = null;
+        Vue.nextTick(() => {
+            this.hideCursor();
+            this.showHubSpeedDial = 1;
+            this.selectedHubA = this.selectedHubB;
+            this.selectedHubB = null;
+        });
     },
     async onHubClick(hub) {
         this.hideCursor();

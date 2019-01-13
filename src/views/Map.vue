@@ -13,9 +13,9 @@
       :minZoom="20"
       :options="{zoomControl: false, attributionControl: false}"
       :ontouchstart="proxy(onMap, null)"
-      :ontouchend="proxy(onMap, 50)"
+      :ontouchend="proxy(onMap, 100)"
       :onmousedown="proxy(onMap, null)"
-      :onmouseup="proxy(onMap, 50)"
+      :onmouseup="proxy(onMap, 100)"
       @click="onSetCursorCoordinate"
     >
       <!-- Links -->

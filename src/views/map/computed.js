@@ -3,7 +3,8 @@ export default {
         return (
             this.showCursor &&
             this.cursorPosition.lat !== null &&
-            this.cursorPosition.lng !== null
+            this.cursorPosition.lng !== null &&
+            this.selectedHubA === null
         );
     }
 };
