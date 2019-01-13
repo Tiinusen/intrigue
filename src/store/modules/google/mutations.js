@@ -38,6 +38,9 @@ export default {
     setAutoSync(state, val) {
         state.autoSyncIntervalRef = val;
     },
+    setAutoSyncTimeout(state, val) {
+        state.autoSyncTimeoutRef = val;
+    },
     setAutoSyncInterval(state, val) {
         state.autoSyncInterval = val;
     },

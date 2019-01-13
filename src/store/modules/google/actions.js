@@ -95,7 +95,10 @@ export default {
 
         commit('setSessionLastModified', null);
         if (state.autoSyncIntervalRef !== null) {
-            clearInterval(state.autoSyncIntervalRef);
+            if (state.autoSyncTimeoutRef !== null) {
+                clearTimeout(state.autoSyncTimeoutRef);
+                commit('setAutoSyncTimeout', null);
+            }
             commit('setAutoSync', null);
             return;
         }
@@ -106,12 +109,24 @@ export default {
                     if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
                         throw new Error();
                     }
+                    if (state.autoSyncTimeoutRef === null) {
+                        commit('setAutoSyncTimeout', setTimeout(() => {
+                            if (state.autoSyncTimeoutRef === null) {
+                                return;
+                            }
+                            commit('setAutoSyncTimeout', null);
+                            commit('setAutoSync', null);
+                        }, state.autoSyncTimeout * 1000));
+                    }
                     await dispatch('sync');
                     await new Promise(resolve => setTimeout(resolve, state.autoSyncInterval * 1000));
                 }
             } catch (e) {
                 console.error(e);
-                clearInterval(state.autoSyncIntervalRef);
+                if (state.autoSyncTimeoutRef !== null) {
+                    clearTimeout(state.autoSyncTimeoutRef);
+                    commit('setAutoSyncTimeout', null);
+                }
                 commit('setAutoSync', null);
             }
         };
@@ -149,13 +164,25 @@ export default {
         }
         loadedFile.modifiedTime = new Date(loadedFile.modifiedTime);
         if (state.sessionLastModified === null) { // First
+            if (state.autoSyncTimeoutRef !== null) {
+                clearTimeout(state.autoSyncTimeoutRef);
+                commit('setAutoSyncTimeout', null);
+            }
             commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', loadedFile.modifiedTime);
         } else if (state.sessionLastModified.getTime() < loadedFile.modifiedTime.getTime()) { // Newer state on drive (Load)
+            if (state.autoSyncTimeoutRef !== null) {
+                clearTimeout(state.autoSyncTimeoutRef);
+                commit('setAutoSyncTimeout', null);
+            }
             commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', null);
             await dispatch("load", { fileId: state.loadedFileId });
         } else if (state.sessionLastModified.getTime() > loadedFile.modifiedTime.getTime()) { // Local state is newer (Save)
+            if (state.autoSyncTimeoutRef !== null) {
+                clearTimeout(state.autoSyncTimeoutRef);
+                commit('setAutoSyncTimeout', null);
+            }
             commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', null);
             await dispatch("save", { fileId: state.loadedFileId });
