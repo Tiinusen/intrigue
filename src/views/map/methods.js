@@ -196,5 +196,10 @@ export default {
         Vue.nextTick(() => {
             this.hideCursor();
         });
+    },
+    onTimelineClick() {
+        Vue.nextTick(() => {
+            this.hideCursor();
+        });
     }
 };

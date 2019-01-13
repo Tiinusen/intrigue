@@ -424,7 +424,8 @@ export default {
         let data = {
             version: rootState.session.version,
             hubs: [],
-            links: []
+            links: [],
+            time: rootState.session.time.getTime()
         };
         rootState.session.hubs.forEach((hub) => {
             data.hubs.push(hub.Serialize());

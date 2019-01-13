@@ -10,6 +10,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import 'leaflet/dist/leaflet.css'
 import VueAnalytics from 'vue-analytics'
 import VueLodash from 'vue-lodash'
+import VueMoment from 'vue-moment'
 
 Vue.use(require('vue-shortkey'))
 
@@ -33,3 +34,4 @@ Vue.use(VueAnalytics, {
 });
 
 Vue.use(VueLodash);
+Vue.use(VueMoment);
