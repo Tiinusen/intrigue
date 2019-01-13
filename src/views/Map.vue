@@ -18,6 +18,125 @@
       :onmouseup="proxy(onMap, 100)"
       @click="onSetCursorCoordinate"
     >
+      <!-- Agreed Link and Text for Permission to use -->
+      <l-control position="bottomleft">
+        <a
+          href="https://kultdivinitylost.com"
+          style="color: red;font-weight:bold;text-decoration:none;"
+          target="_blank"
+        >With permission from Helmgast AB</a>
+      </l-control>
+
+      <!-- Bottom Right Menu for handheld devices with limited viewport -->
+      <l-control position="bottomright" style="margin-right:4em;" class="hidden-lg-and-up">
+        <v-speed-dial
+          v-model="TRUE"
+          v-if="!isCursorVisible && showHubSpeedDial === 1 && selectedHubA !== null"
+          :top="false"
+          :bottom="false"
+          :right="false"
+          :left="false"
+          :direction="'top'"
+          :open-on-hover="false"
+          :transition="'slide-y-reverse-transition'"
+        >
+          <v-btn fab dark large color="blue" v-bind:onmousedown="proxy(onEditHub)">
+            <v-icon class="fas fa-edit" title="Edit"></v-icon>
+          </v-btn>
+          <v-btn fab dark large color="red" v-bind:onmousedown="proxy(onDeleteHub)">
+            <v-icon class="fas fa-trash" title="Delete"></v-icon>
+          </v-btn>
+        </v-speed-dial>
+        <v-speed-dial
+          v-model="TRUE"
+          v-if="!isCursorVisible && showHubSpeedDial === 2 && selectedHubA !== null"
+          :top="false"
+          :bottom="false"
+          :right="false"
+          :left="false"
+          :direction="'top'"
+          :open-on-hover="false"
+          :transition="'slide-y-reverse-transition'"
+        >
+          <v-btn fab dark large color="red" v-bind:onmousedown="proxy(abortHub)">
+            <v-icon class="fas fa-times" title="Abort"></v-icon>
+          </v-btn>
+          <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onConfirmDeleteHub)">
+            <v-icon class="fas fa-check" title="Confirm"></v-icon>
+          </v-btn>
+        </v-speed-dial>
+        <v-speed-dial
+          v-model="TRUE"
+          v-if="!isCursorVisible && showHubSpeedDial === 3 && selectedHubA !== null"
+          :top="false"
+          :bottom="false"
+          :right="false"
+          :left="false"
+          :direction="'top'"
+          :open-on-hover="false"
+          :transition="'slide-y-reverse-transition'"
+        >
+          <v-btn fab dark large color="blue" v-bind:onmousedown="proxy(selectHub)">
+            <v-icon class="fas fa-mouse-pointer" title="Select"></v-icon>
+          </v-btn>
+          <v-btn fab dark large color="green" v-bind:onmousedown="proxy(onAddLink)">
+            <v-icon class="fas fa-link" title="Create Link"></v-icon>
+          </v-btn>
+        </v-speed-dial>
+        <v-speed-dial
+          v-model="TRUE"
+          v-if="isCursorVisible"
+          :top="false"
+          :bottom="false"
+          :right="false"
+          :left="false"
+          :direction="'top'"
+          :open-on-hover="false"
+          :transition="'slide-y-reverse-transition'"
+        >
+          <v-btn
+            fab
+            dark
+            large
+            color="red"
+            v-bind:onmousedown="proxy(onAddOrganization)"
+            title="Add Organization"
+          >
+            <img class="speed-dial-icon" contain src="/icons/group/organization.png">
+          </v-btn>
+          <v-btn
+            fab
+            dark
+            large
+            color="orange"
+            v-bind:onmousedown="proxy(onAddPlace)"
+            title="Add Place"
+          >
+            <img class="speed-dial-icon" contain src="/icons/place/country.png">
+          </v-btn>
+          <v-btn
+            fab
+            dark
+            large
+            color="blue"
+            v-bind:onmousedown="proxy(onAddEvent)"
+            title="Add Event"
+          >
+            <img class="speed-dial-icon" contain src="/icons/event/mission.png">
+          </v-btn>
+          <v-btn
+            fab
+            dark
+            large
+            color="green"
+            v-bind:onmousedown="proxy(onAddCharacter)"
+            title="Add Character"
+          >
+            <v-icon class="fas fa-user"></v-icon>
+          </v-btn>
+        </v-speed-dial>
+      </l-control>
+
       <!-- Links -->
       <l-polygon
         :key="link.key"
@@ -36,6 +155,7 @@
       >
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
+            class="hidden-md-and-down"
             v-model="TRUE"
             v-if="selectedHubA === hub && showHubSpeedDial === 1"
             :top="false"
@@ -54,6 +174,7 @@
             </v-btn>
           </v-speed-dial>
           <v-speed-dial
+            class="hidden-md-and-down"
             v-model="TRUE"
             v-if="selectedHubA === hub && showHubSpeedDial === 2"
             :top="false"
@@ -72,6 +193,7 @@
             </v-btn>
           </v-speed-dial>
           <v-speed-dial
+            class="hidden-md-and-down"
             v-model="TRUE"
             v-if="selectedHubB === hub && showHubSpeedDial === 3"
             :top="false"
@@ -97,6 +219,7 @@
       <l-marker :lat-lng.sync="cursorPosition" v-if="isCursorVisible">
         <l-icon :icon-anchor="[50, 60]">
           <v-speed-dial
+            class="hidden-md-and-down"
             v-model="showCursor"
             :top="false"
             :bottom="false"
@@ -166,7 +289,8 @@ import {
   LTileLayer,
   LIcon,
   LControl,
-  LPolygon
+  LPolygon,
+  LControlAttribution
 } from "vue2-leaflet";
 
 import Avatar from "../components/Avatar";
@@ -192,11 +316,19 @@ export default {
     SubTypeSelector,
     LinkTypeSelector,
     LPolygon,
+    LControlAttribution,
     HubEdit
   },
   data,
   methods,
   computed,
+  watch:{
+    TRUE(){
+      Vue.nextTick(() => { // Since speed-dial buttons v-model gets changed on press
+        this.TRUE = true;
+      });
+    }
+  },
   mounted() {
     Vue.nextTick(() => {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
@@ -227,5 +359,7 @@ export default {
 }
 .fas {
   color: black !important;
+}
+@media screen and (max-width: 500px) {
 }
 </style>

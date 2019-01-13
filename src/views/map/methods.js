@@ -23,6 +23,7 @@ export default {
         let link = new Link();
         link.hubA = this.selectedHubA;
         link.hubB = this.selectedHubB;
+        await new Promise(resolve => setTimeout(resolve, 100));
         this.hideCursor();
         let linkType = await this.$root.LinkTypeSelector.open(link);
         if (linkType === null) {
@@ -109,50 +110,54 @@ export default {
         }
         this.$store.dispatch(hub);
     },
-    onDeleteHub(hub) {
+    async onDeleteHub(hub) {
+        await new Promise(resolve => setTimeout(resolve, 100));
         this.hideCursor();
         this.showHubSpeedDial = 2;
     },
     async onConfirmDeleteHub(hub) {
+        await new Promise(resolve => setTimeout(resolve, 100));
         this.hideCursor();
         await this.$store.dispatch("session/deleteHub", this.selectedHubA);
         this.abortHub();
         await this.$store.commit('google/setSessionLastModified', new Date());
     },
-    abortHub() {
+    async abortHub() {
+        await new Promise(resolve => setTimeout(resolve, 100));
         this.hideCursor();
         this.showHubSpeedDial = 1;
         this.selectedHubA = null;
         this.selectedHubB = null;
     },
-    selectHub() {
-        Vue.nextTick(() => {
-            this.hideCursor();
-            this.showHubSpeedDial = 1;
-            this.selectedHubA = this.selectedHubB;
-            this.selectedHubB = null;
-        });
-    },
-    async onHubClick(hub) {
+    async selectHub() {
+        await new Promise(resolve => setTimeout(resolve, 100));
         this.hideCursor();
         this.showHubSpeedDial = 1;
-        if (this.selectedHubA === hub) {
-            if (this.selectedHubB !== null) {
-                this.selectedHubB = null;
+        this.selectedHubA = this.selectedHubB;
+        this.selectedHubB = null;
+    },
+    async onHubClick(hub) {
+        setTimeout(() => {
+            this.hideCursor();
+            this.showHubSpeedDial = 1;
+            if (this.selectedHubA === hub) {
+                if (this.selectedHubB !== null) {
+                    this.selectedHubB = null;
+                } else {
+                    this.selectedHubA = null;
+                }
+            } else if (this.selectedHubA !== null) {
+                if (this.selectedHubB === hub) {
+                    this.selectedHubB = null;
+                    this.showHubSpeedDial = 1;
+                } else {
+                    this.selectedHubB = hub;
+                    this.showHubSpeedDial = 3;
+                }
             } else {
-                this.selectedHubA = null;
+                this.selectedHubA = hub;
             }
-        } else if (this.selectedHubA !== null) {
-            if (this.selectedHubB === hub) {
-                this.selectedHubB = null;
-                this.showHubSpeedDial = 1;
-            } else {
-                this.selectedHubB = hub;
-                this.showHubSpeedDial = 3;
-            }
-        } else {
-            this.selectedHubA = hub;
-        }
+        }, 100);
     },
     // This part below is to deal with click and touch events not fireing correctly when inside a leaflet component
     onSetCursorCoordinate(event) {
