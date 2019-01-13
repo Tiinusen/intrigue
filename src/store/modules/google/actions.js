@@ -99,19 +99,24 @@ export default {
             commit('setAutoSync', null);
             return;
         }
-        commit('setAutoSync', setInterval(async () => {
+        commit('setAutoSyncInterval', 1);
+        let sF = async () => {
             try {
-                if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
-                    throw new Error();
+                while (sF === state.autoSyncIntervalRef) {
+                    if (!state.signedIn || state.loadedFileId === null) { // In case file has been deleted or user has signed out
+                        throw new Error();
+                    }
+                    await dispatch('sync');
+                    await new Promise(resolve => setTimeout(resolve, state.autoSyncInterval * 1000));
                 }
-                await dispatch('sync');
             } catch (e) {
                 console.error(e);
                 clearInterval(state.autoSyncIntervalRef);
                 commit('setAutoSync', null);
             }
-
-        }, state.autoSyncInterval));
+        };
+        commit('setAutoSync', sF);
+        sF();
     },
     async sync({ commit, state, dispatch }) {
         if (!state.clientInitialized) {
@@ -144,13 +149,20 @@ export default {
         }
         loadedFile.modifiedTime = new Date(loadedFile.modifiedTime);
         if (state.sessionLastModified === null) { // First
+            commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', loadedFile.modifiedTime);
         } else if (state.sessionLastModified.getTime() < loadedFile.modifiedTime.getTime()) { // Newer state on drive (Load)
+            commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', null);
             await dispatch("load", { fileId: state.loadedFileId });
         } else if (state.sessionLastModified.getTime() > loadedFile.modifiedTime.getTime()) { // Local state is newer (Save)
+            commit('setAutoSyncInterval', 1);
             commit('setSessionLastModified', null);
             await dispatch("save", { fileId: state.loadedFileId });
+        } else {
+            if (state.autoSyncInterval < 15) {
+                commit('setAutoSyncInterval', state.autoSyncInterval + 1);
+            }
         }
     },
     async saveUserData({ commit, state, dispatch, rootState }) {

@@ -38,6 +38,9 @@ export default {
     setAutoSync(state, val) {
         state.autoSyncIntervalRef = val;
     },
+    setAutoSyncInterval(state, val) {
+        state.autoSyncInterval = val;
+    },
     setLoading(state, val) {
         state.loading = val;
     }
