@@ -217,6 +217,7 @@ export default {
     });
     this.loading = true;
     await this.$store.dispatch("google/initialize", this.gconfig);
+    this.loading = false;
     if (this.isSignedIn) {
       if (this.hasAppData) {
         await this.$root.Preferences.open();
@@ -224,7 +225,6 @@ export default {
         await this.$root.SaveLoad.open();
       }
     }
-    this.loading = false;
   }
 };
 </script>
