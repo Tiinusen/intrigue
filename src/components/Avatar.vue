@@ -16,15 +16,6 @@ PartNames.forEach(name => {
   props.push(name);
 });
 export default {
-  watch: {
-    designerVisible(val) {
-      if (val) {
-        this.onOpenDesigner();
-      } else {
-        this.onCloseDesigner();
-      }
-    }
-  },
   components: {},
   props: props,
   data() {
