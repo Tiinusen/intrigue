@@ -30,7 +30,7 @@ export default {
             return;
         }
         if (data.time !== 'object' && typeof data.time !== 'undefined') {
-            state.time = new Date(data.time);
+            commit('time', data.time);
         }
         let upgraded = false;
         while (state.version !== data.version) { // Migrates the file to reach current version
