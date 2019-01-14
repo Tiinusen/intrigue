@@ -1,4 +1,11 @@
 export default {
+    time(state, time) {
+        if (typeof time !== 'object' && time !== null) {
+            state.time = new Date(time);
+        } else {
+            state.time = time;
+        }
+    },
     clear(state) {
         state.hubs.splice(0, state.hubs.length);
         state.links.splice(0, state.links.length);

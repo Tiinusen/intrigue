@@ -29,6 +29,9 @@ export default {
             self.location.reload(true);
             return;
         }
+        if (data.time !== 'object' && typeof data.time !== 'undefined') {
+            commit('time', data.time);
+        }
         let upgraded = false;
         while (state.version !== data.version) { // Migrates the file to reach current version
             data.version++;

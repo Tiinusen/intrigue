@@ -81,6 +81,8 @@ export class Link {
         this.linkType = "Input";
         this.color = "black";
         this.linkThickness = 1;
+        this.created = null;
+        this.expired = null;
         this.Copy(source, inspire);
     }
 
@@ -93,7 +95,9 @@ export class Link {
             BtoA: this.BtoA,
             linkType: this.linkType,
             color: this.color,
-            linkThickness: this.linkThickness
+            linkThickness: this.linkThickness,
+            created: this.created === null ? null : this.created.getTime(),
+            expired: this.expired === null ? null : this.expired.getTime()
         };
     }
 
@@ -158,6 +162,18 @@ export class Link {
         ]);
         if (sibling) {
             return this;
+        }
+        if ('created' in source) {
+            if (typeof source.created !== 'object') {
+                source.created = new Date(source.created);
+            }
+            this.created = source.created;
+        }
+        if ('expired' in source) {
+            if (typeof source.expired !== 'object') {
+                source.expired = new Date(source.expired);
+            }
+            this.expired = source.expired;
         }
         Copy(this, source, [
             "id"

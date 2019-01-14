@@ -21,6 +21,7 @@ export default {
     },
     async onAddLink() {
         let link = new Link();
+        link.created = new Date(this.$store.state.session.time.getTime());
         link.hubA = this.selectedHubA;
         link.hubB = this.selectedHubB;
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -39,6 +40,7 @@ export default {
     async onAddOrganization(event) {
         this.hideCursor();
         let hub = new Hub({
+            created: new Date(this.$store.state.session.time.getTime()),
             lat: this.cursorPosition.lat,
             lng: this.cursorPosition.lng
         });
@@ -52,6 +54,7 @@ export default {
     async onAddPlace() {
         this.hideCursor();
         let hub = new Hub({
+            created: new Date(this.$store.state.session.time.getTime()),
             lat: this.cursorPosition.lat,
             lng: this.cursorPosition.lng
         });
@@ -65,6 +68,7 @@ export default {
     async onAddEvent() {
         this.hideCursor();
         let hub = new Hub({
+            created: new Date(this.$store.state.session.time.getTime()),
             lat: this.cursorPosition.lat,
             lng: this.cursorPosition.lng
         });
@@ -78,6 +82,7 @@ export default {
     async onAddCharacter(event) {
         this.hideCursor();
         let hub = new Hub({
+            created: new Date(this.$store.state.session.time.getTime()),
             lat: this.cursorPosition.lat,
             lng: this.cursorPosition.lng
         });
@@ -193,6 +198,11 @@ export default {
         }
     },
     onCursorClick() {
+        Vue.nextTick(() => {
+            this.hideCursor();
+        });
+    },
+    onTimelineClick() {
         Vue.nextTick(() => {
             this.hideCursor();
         });
