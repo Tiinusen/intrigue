@@ -64,10 +64,7 @@ export default {
     },
     async confirmHub(hub, answer){
         if(this.hubConfirmResolve !== null){
-            let resolve = this.hubConfirmResolve;
-            this.hubConfirmResolve = null;
-            this.hubConfirmReject = null;
-            resolve(answer);
+            this.hubConfirmResolve(answer);
         }
     },
     promptYesNoHub() {
@@ -188,6 +185,7 @@ export default {
             return;
         }
         if (this.hubConfirmResolve !== null) { // Ignore hub interaction
+            this.hubConfirmResolve(false);
             return;
         }
         if (this.mapHubClickReject !== null) {
