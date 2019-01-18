@@ -15,16 +15,20 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 # Current Roadmap
 
 - [ ] Intrigue Map
-- - [ ] Theme / Setup
+- - [ ] Other
 - - - [ ] Replace current hub types with the ones from the Kult book
 - - - [ ] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
+- - - [ ] Make Typewriter image theme to match book Intrigue Map
+- - - [ ] Replace session time with scene time
 - - [ ] Timeline
 - - - [ ] Set date and/or time
 - - - [x] Jump forward
+- - - [ ] Display past/upcoming events same day (hub-less, hubs and links)
+- - [ ] Event (hub-less)
+- - - [ ] Add
 - - [ ] Hub
 - - - [x] Add
 - - - [ ] Edit
-- - - - [ ] Place
 - - - [x] Delete
 - - - [ ] Wizard
 - - - - [x] Quick
@@ -34,15 +38,14 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [ ] Edit
 - - - [ ] Delete
 - - [ ] Scene
-- - - [x] Main Scene
+- - - [x] Base
+- - - - [ ] Scene time (since scenes clocks dosen't have to be synced)
 - - - - [x] Add hubs
+- - - - [x] Move hubs
 - - - - [x] Display hubs
 - - - - [ ] Display links
+- - - [x] Main Scene
 - - - [ ] Sub scene
-- - - - [ ] Add hubs
-- - - - [ ] Link to hub
-- - - - [ ] Display hubs
-- - - - [ ] Display links
 - - [x] Google Drive
 - - - [x] Save
 - - - [x] Load
