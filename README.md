@@ -38,7 +38,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [ ] Edit
 - - - [ ] Delete
 - - [ ] Scene
-- - - [x] Base
+- - - [ ] Base
 - - - - [ ] Scene time (since scenes clocks dosen't have to be synced)
 - - - - [x] Add hubs
 - - - - [x] Move hubs
