@@ -60,8 +60,8 @@
             <v-list-tile-title v-show="!isAutoSyncEnabled">Enable AutoSync</v-list-tile-title>
             <v-list-tile-title v-show="isAutoSyncEnabled">Disable AutoSync</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click="onClearClick" :disabled="isEmpty">
-            <v-list-tile-title>Clear Intrigue Map</v-list-tile-title>
+          <v-list-tile @click="newSession" :disabled="isEmpty">
+            <v-list-tile-title>New Session</v-list-tile-title>
           </v-list-tile>
           <v-list-tile @click="onToggleFullscreen">
             <v-list-tile-title>{{ fullscreen ? "Exit" : "Enter" }} Fullscreen</v-list-tile-title>
@@ -195,6 +195,12 @@ export default {
       }
       this.$store.dispatch("session/clear");
     },
+    newSession(){
+      if (!confirm("Are you sure you wish to create a new session?")) {
+        return;
+      }
+      this.$store.dispatch("google/new");
+    },
     async onSignInClick() {
       let accepted = await this.$root.PrivacyPolicy.open();
       if (!accepted) {
@@ -215,8 +221,13 @@ export default {
       this.$root.PrivacyPolicy = this.$refs.PrivacyPolicy;
       this.$root.Preferences = this.$refs.Preferences;
     });
+    this.$root.UpdateModifiedOnSession = () => {
+      this.$store.commit("google/setSessionLastModified", new Date());
+    };
     this.loading = true;
+    await this.$store.dispatch("google/new");
     await this.$store.dispatch("google/initialize", this.gconfig);
+    this.$root.activeScene = this.$store.state.session.ids["Scene#MAIN"];
     this.loading = false;
     if (this.isSignedIn) {
       if (this.hasAppData) {

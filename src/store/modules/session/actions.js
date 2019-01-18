@@ -1,5 +1,6 @@
 import { Hub } from '../../../models/Hub'
 import { Link } from '../../../models/Link'
+import { Scene } from '../../../models/Scene'
 
 export default {
     async clear({ commit, state }, filename) {
@@ -7,6 +8,9 @@ export default {
     },
     async hub({ commit, state }, hub) {
         await commit('hub', hub);
+    },
+    async scene({ commit, state }, scene) {
+        await commit('scene', scene);
     },
     async link({ commit, state }, link) {
         await commit('link', link);
@@ -19,6 +23,9 @@ export default {
     },
     async deleteLink({ commit, state }, link) {
         await commit('deleteLink', link);
+    },
+    async deleteScene({ commit, state }, scene) {
+        await commit('deleteScene', scene);
     },
     async load({ commit, state, dispatch, rootState }, data) {
         if (typeof data !== 'object' || !('hubs' in data) || !('links' in data) || !('version' in data)) {
@@ -57,6 +64,15 @@ export default {
             addedLinksIDs.push(link.id);
             await dispatch("link", link);
         }
+        let addedScenesIDs = [];
+        for (let scene of data.scenes) {
+            scene = new Scene(scene);
+            scene.hubs.forEach(hubO => {
+                hubO.hub = state.ids["Hub#"+hubO.hub];
+            });
+            addedScenesIDs.push(scene.id);
+            await dispatch("scene", scene);
+        }
 
         // Removes deleted hubs and links
         let hubsToBeRemovedKeys = [];
@@ -71,11 +87,20 @@ export default {
                 linksToBeRemovedKeys.push(link.key);
             }
         });
+        let scenesToBeRemovedKeys = [];
+        state.scenes.forEach((scene) => {
+            if (addedScenesIDs.indexOf(scene.id) === -1) {
+                scenesToBeRemovedKeys.push(scene.key);
+            }
+        });
         hubsToBeRemovedKeys.forEach((key) => {
             commit('deleteHub', state.ids[key]);
         });
         linksToBeRemovedKeys.forEach((key) => {
             commit('deleteLink', state.ids[key]);
+        });
+        scenesToBeRemovedKeys.forEach((key) => {
+            commit('deleteScene', state.ids[key]);
         });
 
         if (upgraded) {

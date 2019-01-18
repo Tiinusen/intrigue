@@ -1,4 +1,5 @@
-import { Load, WaitForGoogleAPIToLoad } from "../../../utils/Google";
+import { Load, WaitForGoogleAPIToLoad } from "../../../utils/Google"
+import { Scene } from "../../../models/Scene"
 
 const SavedSessionFolderName = "Saved Intrigue Map Sessions";
 
@@ -52,13 +53,18 @@ export default {
                         }
                     }
                     if (!found) {
-                        replaceHash("");
+                        replaceHash("/");
                         return;
                     }
                     await dispatch("load", { fileId: hash });
                 }
             }
         }
+    },
+    async new({ dispatch, commit, rootState }) {
+        commit("setLoadedFileId", null);
+        await dispatch("session/clear", null, { root: true });
+        replaceHash("/");
     },
     async signIn({ commit, state }) {
         if (!state.clientInitialized) {
@@ -122,7 +128,6 @@ export default {
                     await new Promise(resolve => setTimeout(resolve, state.autoSyncInterval * 1000));
                 }
             } catch (e) {
-                console.error(e);
                 if (state.autoSyncTimeoutRef !== null) {
                     clearTimeout(state.autoSyncTimeoutRef);
                     commit('setAutoSyncTimeout', null);
@@ -399,7 +404,7 @@ export default {
             console.error("Unable to load file");
         }
         commit('setLoadedFileId', fileId);
-        replaceHash(fileId);
+        replaceHash("/"+fileId);
         await dispatch('session/load', file.result, { root: true });
         if (autoSyncWasEnabled || rootState.preferences.autoSync) {
             await dispatch('toggleAutoSync');
@@ -425,6 +430,7 @@ export default {
             version: rootState.session.version,
             hubs: [],
             links: [],
+            scenes: [],
             time: rootState.session.time.getTime()
         };
         rootState.session.hubs.forEach((hub) => {
@@ -432,6 +438,9 @@ export default {
         });
         rootState.session.links.forEach((link) => {
             data.links.push(link.Serialize());
+        });
+        rootState.session.scenes.forEach((scene) => {
+            data.scenes.push(scene.Serialize());
         });
         if (typeof fileId === 'undefined') {
             fileId = null;
@@ -475,7 +484,7 @@ export default {
                 xhr.send(form);
             });
             commit('setLoadedFileId', fileId);
-            replaceHash(fileId);
+            replaceHash("/"+fileId);
             await dispatch('loadFileListIntoState');
             if (autoSyncWasEnabled || rootState.preferences.autoSync) {
                 await dispatch('toggleAutoSync');
@@ -485,7 +494,7 @@ export default {
         }
 
         commit('setLoadedFileId', fileId);
-        replaceHash(fileId);
+        replaceHash("/"+fileId);
         // Update content
         commit('setLoading', true);
         await gapi.client.request({

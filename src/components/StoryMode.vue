@@ -63,9 +63,10 @@ function tickTime(src, dst) {
     // Less than a day
     if (srcIsLessThanDst) {
       src.setHours(src.getHours() + 1);
-    } else {
+    } else if (dst.getHours() !== 0) {
+      src.setHours(src.getHours() - 1);
+    } else { 
       src.setHours(dst.getHours());
-      // src.setHours(src.getHours() - 1);
     }
   }
 }
@@ -97,7 +98,7 @@ export default {
   data() {
     return {
       initialized: false,
-      displayTime: new Date()
+      displayTime: new Date("2018-11-21T06:44:00Z")
     };
   },
   computed: {

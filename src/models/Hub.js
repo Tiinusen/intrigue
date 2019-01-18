@@ -5,7 +5,7 @@ import { Avatar } from './Avatar'
 
 
 export const HubTypes = ArrayToObject({
-    "Character": [
+    "Entity": [
         "Identity",
         "NPC",
         "PC",
@@ -84,10 +84,6 @@ export const HubTypeNames = Object.keys(HubTypes);
 export class Hub {
     constructor(source = null, inspire = false) {
         this.id = GenerateUUID();
-        this.latlng = {
-            lat: 0,
-            lng: 0
-        };
         this.links = [];
         this.avatar = new Avatar();
         this.hubType = "Character.Identity"
@@ -99,41 +95,11 @@ export class Hub {
     Serialize() {
         return {
             id: this.id,
-            lat: this.lat,
-            lng: this.lng,
             avatar: this.avatar.Serialize(),
             hubType: this.hubType,
             created: this.created === null ? null : this.created.getTime(),
             expired: this.expired === null ? null : this.expired.getTime()
         };
-    }
-
-    get lat() {
-        if (typeof this.latlng === 'undefined' || this.latlng === null) {
-            return null;
-        }
-        return this.latlng.lat;
-    }
-
-    get lng() {
-        if (typeof this.latlng === 'undefined' || this.latlng === null) {
-            return null;
-        }
-        return this.latlng.lng;
-    }
-
-    set lat(lat = null) {
-        if (typeof lat === 'undefined' || lat === null) {
-            return;
-        }
-        this.latlng.lat = lat;
-    }
-
-    set lng(lng = null) {
-        if (typeof lng === 'undefined' || lng === null) {
-            return;
-        }
-        this.latlng.lng = lng;
     }
 
     get key() {
@@ -152,8 +118,9 @@ export class Hub {
     }
 
     get displayName() {
-        if (this.name)
+        if (this.name.length === 0){
             return this.key;
+        }
     }
 
     get type() {
@@ -184,7 +151,7 @@ export class Hub {
     }
 
     get url() {
-        if (this.ofType("Character")) {
+        if (this.ofType("Entity")) {
             return this.avatar.url;
         } else {
             return "/icons/" + this.hubType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
@@ -223,8 +190,6 @@ export class Hub {
         }
         Copy(this, source, [
             "id",
-            "lat",
-            "lng"
         ]);
         return this;
     }

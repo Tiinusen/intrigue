@@ -47,7 +47,7 @@ export var LinkTypes = ConvertLinksArraysToLinkTypes(linkArrays);
 //     "",              // Hub A relation to Hub B, example "killed"
 //     "",              // Hub B relation to Hub A, example "was killed by"
 //     [                // Valid hub combinations, supports multiple pairs
-//         ["", ""],    // Pair of Hub Types, example ["Character","Character"]
+//         ["", ""],    // Pair of Hub Types, example ["Entity","Entity"]
 //     ],
 //     "#000000",       // Color of link when displayed on map
 //     1                // Line Thickness, Small(1), Medium(2), Large(3)
