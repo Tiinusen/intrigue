@@ -1,5 +1,4 @@
 <template>
-  <!-- Cursor -->
   <l-marker
     :lat-lng="hubP.latlng"
     @click="$emit('click', $event)"

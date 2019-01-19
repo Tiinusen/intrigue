@@ -1,21 +1,18 @@
 <template>
-  <!-- Cursor -->
-  <l-polygon v-if="show"
-  :lat-lngs="latlngs"
-  :color="link.color"
-  ></l-polygon>
+  <l-polygon v-if="show" :lat-lngs="latlngs" :color="link.color" :weight="link.linkThickness * 5"></l-polygon>
 </template>
 
 <script>
-import { LPolygon, LIcon } from "vue2-leaflet";
+import { LPolygon, LIcon, LMarker } from "vue2-leaflet";
 import { proxy } from "../utils/Proxy";
 
 export default {
   components: {
+    LMarker,
     LPolygon,
     LIcon
   },
-  props: ["link", "p1", "p2"],
+  props: ["link", "p1", "p2", "label"],
   data() {
     return {};
   },
@@ -24,15 +21,18 @@ export default {
   },
   computed: {
     latlngs() {
-      if (typeof this.p1 === "undefined" || this.p1 === null) {
-        return [[0, 0], [0, 0]];
-      } else if (typeof this.p2 === "undefined" || this.p2 === null) {
+      if (!this.show) {
         return [[0, 0], [0, 0]];
       }
       return [this.p1, this.p2];
     },
     show() {
-      return false;
+      if (typeof this.p1 === "undefined" || this.p1 === null) {
+        return false;
+      } else if (typeof this.p2 === "undefined" || this.p2 === null) {
+        return false;
+      }
+      return true;
     },
     text() {
       if (!this.show) {

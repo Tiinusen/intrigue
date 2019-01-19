@@ -33,10 +33,10 @@
         >With permission from Helmgast AB</a>
       </l-control>
 
-      <!-- Hub Markers -->
+      <!-- Map Hubs -->
       <map-hub
         v-for="(hubP, n) in activeScene.hubs"
-        :key="n"
+        :key="'MapHub#'+n"
         :hubP="hubP"
         @click="onHubClick(hubP.hub)"
         @mousedown="disableDraggable"
@@ -48,6 +48,15 @@
         @click:wizard="wizardHub"
         @click:confirm="confirmHub"
         :selected="selectedHub === hubP.hub"
+      />
+      <!-- Map Links -->
+      <map-link
+        v-for="(maplink, n) in maplinks"
+        :key="'MapLink#'+n"
+        :p1="maplink.p1"
+        :p2="maplink.p2"
+        :label="maplink.text"
+        :link="maplink.link"
       />
 
       <!-- Crosshair -->
