@@ -42,6 +42,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - - [ ] Scene time (since scenes clocks dosen't have to be synced)
 - - - - [x] Add hubs
 - - - - [x] Move hubs
+- - - - [ ] Display only hubs and links within current time
 - - - - [x] Display hubs
 - - - - [x] Display links
 - - - - - [x] Overview (when no hub is selected)
