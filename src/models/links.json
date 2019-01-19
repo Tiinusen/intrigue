@@ -27,15 +27,28 @@
     ],
     [
         "Friends",
-        "acquaintance with",
-        "acquaintance with",
+        "friends with",
+        "friends with",
         [
             [
                 "Entity",
                 "Entity"
             ]
         ],
-        "#000000",
+        "#007700",
         1
+    ],
+    [
+        "Killed",
+        "killed",
+        "was killed by",
+        [
+            [
+                "Entity",
+                "Entity"
+            ]
+        ],
+        "#770000",
+        2
     ]
 ]

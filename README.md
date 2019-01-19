@@ -43,10 +43,10 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - - [x] Add hubs
 - - - - [x] Move hubs
 - - - - [x] Display hubs
-- - - - [ ] Display links
+- - - - [x] Display links
 - - - - - [x] Overview (when no hub is selected)
-- - - - - [ ] Targeted (when a hub is selected, show relevant links with relation text)
-- - - [x] Main Scene
+- - - - - [x] Targeted (when a hub is selected, show relevant links with relation text)
+- - - [x] Main scene
 - - - [ ] Sub scene
 - - [x] Google Drive
 - - - [x] Save
