@@ -2,82 +2,10 @@ import { ArrayToObject } from "../utils/Convert";
 import { Copy, IsEmpty } from "../utils/Entity";
 import { GenerateUUID } from "../utils/UUID";
 import { Avatar } from './Avatar'
+import predefinedHubTypes from './predefined_hub_types';
 
 
-export const HubTypes = ArrayToObject({
-    "Entity": [
-        "Identity",
-        "NPC",
-        "PC",
-        "Threat"
-    ],
-    "Event": [
-        {
-            "Gathering": [
-                "Meeting",
-                "Party",
-                "Other"
-            ],
-            "Mission": [
-                "Retrieval",
-                "Assasination",
-                "Abduction",
-                "Arrest",
-                "Other"
-            ],
-            "Crime": [
-                "Assault",
-                "Murder",
-                "Theft",
-                "Rape",
-                "Kidnapping",
-                "Other"
-            ]
-        },
-        "Other"
-    ],
-    "Place": {
-        "Country": [
-            "Nation",
-            "Region",
-            "City",
-            "Town"
-        ],
-        "Building": [
-            {
-                "House": [
-                    "Ordinary",
-                    "Fancy",
-                    "Decayed"
-                ]
-            },
-            "Apartment Building",
-            "Mansion",
-            "Hotel",
-            "Villa",
-            "Hidden",
-            "Other"
-        ],
-        "Location": [
-            "Point",
-            "Area"
-        ]
-    },
-    "Group": [
-        "People",
-        "Mob",
-        {
-            "Organization": [
-                "Business",
-                "Secret",
-                "Government",
-                "Other"
-            ]
-        },
-        "Gang",
-        "Worshippers"
-    ]
-});
+export const HubTypes = ArrayToObject(predefinedHubTypes);
 
 export const HubTypeNames = Object.keys(HubTypes);
 
@@ -118,7 +46,7 @@ export class Hub {
     }
 
     get displayName() {
-        if (this.name.length === 0){
+        if (this.name.length === 0) {
             return this.key;
         }
     }

@@ -1,0 +1,74 @@
+{
+    "Entity": [
+        "Identity",
+        "NPC",
+        "PC",
+        "Threat"
+    ],
+    "Event": [
+        {
+            "Gathering": [
+                "Meeting",
+                "Party",
+                "Other"
+            ],
+            "Mission": [
+                "Retrieval",
+                "Assasination",
+                "Abduction",
+                "Arrest",
+                "Other"
+            ],
+            "Crime": [
+                "Assault",
+                "Murder",
+                "Theft",
+                "Rape",
+                "Kidnapping",
+                "Other"
+            ]
+        },
+        "Other"
+    ],
+    "Place": {
+        "Country": [
+            "Nation",
+            "Region",
+            "City",
+            "Town"
+        ],
+        "Building": [
+            {
+                "House": [
+                    "Ordinary",
+                    "Fancy",
+                    "Decayed"
+                ]
+            },
+            "Apartment Building",
+            "Mansion",
+            "Hotel",
+            "Villa",
+            "Hidden",
+            "Other"
+        ],
+        "Location": [
+            "Point",
+            "Area"
+        ]
+    },
+    "Group": [
+        "People",
+        "Mob",
+        {
+            "Organization": [
+                "Business",
+                "Secret",
+                "Government",
+                "Other"
+            ]
+        },
+        "Gang",
+        "Worshippers"
+    ]
+}

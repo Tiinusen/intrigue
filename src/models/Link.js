@@ -1,7 +1,7 @@
 import { ArrayToObject } from "../utils/Convert";
 import { Copy, IsEmpty } from "../utils/Entity";
 import { GenerateUUID } from "../utils/UUID";
-import linkArrays from './links';
+import predefinedLinkTypes from './predefined_link_types';
 
 export class LinkType {
     constructor(name, AtoB, BtoA, valid, color, linkThickness) {
@@ -37,7 +37,7 @@ export class LinkType {
         return "";
     }
 }
-export var LinkTypes = ConvertLinksArraysToLinkTypes(linkArrays);
+export var LinkTypes = ConvertLinksArraysToLinkTypes(predefinedLinkTypes);
 
 
 // Valid link types are stored in links.json
