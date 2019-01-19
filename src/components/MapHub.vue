@@ -119,22 +119,22 @@ export default {
   methods: {
     proxy,
     onEditClick(){
-      this.$emit('edit', this.hubP.hub);
+      this.$emit('click:edit', this.hubP.hub);
     },
     onLinkClick(){
-      this.$emit('link', this.hubP.hub);
+      this.$emit('click:link', this.hubP.hub);
     },
     onWizardClick(){
-      this.$emit('wizard', this.hubP.hub);
+      this.$emit('click:wizard', this.hubP.hub);
     },
     onDeleteClick(){
-      this.$emit('delete', this.hubP.hub);
+      this.$emit('click:delete', this.hubP.hub);
     },
     onConfirmYesClick(){
-      this.$emit('confirm', this.hubP.hub, true);
+      this.$emit('click:confirm', this.hubP.hub, true);
     },
     onConfirmNoClick(){
-      this.$emit('confirm', this.hubP.hub, false);
+      this.$emit('click:confirm', this.hubP.hub, false);
     },
   },
   computed: {

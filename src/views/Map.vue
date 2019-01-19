@@ -34,7 +34,7 @@
       </l-control>
 
       <!-- Hub Markers -->
-      <hub-marker
+      <map-hub
         v-for="(hubP, n) in activeScene.hubs"
         :key="n"
         :hubP="hubP"
@@ -42,81 +42,26 @@
         @mousedown="disableDraggable"
         @mouseup="enableDraggable"
         @update="onHubDragged(hubP.hub, $event)"
-        @edit="editHub"
-        @delete="deleteHub"
-        @link="createLink"
-        @wizard="wizardHub"
-        @confirm="confirmHub"
+        @click:edit="editHub"
+        @click:delete="deleteHub"
+        @click:link="createLink"
+        @click:wizard="wizardHub"
+        @click:confirm="confirmHub"
         :selected="selectedHub === hubP.hub"
       />
 
-      <!-- Cursor -->
-      <l-marker
-        :lat-lng="cursorPosition"
+      <!-- Crosshair -->
+      <map-crosshair
+        :latlng="cursorPosition"
+        :visible="isCursorMarkerVisible"
         @click="onCursorClick"
+        @click:place="createPlaceHub"
+        @click:entity="createEntityHub"
+        @click:group="createGroupHub"
+        @click:event="createEventHub"
         @mousedown="disableDraggable"
         @mouseup="enableDraggable"
-        v-if="isCursorMarkerVisible"
-        :zIndexOffset="3000"
-      >
-        <l-icon :icon-anchor="[50, 50]">
-          <v-img src="/cursor.png" class="cursor-image"/>
-          <v-sheet height="150" width="150" class="cursor-sheet">
-            <v-btn
-              fab
-              dark
-              large
-              absolute
-              flat
-              color="red"
-              title="Add Entity"
-              style="left:-25px;top:-25px;"
-              :onclick="proxy(createEntityHub)"
-            >
-              <v-icon class="fas fa-user" style="color:red !important"></v-icon>
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              large
-              absolute
-              flat
-              color="red"
-              title="Add Place"
-              style="left:100px;top:-25px;"
-              :onclick="proxy(createPlaceHub)"
-            >
-              <img class="speed-dial-icon" contain src="/icons/place.png" style="width:50px;">
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              large
-              absolute
-              flat
-              color="red"
-              title="Add Event"
-              style="left:100px;top:100px;"
-              :onclick="proxy(createEventHub)"
-            >
-              <img class="speed-dial-icon" contain src="/icons/event.png" style="width:50px;">
-            </v-btn>
-            <v-btn
-              fab
-              dark
-              large
-              absolute
-              flat
-              color="red"
-              title="Add Group"
-              style="left:-25px;top:100px;"
-              :onclick="proxy(createGroupHub)"
-            >
-              <img class="speed-dial-icon" contain src="/icons/group.png" style="width:50px;">
-            </v-btn>
-          </v-sheet>
-        </l-icon>
-      </l-marker>
+      />
     </l-map>
   </div>
 </template>
@@ -135,7 +80,9 @@ import {
 
 import Avatar from "../components/Avatar";
 import StoryMode from "../components/StoryMode";
-import HubMarker from "../components/HubMarker";
+import MapHub from "../components/MapHub";
+import MapLink from "../components/MapLink";
+import MapCrosshair from "../components/MapCrosshair";
 
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
@@ -159,10 +106,11 @@ export default {
     AvatarDesigner,
     SubTypeSelector,
     LinkTypeSelector,
-    LPolygon,
     LControlAttribution,
     HubEdit,
-    HubMarker
+    MapHub,
+    MapLink,
+    MapCrosshair
   },
   data,
   methods,
