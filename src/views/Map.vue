@@ -44,7 +44,7 @@
         @update="onHubDragged(hubP.hub, $event)"
         @click:edit="editHub"
         @click:delete="deleteHub"
-        @click:link="createLink"
+        @click:link="createRemoveLink"
         @click:wizard="wizardHub"
         @click:confirm="confirmHub"
         :selected="selectedHub === hubP.hub"

@@ -15,6 +15,8 @@ export class Hub {
         this.links = [];
         this.avatar = new Avatar();
         this.hubType = "PC"
+        this.firstName = "";
+        this.lastName = "";
         this.created = null;
         this.expired = null;
         this.Copy(source, inspire);
@@ -24,6 +26,8 @@ export class Hub {
         return {
             id: this.id,
             avatar: this.avatar.Serialize(),
+            firstName: this.firstName,
+            lastName: this.lastName,
             hubType: this.hubType,
             created: this.created === null ? null : this.created.getTime(),
             expired: this.expired === null ? null : this.expired.getTime()
@@ -47,12 +51,17 @@ export class Hub {
 
     get displayName() {
         if (this.name.length === 0) {
-            return this.key;
+            return this.id;
         }
+        return this.name;
     }
 
     get type() {
         return "session/hub";
+    }
+
+    get baseType() {
+        return this.hubType.split(".")[0];
     }
 
     get subType() {
@@ -96,7 +105,7 @@ export class Hub {
             return this;
         }
         Copy(this, source, [
-            "hubType"
+            "hubType",
         ]);
         if ('avatar' in source) {
             this.avatar.Copy(source.avatar, sibling);
@@ -118,6 +127,8 @@ export class Hub {
         }
         Copy(this, source, [
             "id",
+            "firstName",
+            "lastName"
         ]);
         return this;
     }

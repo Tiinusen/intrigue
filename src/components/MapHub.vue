@@ -10,7 +10,28 @@
   >
     <l-icon :icon-anchor="[50, 50]">
       <div></div>
-      <img :src="hubP.hub.url" class="cursor-image">
+      <img :src="hubP.hub.url" class="cursor-image" v-if="!isKultStyleEnabled">
+      <v-sheet
+        height="100"
+        width="100"
+        v-if="isKultStyleEnabled"
+        style="text-align:center;background-color:transparent;"
+      >
+        <v-container bg fill-height grid-list-md text-xs-center>
+          <v-layout row wrap align-center>
+            <v-flex style="white-space: nowrap">
+              <div style="background-color: #323232;">
+                <span class="base-type" :style="'right:'+(baseType.length*4)+'px;'">{{ baseType }}</span>
+                <br>
+                <span
+                  class="hub-display-name"
+                  :style="'right:'+(displayName.length*3)+'px;'"
+                >{{ displayName }}</span>
+              </div>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-sheet>
       <!-- 2 Buttons (Confirm) -->
       <v-sheet height="0" width="0" class="cursor-sheet">
         <v-btn
@@ -106,6 +127,7 @@
 <script>
 import { LMarker, LIcon } from "vue2-leaflet";
 import { proxy } from "../utils/Proxy";
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -138,6 +160,20 @@ export default {
     }
   },
   computed: {
+    baseType() {
+      return this.hubP.hub.baseType;
+    },
+    displayName() {
+      let dName = this.hubP.hub.displayName;
+      if(dName.length > 15){
+        return dName.substr(0,15)+" ...";
+      }
+      return dName;
+    },
+    ...mapGetters({
+      isDarkThemeEnabled: "preferences/isDarkThemeEnabled",
+      isKultStyleEnabled: "preferences/isKultStyleEnabled"
+    }),
     showConfirm() {
       return this.selected && this.$root.Map.hubConfirmResolve !== null;
     },
@@ -151,6 +187,26 @@ export default {
 .cursor-image {
   width: 100px;
   height: 100px;
+}
+span.base-type {
+  background-color: #303030;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  color: red;
+}
+
+span.hub-display-name {
+  background-color: #303030;
+  font-size: 1.6em;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: relative;
+  color: white;
 }
 
 .cursor-sheet {

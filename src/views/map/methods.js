@@ -11,7 +11,7 @@ const HardcodedEventSleep = 1; // This delay is used to allow onMapClick and onH
 
 export default {
     proxy,
-    async createLink() {
+    async createRemoveLink() {
         try {
             let hubA = this.selectedHub;
             await new Promise(resolve => setTimeout(resolve, HardcodedEventSleep));
@@ -20,6 +20,18 @@ export default {
             if (hubA === hubB) {
                 this.selectedHub = hubA;
                 throw new Error("Cancelled");
+            }
+            let foundLink = null;
+            for (link of hubA.links) {
+                if (link.hubA === hubB || link.hubB === hubB) {
+                    foundLink = link;
+                    break;
+                }
+            }
+            if (foundLink !== null) {
+                this.$store.dispatch("session/deleteLink", link);
+                this.selectedHub = hubA;
+                return;
             }
             let link = new Link();
             link.created = new Date(this.$store.state.session.time.getTime());

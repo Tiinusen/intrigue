@@ -18,7 +18,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - [ ] Other
 - - - [x] Replace current hub types with the ones from the Kult book
 - - - [ ] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
-- - - [ ] Make Traditional Kult Intrigue Map Theme
+- - - [x] Make Traditional Kult Intrigue Map Theme
 - - - [ ] Replace session time with scene time
 - - [ ] Timeline
 - - - [ ] Set date and/or time
@@ -36,7 +36,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - [ ] Link
 - - - [x] Add
 - - - [ ] Edit
-- - - [ ] Delete
+- - - [x] Delete
 - - [ ] Scene
 - - - [ ] Base
 - - - - [ ] Scene time (since scenes clocks dosen't have to be synced)
