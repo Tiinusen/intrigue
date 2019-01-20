@@ -1,11 +1,4 @@
 export default {
-    time(state, time) {
-        if (typeof time !== 'object' && time !== null) {
-            state.time = new Date(time);
-        } else {
-            state.time = time;
-        }
-    },
     clear(state) {
         let mainScene = state.ids["Scene#MAIN"];
         mainScene.Clear();

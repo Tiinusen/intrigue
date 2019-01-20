@@ -430,8 +430,7 @@ export default {
             version: rootState.session.version,
             hubs: [],
             links: [],
-            scenes: [],
-            time: rootState.session.time.getTime()
+            scenes: []
         };
         rootState.session.hubs.forEach((hub) => {
             data.hubs.push(hub.Serialize());

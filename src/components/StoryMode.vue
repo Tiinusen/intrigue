@@ -31,6 +31,7 @@
 
 <script>
 import Vue from "vue";
+import { Scene } from '../models/Scene'
 
 function tickNormal(src, dst) {
   if (src < dst) {
@@ -65,7 +66,7 @@ function tickTime(src, dst) {
       src.setHours(src.getHours() + 1);
     } else if (dst.getHours() !== 0) {
       src.setHours(src.getHours() - 1);
-    } else { 
+    } else {
       src.setHours(dst.getHours());
     }
   }
@@ -117,21 +118,19 @@ export default {
       alert("Not yet implemented");
     },
     onForward15MinutesClick() {
-      this.$store.commit(
-        "session/time",
-        Vue.moment(this.$store.state.session.time)
-          .add(15, "minutes")
-          .toDate()
-      );
+      let scene = new Scene(this.$root.Map.activeScene);
+      scene.time = Vue.moment(scene.time)
+        .add(15, "minutes")
+        .toDate();
+      this.$store.commit(scene);;
       this.$store.commit("google/setSessionLastModified", new Date());
     },
     onForward1HourClick() {
-      this.$store.commit(
-        "session/time",
-        Vue.moment(this.$store.state.session.time)
-          .add(1, "hour")
-          .toDate()
-      );
+      let scene = new Scene(this.$root.Map.activeScene);
+      scene.time = Vue.moment(scene.time)
+        .add(1, "hour")
+        .toDate();
+      this.$store.commit(scene);;
       this.$store.commit("google/setSessionLastModified", new Date());
     }
   },
@@ -142,7 +141,14 @@ export default {
     this.initialized = true;
     (async () => {
       while (true) {
-        let diff = tickDate(this.displayTime, this.$store.state.session.time);
+        if (
+          typeof this.$root.Map === "undefined" ||
+          this.$root.Map.activeScene === null
+        ) {
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          continue;
+        }
+        let diff = tickDate(this.displayTime, this.$root.Map.activeScene.time);
         if (diff) {
           this.displayTime = new Date(this.displayTime.getTime());
         }

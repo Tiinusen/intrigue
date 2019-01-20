@@ -5,6 +5,7 @@ export class Scene {
     constructor(source = null) {
         this.id = GenerateUUID();
         this.hubs = [];
+        this.time = new Date('2018-11-21T06:45:00Z')
         this.created = null;
         this.expired = null;
         this.Copy(source);
@@ -22,7 +23,11 @@ export class Scene {
         });
         return {
             id: this.id,
-            hubs: hubs
+            hubs: hubs,
+            time: this.time === null ? null : this.time.getTime(),
+            created: this.created === null ? null : this.created.getTime(),
+            expired: this.expired === null ? null : this.expired.getTime(),
+
         };
     }
     get key() {
@@ -61,9 +66,9 @@ export class Scene {
     }
     RemoveHub(a) {
         let found = false;
-        for(let i = 0; i < this.hubs.length; i++){
+        for (let i = 0; i < this.hubs.length; i++) {
             let b = this.hubs[i].hub;
-            if(a === b){
+            if (a === b) {
                 this.hubs.splice(i, 1);
                 break;
             }
@@ -86,6 +91,12 @@ export class Scene {
         Copy(this, source, [
             "id",
         ]);
+        if ('time' in source) {
+            if (typeof source.time !== 'object') {
+                source.time = new Date(source.time);
+            }
+            this.time = source.time;
+        }
         if ('created' in source) {
             if (typeof source.created !== 'object') {
                 source.created = new Date(source.created);
