@@ -62,8 +62,8 @@ export default {
             this.mapHubClickReject = reject;
         });
     },
-    async confirmHub(hub, answer){
-        if(this.hubConfirmResolve !== null){
+    async confirmHub(hub, answer) {
+        if (this.hubConfirmResolve !== null) {
             this.hubConfirmResolve(answer);
         }
     },
@@ -107,9 +107,49 @@ export default {
         await this.$store.dispatch(hub);
         this.selectedHub = hubO;
     },
-    async createEntityHub() {
+    async createObjectHub() {
         let hub = new Hub({
-            hubType: "Entity",
+            hubType: "Object",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
+    async createPCHub() {
+        let hub = new Hub({
+            hubType: "PC",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
+    async createLeaderHub() {
+        let hub = new Hub({
+            hubType: "Leader",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
+    async createMonsterHub() {
+        let hub = new Hub({
+            hubType: "Monster",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
+    async createContactHub() {
+        let hub = new Hub({
+            hubType: "Contact",
             created: new Date(this.$store.state.session.time.getTime()),
         });
         await this.$store.dispatch(hub);
@@ -127,6 +167,16 @@ export default {
         this.selectedHub = hub;
         this.$root.UpdateModifiedOnSession();
     },
+    async createPlaceBuildingHub() {
+        let hub = new Hub({
+            hubType: "Place.Building",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
     async createEventHub() {
         let hub = new Hub({
             hubType: "Event",
@@ -137,9 +187,29 @@ export default {
         this.selectedHub = hub;
         this.$root.UpdateModifiedOnSession();
     },
+    async createEventDarkSecretHub() {
+        let hub = new Hub({
+            hubType: "Event.Dark Secret",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
     async createGroupHub() {
         let hub = new Hub({
             hubType: "Group",
+            created: new Date(this.$store.state.session.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
+    async createOrganizationHub() {
+        let hub = new Hub({
+            hubType: "Organization",
             created: new Date(this.$store.state.session.time.getTime()),
         });
         await this.$store.dispatch(hub);
