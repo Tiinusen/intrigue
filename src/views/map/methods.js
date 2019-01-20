@@ -132,6 +132,7 @@ export default {
     async createPCHub() {
         let hub = new Hub({
             hubType: "PC",
+            useAvatar: true,
             created: new Date(this.$store.state.session.time.getTime()),
         });
         await this.$store.dispatch(hub);

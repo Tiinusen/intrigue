@@ -25,7 +25,7 @@
                 <br>
                 <span
                   class="hub-display-name"
-                  :style="'right:'+(displayName.length*3)+'px;'"
+                  :style="'right:'+(displayName.length*4)+'px;'"
                 >{{ displayName }}</span>
               </div>
             </v-flex>
@@ -184,9 +184,9 @@ export default {
     },
     displayName() {
       let dName = this.hubP.hub.displayName;
-      if(dName.length > 15){
-        return dName.substr(0,15)+" ...";
-      }
+      // if(dName.length > 15){
+      //   return dName.substr(0,15)+" ...";
+      // }
       return dName;
     },
     ...mapGetters({

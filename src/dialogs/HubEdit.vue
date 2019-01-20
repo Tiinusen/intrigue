@@ -18,8 +18,30 @@
         </v-btn>
         <v-card-title class="headline">{{ title }}</v-card-title>
         <v-card-text>
-          <v-container>
-            <avatar class="avatar" v-bind:avatar="modifiedHub.avatar"/>
+          <v-container fluid>
+            <v-layout>
+              <v-flex
+                xs7
+                v-if="modifiedHub.ofType('PC') || modifiedHub.ofType('Leader') || modifiedHub.ofType('Monster') || modifiedHub.ofType('Contact')"
+              >
+                <v-text-field v-model="modifiedHub.firstName" label="First Name"/>
+                <v-text-field v-model="modifiedHub.lastName" label="Last Name"/>
+                <v-text-field v-model="modifiedHub.name" label="Name"/>
+              </v-flex>
+              <v-flex xs7 v-else>
+                <v-text-field v-model="modifiedHub.name" label="Name"/>
+              </v-flex>
+              <v-flex/>
+              <v-flex xs4 v-show="modifiedHub.useAvatar || modifiedHub.ofType('PC')">
+                <avatar
+                  class="avatar"
+                  v-bind:avatar="modifiedHub.avatar"
+                  avatarStyle="transparent"
+                  editable
+                  style="max-height:180px;"
+                />
+              </v-flex>
+            </v-layout>
           </v-container>
         </v-card-text>
       </v-card>

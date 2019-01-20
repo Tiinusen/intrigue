@@ -17,6 +17,7 @@ export class Hub {
         this.hubType = "PC"
         this.firstName = "";
         this.lastName = "";
+        this.useAvatar = false;
         this.created = null;
         this.expired = null;
         this.Copy(source, inspire);
@@ -26,6 +27,7 @@ export class Hub {
         return {
             id: this.id,
             avatar: this.avatar.Serialize(),
+            useAvatar: this.useAvatar,
             firstName: this.firstName,
             lastName: this.lastName,
             hubType: this.hubType,
@@ -44,9 +46,9 @@ export class Hub {
 
     set name(value) {
         value = value.replace(/  /g, " ");
-        let parts = value.split(" ", 2);
-        this.firstName = parts[0];
-        this.lastName = parts[1];
+        let parts = value.split(" ");
+        this.firstName = parts.shift();
+        this.lastName = parts.length > 0 ? parts.join(" ") : "";
     }
 
     get displayName() {
@@ -106,6 +108,7 @@ export class Hub {
         }
         Copy(this, source, [
             "hubType",
+            "lastName",
         ]);
         if ('avatar' in source) {
             this.avatar.Copy(source.avatar, sibling);
@@ -128,7 +131,7 @@ export class Hub {
         Copy(this, source, [
             "id",
             "firstName",
-            "lastName"
+            "useAvatar"
         ]);
         return this;
     }
