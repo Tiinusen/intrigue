@@ -7,7 +7,7 @@ export default {
         state.scenes.splice(0, state.scenes.length);
         state.ids = { "Scene#MAIN": mainScene };
         state.scenes.push(mainScene);
-        state.time = new Date('2018-11-21T06:45:00Z');
+        mainScene.time = new Date('2018-11-21T06:45:00Z');
     },
     deleteHub(state, hub) {
         let key = 'key' in hub ? hub.key : "Hub#" + hub.id;
