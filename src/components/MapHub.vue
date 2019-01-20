@@ -32,6 +32,25 @@
           </v-layout>
         </v-container>
       </v-sheet>
+      <v-sheet
+        height="0"
+        width="0"
+        v-if="!isKultStyleEnabled"
+        style="text-align:center;background-color:transparent;top:-10px;"
+      >
+        <v-container bg fill-height grid-list-md text-xs-center>
+          <v-layout row wrap align-center>
+            <v-flex style="white-space: nowrap">
+              <div style="background-color: #323232;">
+                <span
+                  class="hub-display-name"
+                  :style="'right:'+(displayName.length*3)+'px;'"
+                >{{ displayName }}</span>
+              </div>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-sheet>
       <!-- 2 Buttons (Confirm) -->
       <v-sheet height="0" width="0" class="cursor-sheet">
         <v-btn
