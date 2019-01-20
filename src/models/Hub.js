@@ -79,7 +79,7 @@ export class Hub {
     }
 
     get url() {
-        if (this.ofType("PC") || this.ofType("Leader") || this.ofType("Contact")) {
+        if (this.ofType("PC")) {
             return this.avatar.url;
         } else {
             return "/iconsets/default/" + this.hubType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
