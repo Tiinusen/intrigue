@@ -18,7 +18,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - [ ] Other
 - - - [x] Replace current hub types with the ones from the Kult book
 - - - [ ] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
-- - - [ ] Make Typewriter image theme to match book Intrigue Map
+- - - [ ] Make Traditional Kult Intrigue Map Theme
 - - - [ ] Replace session time with scene time
 - - [ ] Timeline
 - - - [ ] Set date and/or time
@@ -31,7 +31,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [ ] Edit
 - - - [x] Delete
 - - - [ ] Wizard
-- - - - [ ] Quick (Needs adjustments since new hub types was introduced)
+- - - - [ ] Quick
 - - - - [ ] Character creation
 - - [ ] Link
 - - - [x] Add
