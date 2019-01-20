@@ -1,10 +1,10 @@
 <template>
   <div>
     <l-polygon v-if="show" :lat-lngs="latlngs" :color="link.color" :weight="link.linkThickness * 5"></l-polygon>
-    <l-marker :lat-lng="midpoint" v-if="show && label !== ''">
-      <l-icon :icon-anchor="[label.length*6, 18]">
+    <l-marker :lat-lng="midpoint" v-if="show && text !== ''" :zIndexOffset="1500">
+      <l-icon :icon-anchor="[label.length*4.5, 13]">
         <div class="line-label-div">
-          <span class="line-label-span" :style="'background-color:'+link.color">{{ label }}</span>
+          <span class="line-label-span" :style="'background-color:'+link.color">{{ text }}</span>
         </div>
       </l-icon>
     </l-marker>
@@ -14,6 +14,7 @@
 <script>
 import { LPolygon, LIcon, LMarker } from "vue2-leaflet";
 import { proxy } from "../utils/Proxy";
+import { mapGetters } from "vuex";
 
 // Below latlng midpoint functions was borrowed from
 // http://jsfiddle.net/kevinrignault/gzq64p56/
@@ -65,6 +66,14 @@ export default {
     proxy
   },
   computed: {
+    ...mapGetters({
+      hasFiles: "google/hasFiles",
+      isEmpty: "session/isEmpty",
+      isDarkThemeEnabled: "preferences/isDarkThemeEnabled",
+      isDefaultAutoSyncEnabled: "preferences/isDefaultAutoSyncEnabled",
+      isShowAllLinkLabelsEnabled: "preferences/isShowAllLinkLabelsEnabled",
+      isKultStyleEnabled: "preferences/isKultStyleEnabled",
+    }),
     midpoint() {
       if (!this.show) {
         return { lat: 0, lng: 0 };
@@ -90,6 +99,10 @@ export default {
       if (!this.show) {
         return "";
       }
+      if(!this.isShowAllLinkLabelsEnabled && !(this.$root.Map.selectedHub === this.link.hubA || this.$root.Map.selectedHub === this.link.hubB)){
+        return "";
+      }
+      return this.label;
     }
   }
 };
@@ -101,7 +114,7 @@ export default {
 }
 
 .line-label-span {
-  font-size: 2em;
+  font-size: 1.4em;
   padding: 0.2em;
   padding-left: 0.5em;
   padding-right: 0.5em;

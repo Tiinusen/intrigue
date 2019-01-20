@@ -1,74 +1,95 @@
-{
-    "Entity": [
-        "Identity",
-        "NPC",
-        "PC",
-        "Threat"
-    ],
-    "Event": [
-        {
-            "Gathering": [
-                "Meeting",
-                "Party",
-                "Other"
-            ],
-            "Mission": [
-                "Retrieval",
-                "Assasination",
-                "Abduction",
-                "Arrest",
-                "Other"
-            ],
-            "Crime": [
-                "Assault",
-                "Murder",
-                "Theft",
-                "Rape",
-                "Kidnapping",
-                "Other"
-            ]
-        },
-        "Other"
-    ],
-    "Place": {
-        "Country": [
-            "Nation",
-            "Region",
-            "City",
-            "Town"
-        ],
-        "Building": [
+[
+    "PC",
+    {
+        "Event": [
             {
-                "House": [
-                    "Ordinary",
-                    "Fancy",
-                    "Decayed"
+                "Dark Secret": [
+                    "Chosen One",
+                    "Curse",
+                    "Family Secret",
+                    "Forbidden Knowledge",
+                    "Guardian",
+                    "Guilty of Crime",
+                    "Victim of Crime",
+                    "Mental Illness",
+                    "Occult Experience",
+                    "Pact with Dark Forces",
+                    "Medical Experiment",
+                    "Returned from the Other Side",
+                    "Rootless",
+                    "Strange Disapperance",
+                    "Visitations"
+                ],
+                "Gathering": [
+                    "Meeting",
+                    "Party",
+                    "Other"
+                ],
+                "Mission": [
+                    "Retrieval",
+                    "Assasination",
+                    "Abduction",
+                    "Arrest",
+                    "Other"
+                ],
+                "Crime": [
+                    "Assault",
+                    "Murder",
+                    "Theft",
+                    "Rape",
+                    "Kidnapping",
+                    "Extortion",
+                    "Other"
                 ]
             },
-            "Apartment Building",
-            "Mansion",
-            "Hotel",
-            "Villa",
-            "Hidden",
             "Other"
         ],
-        "Location": [
-            "Point",
-            "Area"
-        ]
-    },
-    "Group": [
-        "People",
-        "Mob",
-        {
-            "Organization": [
-                "Business",
-                "Secret",
-                "Government",
+        "Place": {
+            "Country": [
+                "Nation",
+                "Region",
+                "City",
+                "Town"
+            ],
+            "Building": [
+                {
+                    "House": [
+                        "Ordinary",
+                        "Fancy",
+                        "Decayed"
+                    ]
+                },
+                "Apartment Building",
+                "Mansion",
+                "Hotel",
+                "Villa",
+                "Hidden",
                 "Other"
+            ],
+            "Location": [
+                "Point",
+                "Area"
             ]
         },
-        "Gang",
-        "Worshippers"
-    ]
-}
+        "Object": []
+    },
+    "Leader",
+    "Monster",
+    {
+        "Organization": [
+            "Business",
+            "Secret",
+            "Government",
+            "Other"
+        ]
+    },
+    {
+        "Group": [
+            "People",
+            "Mob",
+            "Gang",
+            "Worshippers"
+        ]
+    },
+    "Contact"
+]

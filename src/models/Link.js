@@ -158,7 +158,9 @@ export class Link {
             "hubA",
             "hubB",
             "AtoB",
-            "BtoA"
+            "BtoA",
+            "color",
+            "linkThickness"
         ]);
         if (sibling) {
             return this;

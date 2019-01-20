@@ -14,7 +14,7 @@ export class Hub {
         this.id = GenerateUUID();
         this.links = [];
         this.avatar = new Avatar();
-        this.hubType = "Character.Identity"
+        this.hubType = "PC"
         this.created = null;
         this.expired = null;
         this.Copy(source, inspire);

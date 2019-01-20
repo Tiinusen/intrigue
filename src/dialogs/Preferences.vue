@@ -37,6 +37,26 @@
                 ></v-switch>
               </v-flex>
             </v-layout>
+            <v-layout>
+              <v-flex xs12>
+                <v-switch
+                  v-model="showAllLinkLabels"
+                  :label="showAllLinkLabels?'Shows all labels':'Shows only labels close to selected hub'"
+                  color="black"
+                  hide-details
+                ></v-switch>
+              </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex xs12>
+                <v-switch
+                  v-model="kultStyle"
+                  :label="kultStyle?'Kult style Intrigue Map':'Default Intrigue Map'"
+                  color="black"
+                  hide-details
+                ></v-switch>
+              </v-flex>
+            </v-layout>
           </v-container>
         </v-card-text>
       </v-card>
@@ -66,6 +86,12 @@ export default {
     },
     autoSync(val) {
       this.$store.commit("preferences/setAutoSync", val);
+    },
+    showAllLinkLabels(val) {
+      this.$store.commit("preferences/setShowAllLinkLabels", val);
+    },
+    kultStyle(val) {
+      this.$store.commit("preferences/setKultStyle", val);
     }
   },
   computed: {
@@ -73,7 +99,9 @@ export default {
       hasFiles: "google/hasFiles",
       isEmpty: "session/isEmpty",
       isDarkThemeEnabled: "preferences/isDarkThemeEnabled",
-      isDefaultAutoSyncEnabled: "preferences/isDefaultAutoSyncEnabled"
+      isDefaultAutoSyncEnabled: "preferences/isDefaultAutoSyncEnabled",
+      isShowAllLinkLabelsEnabled: "preferences/isShowAllLinkLabelsEnabled",
+      isKultStyleEnabled: "preferences/isKultStyleEnabled",
     })
   },
   components: {},
@@ -85,7 +113,9 @@ export default {
       reject: null,
       loading: false,
       dark: true,
-      autoSync: false
+      autoSync: false,
+      showAllLinkLabels: false,
+      kultStyle: false
     };
   },
   methods: {
@@ -102,6 +132,8 @@ export default {
       this.loading = true;
       this.dark = this.isDarkThemeEnabled;
       this.autoSync = this.isDefaultAutoSyncEnabled;
+      this.showAllLinkLabels = this.isShowAllLinkLabelsEnabled;
+      this.kultStyle = this.isKultStyleEnabled;
     },
     onClose() {
       this.resolve();
