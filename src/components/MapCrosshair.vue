@@ -33,11 +33,11 @@
           absolute
           flat
           color="red"
-          title="Add Place"
+          title="Place: Location / Building"
           style="left:100px;top:-25px;"
           :onclick="proxy(displayPlaceButtons)"
         >
-          <img class="speed-dial-icon" contain src="/icons/place.png" style="width:50px;">
+          <img class="speed-dial-icon" contain src="/buttons/place.png" style="width:50px;">
         </v-btn>
         <!-- Bottom Right -->
         <v-btn
@@ -51,7 +51,7 @@
           style="left:100px;top:100px;"
           :onclick="proxy(displayEventButtons)"
         >
-          <img class="speed-dial-icon" contain src="/icons/event.png" style="width:50px;">
+          <img class="speed-dial-icon" contain src="/buttons/event.png" style="width:50px;">
         </v-btn>
         <!-- Bottom Left -->
         <v-btn
@@ -155,7 +155,7 @@
           style="left:38px;top:100px;"
           :onclick="proxy(onEventClick)"
         >
-          <img class="speed-dial-icon" contain src="/icons/event.png" style="width:50px;">
+          <img class="speed-dial-icon" contain src="/buttons/event.png" style="width:50px;">
         </v-btn>
         <!-- Left -->
         <v-btn
@@ -186,7 +186,7 @@
           style="left:38px;top:100px;"
           :onclick="proxy(onOrganizationClick)"
         >
-          <img class="speed-dial-icon" contain src="/icons/group.png" style="width:50px;">
+          <img class="speed-dial-icon" contain src="/buttons/group.png" style="width:50px;">
         </v-btn>
         <!-- Left -->
         <v-btn
@@ -217,7 +217,7 @@
           style="left:38px;top:-25px;"
           :onclick="proxy(onPlaceClick)"
         >
-          <img class="speed-dial-icon" contain src="/icons/place.png" style="width:50px;">
+          <img class="speed-dial-icon" contain src="/buttons/place.png" style="width:50px;">
         </v-btn>
         <!-- Right -->
         <v-btn
@@ -227,7 +227,7 @@
           absolute
           flat
           color="red"
-          title="Add PC"
+          title="Add Building"
           style="left:100px;top:38px;"
           :onclick="proxy(onPlaceBuildingClick)"
         >

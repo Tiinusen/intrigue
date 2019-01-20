@@ -72,7 +72,7 @@
         @click:group="createGroupHub"
         @click:contact="createContactHub"
         @click:object="createObjectHub"
-        @click:organization="createGroupHub"
+        @click:organization="createOrganizationHub"
         @click:event="createEventHub"
         @click:event-dark-secret="createEventDarkSecretHub"
         @mousedown="disableDraggable"

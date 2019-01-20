@@ -10,7 +10,7 @@
           @click="onOptionSelect(option)"
         >
           <v-flex>
-            <img :src="'/icons/'+key.replace(/\./g,'/').replace(/ /g, '_').toLowerCase()+'.png'"/>
+            <img :src="'/iconsets/default/'+key.replace(/\./g,'/').replace(/ /g, '_').toLowerCase()+'.png'"/>
             <div style="text-align:center">{{ option }}</div>
           </v-flex>
         </v-container>

@@ -9,9 +9,10 @@
     :draggable="showMenu"
   >
     <l-icon :icon-anchor="[50, 50]">
+      <div></div>
       <img :src="hubP.hub.url" class="cursor-image">
       <!-- 2 Buttons (Confirm) -->
-      <v-sheet height="150" width="150" class="cursor-sheet">
+      <v-sheet height="0" width="0" class="cursor-sheet">
         <v-btn
           fab
           dark
@@ -92,7 +93,7 @@
           color="red"
           title="Wizard"
           style="left:-25px;top:100px;"
-          v-show="showMenu && hubP.hub.hubType.indexOf('.') === -1"
+          v-show="false && showMenu && hubP.hub.hubType.indexOf('.') === -1"
           :onclick="proxy(onWizardClick)"
         >
           <v-icon class="fas fa-hat-wizard" style="color:red !important"></v-icon>
@@ -103,7 +104,7 @@
 </template>
 
 <script>
-import { LMarker, LIcon } from "vue2-leaflet"
+import { LMarker, LIcon } from "vue2-leaflet";
 import { proxy } from "../utils/Proxy";
 
 export default {
@@ -117,30 +118,30 @@ export default {
   },
   methods: {
     proxy,
-    onEditClick(){
-      this.$emit('click:edit', this.hubP.hub);
+    onEditClick() {
+      this.$emit("click:edit", this.hubP.hub);
     },
-    onLinkClick(){
-      this.$emit('click:link', this.hubP.hub);
+    onLinkClick() {
+      this.$emit("click:link", this.hubP.hub);
     },
-    onWizardClick(){
-      this.$emit('click:wizard', this.hubP.hub);
+    onWizardClick() {
+      this.$emit("click:wizard", this.hubP.hub);
     },
-    onDeleteClick(){
-      this.$emit('click:delete', this.hubP.hub);
+    onDeleteClick() {
+      this.$emit("click:delete", this.hubP.hub);
     },
-    onConfirmYesClick(){
-      this.$emit('click:confirm', this.hubP.hub, true);
+    onConfirmYesClick() {
+      this.$emit("click:confirm", this.hubP.hub, true);
     },
-    onConfirmNoClick(){
-      this.$emit('click:confirm', this.hubP.hub, false);
-    },
+    onConfirmNoClick() {
+      this.$emit("click:confirm", this.hubP.hub, false);
+    }
   },
   computed: {
-    showConfirm(){
+    showConfirm() {
       return this.selected && this.$root.Map.hubConfirmResolve !== null;
     },
-    showMenu(){
+    showMenu() {
       return this.selected && this.$root.Map.hubConfirmResolve === null;
     }
   }
