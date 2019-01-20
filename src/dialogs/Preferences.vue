@@ -51,7 +51,7 @@
               <v-flex xs12>
                 <v-switch
                   v-model="kultStyle"
-                  :label="kultStyle?'Kult style Intrigue Map':'Default Intrigue Map'"
+                  :label="kultStyle?'Traditional Kult Intrigue Map':'Icon Intrigue Map'"
                   color="black"
                   hide-details
                 ></v-switch>
