@@ -184,7 +184,7 @@ export class Link {
     }
 
     ApplyLinkType(linkType) {
-        this.linkType = linkType;
+        this.linkType = linkType.name;
         this.AtoB = linkType.HubText(this.hubA);
         this.BtoA = linkType.HubText(this.hubB, true);
         this.color = linkType.color;
