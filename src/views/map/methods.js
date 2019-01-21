@@ -43,6 +43,13 @@ export default {
                 return;
             }
             link.ApplyLinkType(linkType);
+            if (link.linkType === "Input") {
+                // Display link edit dialog before commiting to store
+                link = await this.$root.LinkForm.open(link);
+                if (link === null) {
+                    return;
+                }
+            }
             this.$store.dispatch(link);
             this.$root.UpdateModifiedOnSession();
             this.selectedHub = hubA;
@@ -61,12 +68,20 @@ export default {
         this.$root.UpdateModifiedOnSession();
     },
     async editHub(hubO) {
-        let hub = await this.$root.HubEdit.open(hubO);
+        let hub = await this.$root.HubForm.open(hubO);
         if (hub === null) { // Cancel
             return;
         }
         this.$store.dispatch(hub);
         this.selectedHub = hubO;
+    },
+    async editLink(linkO) {
+        this.clearCursorMarker();
+        let link = await this.$root.LinkForm.open(linkO);
+        if (link === null) { // Cancel
+            return;
+        }
+        this.$store.dispatch(link);
     },
     pickHub() {
         return new Promise((resolve, reject) => {

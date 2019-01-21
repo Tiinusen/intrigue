@@ -4,7 +4,8 @@
     <avatar-designer ref="AvatarDesigner"/>
     <sub-type-selector ref="SubTypeSelector"/>
     <link-type-selector ref="LinkTypeSelector"/>
-    <hub-edit ref="HubEdit"/>
+    <hub-form ref="HubForm"/>
+    <link-form ref="LinkForm"/>
     <!-- Map -->
     <l-map
       ref="Map"
@@ -57,6 +58,7 @@
         :p2="maplink.p2"
         :label="maplink.text"
         :link="maplink.link"
+        @click:link="editLink"
       />
 
       <!-- Crosshair -->
@@ -103,7 +105,8 @@ import MapCrosshair from "../components/MapCrosshair";
 import AvatarDesigner from "../dialogs/AvatarDesigner";
 import SubTypeSelector from "../dialogs/SubTypeSelector";
 import LinkTypeSelector from "../dialogs/LinkTypeSelector";
-import HubEdit from "../dialogs/HubEdit";
+import HubForm from "../dialogs/HubForm";
+import LinkForm from "../dialogs/LinkForm";
 
 import methods from "./map/methods";
 import data from "./map/data";
@@ -123,7 +126,8 @@ export default {
     SubTypeSelector,
     LinkTypeSelector,
     LControlAttribution,
-    HubEdit,
+    HubForm,
+    LinkForm,
     MapHub,
     MapLink,
     MapCrosshair
@@ -137,7 +141,8 @@ export default {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
       this.$root.SubTypeSelector = this.$refs.SubTypeSelector;
       this.$root.LinkTypeSelector = this.$refs.LinkTypeSelector;
-      this.$root.HubEdit = this.$refs.HubEdit;
+      this.$root.HubForm = this.$refs.HubForm;
+      this.$root.LinkForm = this.$refs.LinkForm;
       this.$root.Leaflet = this.$refs.Map;
       this.$root.Map = this;
     });

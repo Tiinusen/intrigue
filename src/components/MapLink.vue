@@ -1,7 +1,13 @@
 <template>
   <div>
-    <l-polygon v-if="show" :lat-lngs="latlngs" :color="link.color" :weight="link.linkThickness * 5"></l-polygon>
-    <l-marker :lat-lng="midpoint" v-if="show && text !== ''" :zIndexOffset="1500">
+    <l-polygon
+      v-if="show"
+      :lat-lngs="latlngs"
+      :color="link.color"
+      :weight="link.linkThickness * 5"
+      @click="onClick"
+    ></l-polygon>
+    <l-marker :lat-lng="midpoint" v-if="show && text !== ''" :zIndexOffset="1500" @click="onClick">
       <l-icon :icon-anchor="[label.length*4.5, 13]">
         <div class="line-label-div">
           <span class="line-label-span" :style="'background-color:'+link.color">{{ text }}</span>
@@ -63,7 +69,22 @@ export default {
     return {};
   },
   methods: {
-    proxy
+    proxy,
+    onClick() {
+      if (!this.show) {
+        return;
+      }
+      if (
+        !this.isShowAllLinkLabelsEnabled &&
+        !(
+          this.$root.Map.selectedHub === this.link.hubA ||
+          this.$root.Map.selectedHub === this.link.hubB
+        )
+      ) {
+        return;
+      }
+      this.$emit("click:link", this.link);
+    }
   },
   computed: {
     ...mapGetters({
@@ -72,7 +93,7 @@ export default {
       isDarkThemeEnabled: "preferences/isDarkThemeEnabled",
       isDefaultAutoSyncEnabled: "preferences/isDefaultAutoSyncEnabled",
       isShowAllLinkLabelsEnabled: "preferences/isShowAllLinkLabelsEnabled",
-      isKultStyleEnabled: "preferences/isKultStyleEnabled",
+      isKultStyleEnabled: "preferences/isKultStyleEnabled"
     }),
     midpoint() {
       if (!this.show) {
@@ -99,7 +120,13 @@ export default {
       if (!this.show) {
         return "";
       }
-      if(!this.isShowAllLinkLabelsEnabled && !(this.$root.Map.selectedHub === this.link.hubA || this.$root.Map.selectedHub === this.link.hubB)){
+      if (
+        !this.isShowAllLinkLabelsEnabled &&
+        !(
+          this.$root.Map.selectedHub === this.link.hubA ||
+          this.$root.Map.selectedHub === this.link.hubB
+        )
+      ) {
         return "";
       }
       return this.label;
