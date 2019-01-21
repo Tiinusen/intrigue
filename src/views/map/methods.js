@@ -34,7 +34,7 @@ export default {
                 return;
             }
             let link = new Link();
-            link.created = new Date(this.$store.state.session.time.getTime());
+            link.created = new Date(this.activeScene.time.getTime());
             link.hubA = hubA;
             link.hubB = hubB;
             await new Promise(resolve => setTimeout(resolve, HardcodedEventSleep));
@@ -122,7 +122,7 @@ export default {
     async createObjectHub() {
         let hub = new Hub({
             hubType: "Object",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -133,7 +133,7 @@ export default {
         let hub = new Hub({
             hubType: "PC",
             useAvatar: true,
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -143,7 +143,7 @@ export default {
     async createLeaderHub() {
         let hub = new Hub({
             hubType: "Leader",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -153,7 +153,7 @@ export default {
     async createMonsterHub() {
         let hub = new Hub({
             hubType: "Monster",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -163,7 +163,7 @@ export default {
     async createContactHub() {
         let hub = new Hub({
             hubType: "Contact",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -173,7 +173,7 @@ export default {
     async createPlaceHub() {
         let hub = new Hub({
             hubType: "Place",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -183,7 +183,7 @@ export default {
     async createPlaceBuildingHub() {
         let hub = new Hub({
             hubType: "Place.Building",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -193,7 +193,7 @@ export default {
     async createEventHub() {
         let hub = new Hub({
             hubType: "Event",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -203,7 +203,7 @@ export default {
     async createEventDarkSecretHub() {
         let hub = new Hub({
             hubType: "Event.Dark Secret",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -213,7 +213,7 @@ export default {
     async createGroupHub() {
         let hub = new Hub({
             hubType: "Group",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
@@ -223,7 +223,7 @@ export default {
     async createOrganizationHub() {
         let hub = new Hub({
             hubType: "Organization",
-            created: new Date(this.$store.state.session.time.getTime()),
+            created: new Date(this.activeScene.time.getTime()),
         });
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
