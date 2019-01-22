@@ -20,15 +20,7 @@
         <v-card-text>
           <v-container fluid>
             <v-layout>
-              <v-flex
-                xs7
-                v-if="modifiedHub.ofType('PC') || modifiedHub.ofType('Leader') || modifiedHub.ofType('Monster') || modifiedHub.ofType('Contact')"
-              >
-                <v-text-field v-model="modifiedHub.firstName" label="First Name"/>
-                <v-text-field v-model="modifiedHub.lastName" label="Last Name"/>
-                <v-text-field v-model="modifiedHub.name" label="Name"/>
-              </v-flex>
-              <v-flex xs7 v-else>
+              <v-flex xs7>
                 <v-text-field v-model="modifiedHub.name" label="Name"/>
               </v-flex>
               <v-flex/>
