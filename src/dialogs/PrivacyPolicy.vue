@@ -45,7 +45,6 @@
 </template>
 
 <script>
-import { IsEmpty } from "../utils/Entity";
 import Vue from "vue";
 export default {
   watch: {
