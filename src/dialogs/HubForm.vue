@@ -85,7 +85,12 @@ export default {
       //
     },
     onClose() {
-      this.resolve(this.modifiedHub);
+      // To avoid saving the form link object (which will cause vuex mutation errors)
+      let r = new Hub();
+      r.Copy(this.modifiedHub)
+      this.resolve(r);
+      this.resolve = null;
+      this.reject = null;
     }
   },
   computed: {

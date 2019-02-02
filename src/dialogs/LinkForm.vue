@@ -159,7 +159,7 @@ export default {
   methods: {
     open(link) {
       return new Promise((resolve, reject) => {
-        this.originalLink.Copy(link);
+        this.originalLink.Copy(new Link(link));
         this.modifiedLink.Copy(this.originalLink);
         this.resolve = resolve;
         this.reject = reject;
@@ -172,7 +172,10 @@ export default {
       //
     },
     onClose() {
-      this.resolve(this.modifiedLink);
+      // To avoid saving the form link object (which will cause vuex mutation errors)
+      let r = new Link();
+      r.Copy(this.modifiedLink)
+      this.resolve(r);
       this.resolve = null;
       this.reject = null;
     }
