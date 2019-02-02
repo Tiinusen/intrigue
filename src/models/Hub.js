@@ -40,7 +40,7 @@ export class Hub {
 
     get displayName() {
         if (this.name.length === 0) {
-            return this.id;
+            return "New";
         }
         return this.name;
     }
