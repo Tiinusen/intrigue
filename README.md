@@ -20,6 +20,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [ ] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
 - - - [x] Make Traditional Kult Intrigue Map Theme
 - - - [x] Replace session time with scene time
+- - - [ ] Populate hub and links with more properties related to Kult
 - - [ ] Timeline
 - - - [ ] Set date and/or time
 - - - [x] Jump forward
@@ -28,14 +29,14 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [ ] Add
 - - [ ] Hub
 - - - [x] Add
-- - - [ ] Edit
+- - - [x] Edit
 - - - [x] Delete
 - - - [ ] Wizard
 - - - - [ ] Quick
 - - - - [ ] Character creation
-- - [ ] Link
+- - [x] Link
 - - - [x] Add
-- - - [ ] Edit
+- - - [x] Edit
 - - - [x] Delete
 - - [ ] Scene
 - - - [ ] Base
