@@ -33,7 +33,7 @@
           and share and divide sessions between DMs and Players
           <br>
           <br>
-          The source code for this project is available at <a style="color: white;" target="_blank" href="https://github.com/Tiinusen/intrigue">github.com/Tiinusen/intrigue</a>,
+          The source code for this project is available at <a style="color: white;" target="_blank" href="https://github.com/Tiinusen/intrigue">github.com/Tiinusen/intrigue</a>
         </v-card-text>
         <v-card-actions>
           <v-btn flat color="green" @click="onAccept">Accept</v-btn>
