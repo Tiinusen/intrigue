@@ -18,59 +18,14 @@ export default {
         /**
          * This property will when no hub is selected display all links but without texts
          * when a hub is selected however then this property will return all links relevant from that hub
+         * with text and the rest is just rendered as normal links without text
          */
         let mlinks = [];
         if (this.activeScene === null) {
             return [];
         }
-        if (this.selectedHub === null) {
-            let alreadyVisitedHubs = [];
-            for (let hubP of this.activeScene.hubs) {
-                for (let link of hubP.hub.links) {
-                    if (alreadyVisitedHubs.indexOf(link.hubA) !== -1 || alreadyVisitedHubs.indexOf(link.hubB) !== -1) {
-                        continue;
-                    }
-                    if (link.hubA === hubP.hub) {
-                        let p1 = hubP.latlng;
-                        let p2 = null;
-                        for (let hubPi of this.activeScene.hubs) {
-                            if (hubPi.hub === link.hubB) {
-                                p2 = hubPi.latlng;
-                                break;
-                            }
-                        }
-                        if (p2 === null) {
-                            continue;
-                        }
-                        mlinks.push({
-                            link,
-                            p1,
-                            p2,
-                            text: ""
-                        });
-                    } else {
-                        let p1 = hubP.latlng;
-                        let p2 = null;
-                        for (let hubPi of this.activeScene.hubs) {
-                            if (hubPi.hub === link.hubA) {
-                                p2 = hubPi.latlng;
-                                break;
-                            }
-                        }
-                        if (p2 === null) {
-                            continue;
-                        }
-                        mlinks.push({
-                            link,
-                            p1,
-                            p2,
-                            text: ""
-                        });
-                    }
-                }
-                alreadyVisitedHubs.push(hubP.hub);
-            }
-        } else {
+        let alreadyVisitedHubs = [];
+        if (this.selectedHub !== null) {
             let activeSceneHubs = [];
             let keyToHubs = {};
             let visitedLinks = [];
@@ -94,6 +49,9 @@ export default {
                     visitedLinks.push(link);
                     if (!(link.hubA.key in keyToHubs) || !(link.hubB.key in keyToHubs)) {
                         continue;
+                    }
+                    if(alreadyVisitedHubs.indexOf(hub) === -1){
+                        alreadyVisitedHubs.push(hub);
                     }
                     if (hub === link.hubA) {
                         let p1 = keyToHubs[link.hubA.key].latlng;
@@ -124,6 +82,51 @@ export default {
                 }
             };
             traverseRelatedHubs(this.selectedHub);
+        }
+        for (let hubP of this.activeScene.hubs) {
+            for (let link of hubP.hub.links) {
+                if (alreadyVisitedHubs.indexOf(link.hubA) !== -1 || alreadyVisitedHubs.indexOf(link.hubB) !== -1) {
+                    continue;
+                }
+                if (link.hubA === hubP.hub) {
+                    let p1 = hubP.latlng;
+                    let p2 = null;
+                    for (let hubPi of this.activeScene.hubs) {
+                        if (hubPi.hub === link.hubB) {
+                            p2 = hubPi.latlng;
+                            break;
+                        }
+                    }
+                    if (p2 === null) {
+                        continue;
+                    }
+                    mlinks.push({
+                        link,
+                        p1,
+                        p2,
+                        text: ""
+                    });
+                } else {
+                    let p1 = hubP.latlng;
+                    let p2 = null;
+                    for (let hubPi of this.activeScene.hubs) {
+                        if (hubPi.hub === link.hubA) {
+                            p2 = hubPi.latlng;
+                            break;
+                        }
+                    }
+                    if (p2 === null) {
+                        continue;
+                    }
+                    mlinks.push({
+                        link,
+                        p1,
+                        p2,
+                        text: ""
+                    });
+                }
+            }
+            alreadyVisitedHubs.push(hubP.hub);
         }
         return mlinks;
     }
