@@ -19,7 +19,7 @@
     >
       <!-- StoryMode Component -->
       <l-control position="topleft">
-        <story-mode
+        <story-mode class="hidden-md-and-down"
           @mousedown.native="disableDraggable();clearCursorMarker()"
           @mouseup.native="enableDraggable();clearCursorMarker()"
         />
