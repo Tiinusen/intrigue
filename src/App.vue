@@ -4,6 +4,7 @@
     <privacy-policy ref="PrivacyPolicy"/>
     <preferences ref="Preferences"/>
     <welcome ref="Welcome" @click:blank="onBlankClick" @click:example="onExampleClick"/>
+    <help ref="Help"/>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span style="color:red;">Intrigue</span>
@@ -88,6 +89,7 @@ import SaveLoad from "./dialogs/SaveLoad";
 import PrivacyPolicy from "./dialogs/PrivacyPolicy";
 import Preferences from "./dialogs/Preferences";
 import Welcome from "./dialogs/Welcome";
+import Help from "./dialogs/Help";
 
 function launchIntoFullscreen(element) {
   if (element.requestFullscreen) {
@@ -117,7 +119,8 @@ export default {
     SaveLoad,
     PrivacyPolicy,
     Preferences,
-    Welcome
+    Welcome,
+    Help
   },
   data() {
     return {
@@ -158,7 +161,7 @@ export default {
       this.$store.dispatch("session/loadExample");
     },
     onHelpClick(){
-      alert("The help dialog hasn't been implemented yet, feel free to experiment a bit, hover of for tooltips and such");
+      this.$root.Help.open();
     },
     onToggleFullscreen() {
       this.fullscreen = !this.fullscreen;
@@ -234,6 +237,7 @@ export default {
       this.$root.PrivacyPolicy = this.$refs.PrivacyPolicy;
       this.$root.Preferences = this.$refs.Preferences;
       this.$root.Welcome = this.$refs.Welcome;
+      this.$root.Help = this.$refs.Help;
     });
     this.$root.UpdateModifiedOnSession = () => {
       this.$store.commit("google/setSessionLastModified", new Date());

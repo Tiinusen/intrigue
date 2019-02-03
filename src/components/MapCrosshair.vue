@@ -33,7 +33,7 @@
           absolute
           flat
           color="red"
-          title="Place: Location / Building"
+          title="Place / Location / Building"
           style="left:100px;top:-25px;"
           :onclick="proxy(displayPlaceButtons)"
         >
