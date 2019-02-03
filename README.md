@@ -21,13 +21,15 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [x] Make Traditional Kult Intrigue Map Theme
 - - - [x] Replace session time with scene time
 - - - [ ] Populate hub and links with more properties related to Kult
+- - - [ ] Add Kult Influences to map
 - - [ ] Help
+- - - [x] Interaction
 - - - [ ] Shortcuts
 - - - [ ] Guide
-- - - [ ] About
 - - [ ] Timeline
 - - - [ ] Set date and/or time
 - - - [x] Jump forward
+- - - [x] Hide on smaller devices
 - - - [ ] Display past/upcoming events same day (hub-less, hubs and links)
 - - [ ] Event (hub-less)
 - - - [ ] Add
@@ -37,7 +39,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [x] Delete
 - - - [ ] Wizard
 - - - - [ ] Quick
-- - - - [ ] Character creation
+- - - - [ ] Kult Character Creation
 - - [x] Link
 - - - [x] Add
 - - - [x] Edit
