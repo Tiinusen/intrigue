@@ -17,10 +17,14 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - [ ] Intrigue Map
 - - [ ] Other
 - - - [x] Replace current hub types with the ones from the Kult book
-- - - [ ] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
+- - - [x] Recreate Intrigue Map from Kult book and use as welcome page for new visitors
 - - - [x] Make Traditional Kult Intrigue Map Theme
 - - - [x] Replace session time with scene time
 - - - [ ] Populate hub and links with more properties related to Kult
+- - [ ] Help
+- - - [ ] Shortcuts
+- - - [ ] Guide
+- - - [ ] About
 - - [ ] Timeline
 - - - [ ] Set date and/or time
 - - - [x] Jump forward
