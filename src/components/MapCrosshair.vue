@@ -61,7 +61,7 @@
           absolute
           flat
           color="red"
-          title="Group / Organization"
+          title="Group / Organization / Influence"
           style="left:-25px;top:100px;"
           :onclick="proxy(displayGroupOrganizationButtons)"
         >
@@ -172,8 +172,22 @@
           <v-icon class="fas fa-guitar" style="color:red !important"></v-icon>
         </v-btn>
       </v-sheet>
-      <!-- Group / Organization -->
+      <!-- Group / Organization / Influence -->
       <v-sheet height="0" width="0" class="cursor-sheet" v-show="showGroupOrganizationButtons">
+        <!-- Right -->
+        <v-btn
+          fab
+          dark
+          large
+          absolute
+          flat
+          color="red"
+          title="Add Influence"
+          style="left:100px;top:38px;"
+          :onclick="proxy(onInfluenceClick)"
+        >
+          <v-icon class="fas fa-ankh" style="color:red !important"></v-icon>
+        </v-btn>
         <!-- Bottom -->
         <v-btn
           fab
@@ -295,6 +309,10 @@ export default {
     onEventClick() {
       this.displayDefaultButtons();
       this.$emit("click:event");
+    },
+    onInfluenceClick() {
+      this.displayDefaultButtons();
+      this.$emit("click:influence");
     },
     onEventDarkSecretClick() {
       this.displayDefaultButtons();

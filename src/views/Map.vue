@@ -74,6 +74,7 @@
         @click:group="createGroupHub"
         @click:contact="createContactHub"
         @click:object="createObjectHub"
+        @click:influence="createInfluenceHub"
         @click:organization="createOrganizationHub"
         @click:event="createEventHub"
         @click:event-dark-secret="createEventDarkSecretHub"

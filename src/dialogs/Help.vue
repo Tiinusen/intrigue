@@ -97,7 +97,7 @@
                               <v-icon class="fas fa-users" style="color:red !important"></v-icon>
                             </v-list-tile-avatar>
                             <v-list-tile-content>
-                              <v-list-tile-title>Group / Organization</v-list-tile-title>
+                              <v-list-tile-title>Group / Organization / Influence</v-list-tile-title>
                               <v-list-tile-sub-title>Opens sub menu</v-list-tile-sub-title>
                             </v-list-tile-content>
                           </v-list-tile>
@@ -223,7 +223,7 @@
                           </v-list-tile>
                           <v-list-tile>
                             <v-list-tile-content>
-                              <v-list-tile-title>Group / Organization</v-list-tile-title>
+                              <v-list-tile-title>Group / Organization / Influence</v-list-tile-title>
                               <v-list-tile-sub-title>These sub options belongs to
                                 <br class="hidden-md-and-up">Group / Organization
                               </v-list-tile-sub-title>
@@ -250,6 +250,15 @@
                             <v-list-tile-content>
                               <v-list-tile-title>Group</v-list-tile-title>
                               <v-list-tile-sub-title>Creates Group Hub</v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </v-list-tile>
+                          <v-list-tile avatar>
+                            <v-list-tile-avatar>
+                              <v-icon class="fas fa-ankh" style="color:red !important"></v-icon>
+                            </v-list-tile-avatar>
+                            <v-list-tile-content>
+                              <v-list-tile-title>Influence</v-list-tile-title>
+                              <v-list-tile-sub-title>Creates Influence Hub</v-list-tile-sub-title>
                             </v-list-tile-content>
                           </v-list-tile>
                         </v-list>

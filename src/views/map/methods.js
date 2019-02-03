@@ -144,6 +144,16 @@ export default {
         this.selectedHub = hub;
         this.$root.UpdateModifiedOnSession();
     },
+    async createInfluenceHub() {
+        let hub = new Hub({
+            hubType: "Influence",
+            created: new Date(this.activeScene.time.getTime()),
+        });
+        await this.$store.dispatch(hub);
+        this.addHubToActiveScene(hub);
+        this.selectedHub = hub;
+        this.$root.UpdateModifiedOnSession();
+    },
     async createPCHub() {
         let hub = new Hub({
             hubType: "PC",
