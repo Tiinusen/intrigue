@@ -203,7 +203,12 @@ export default {
 .hub-icon {
   width: 100%;
   height: 100%;
+  max-width: 125px;
+  max-height: 125px;
 }
 @media screen and (min-width: 500px) {
+ .hub-icon {
+  margin-top:60px;
+} 
 }
 </style>
