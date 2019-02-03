@@ -26,7 +26,6 @@
             @click="onPreferencesClick"
             v-shortkey="['ctrl', 'p']"
             @shortkey.native="onPreferencesClick()"
-            v-show="isSignedIn"
           >
             <v-list-tile-title>Preferences</v-list-tile-title>
           </v-list-tile>
@@ -170,11 +169,10 @@ export default {
       }
     },
     async onPreferencesClick() {
-      if (!this.isSignedIn) {
-        return;
-      }
       await this.$root.Preferences.open();
-      await this.$store.dispatch("google/saveUserData");
+      if (this.isSignedIn) {
+        await this.$store.dispatch("google/saveUserData");
+      }
     },
     async onQuickLoad() {
       if (!this.isFileLoaded) {
