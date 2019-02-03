@@ -53,7 +53,7 @@ export default {
         this.reject = reject;
         this.link.hubA = link.hubA;
         this.link.hubB = link.hubB;
-        this.hubA = Vue.nextTick(() => {
+        Vue.nextTick(() => {
           this.dialog = true;
         });
       });

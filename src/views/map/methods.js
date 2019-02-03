@@ -149,6 +149,10 @@ export default {
             hubType: "Influence",
             created: new Date(this.activeScene.time.getTime()),
         });
+        hub.influence = await this.$root.InfluenceSelector.open();
+        if(typeof hub.influence === 'undefined' || hub.influence === null){
+            return;
+        }
         await this.$store.dispatch(hub);
         this.addHubToActiveScene(hub);
         this.selectedHub = hub;

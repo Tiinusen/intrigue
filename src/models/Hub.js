@@ -17,6 +17,7 @@ export class Hub {
         this.hubType = "PC"
         this.name = "";
         this.useAvatar = false;
+        this.influence = null;
         this.created = null;
         this.expired = null;
         this.Copy(source, inspire);
@@ -29,6 +30,7 @@ export class Hub {
             useAvatar: this.useAvatar,
             name: this.name,
             hubType: this.hubType,
+            influence: this.influence,
             created: this.created === null ? null : this.created.getTime(),
             expired: this.expired === null ? null : this.expired.getTime()
         };
@@ -39,6 +41,10 @@ export class Hub {
     }
 
     get displayName() {
+        if (this.ofType("Influence")) {
+            let parts = this.influence.split(".");
+            return parts[1];
+        }
         if (this.name.length === 0) {
             return "New";
         }
@@ -77,7 +83,9 @@ export class Hub {
     }
 
     get url() {
-        if (this.ofType("PC")) {
+        if (this.ofType("Influence")) {
+            return "/influences/" + this.influence.toLowerCase().replace(/ /g, "_").replace(/\./g, "/") + ".png";
+        } else if (this.ofType("PC")) {
             return this.avatar.url;
         } else {
             return "/iconsets/default/" + this.hubType.replace(/\./g, '/').replace(/ /g, '_').toLowerCase() + ".png";
@@ -95,6 +103,7 @@ export class Hub {
         }
         Copy(this, source, [
             "hubType",
+            "influence"
         ]);
         if ('avatar' in source) {
             this.avatar.Copy(source.avatar, sibling);

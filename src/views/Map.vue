@@ -4,6 +4,7 @@
     <avatar-designer ref="AvatarDesigner"/>
     <sub-type-selector ref="SubTypeSelector"/>
     <link-type-selector ref="LinkTypeSelector"/>
+    <influence-selector ref="InfluenceSelector"/>
     <hub-form ref="HubForm"/>
     <link-form ref="LinkForm"/>
     <!-- Map -->
@@ -97,22 +98,23 @@ import {
   LControlAttribution
 } from "vue2-leaflet";
 
-import Avatar from "../components/Avatar";
-import StoryMode from "../components/StoryMode";
-import MapHub from "../components/MapHub";
-import MapLink from "../components/MapLink";
-import MapCrosshair from "../components/MapCrosshair";
+import Avatar from "../components/Avatar"
+import StoryMode from "../components/StoryMode"
+import MapHub from "../components/MapHub"
+import MapLink from "../components/MapLink"
+import MapCrosshair from "../components/MapCrosshair"
 
-import AvatarDesigner from "../dialogs/AvatarDesigner";
-import SubTypeSelector from "../dialogs/SubTypeSelector";
-import LinkTypeSelector from "../dialogs/LinkTypeSelector";
-import HubForm from "../dialogs/HubForm";
-import LinkForm from "../dialogs/LinkForm";
+import AvatarDesigner from "../dialogs/AvatarDesigner"
+import SubTypeSelector from "../dialogs/SubTypeSelector"
+import LinkTypeSelector from "../dialogs/LinkTypeSelector"
+import InfluenceSelector from "../dialogs/InfluenceSelector"
+import HubForm from "../dialogs/HubForm"
+import LinkForm from "../dialogs/LinkForm"
 
-import methods from "./map/methods";
-import data from "./map/data";
-import computed from "./map/computed";
-import watch from "./map/watch";
+import methods from "./map/methods"
+import data from "./map/data"
+import computed from "./map/computed"
+import watch from "./map/watch"
 
 export default {
   components: {
@@ -126,6 +128,7 @@ export default {
     AvatarDesigner,
     SubTypeSelector,
     LinkTypeSelector,
+    InfluenceSelector,
     LControlAttribution,
     HubForm,
     LinkForm,
@@ -142,6 +145,7 @@ export default {
       this.$root.AvatarDesigner = this.$refs.AvatarDesigner;
       this.$root.SubTypeSelector = this.$refs.SubTypeSelector;
       this.$root.LinkTypeSelector = this.$refs.LinkTypeSelector;
+      this.$root.InfluenceSelector = this.$refs.InfluenceSelector;
       this.$root.HubForm = this.$refs.HubForm;
       this.$root.LinkForm = this.$refs.LinkForm;
       this.$root.Leaflet = this.$refs.Map;

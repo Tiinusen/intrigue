@@ -91,7 +91,7 @@
           color="red"
           title="Edit"
           style="left:-25px;top:-25px;"
-          v-show="showMenu"
+          v-show="showMenu && !this.hubP.hub.ofType('Influence')"
           :onclick="proxy(onEditClick)"
         >
           <v-icon class="fas fa-edit" style="color:red !important"></v-icon>

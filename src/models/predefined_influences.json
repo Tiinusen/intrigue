@@ -1,0 +1,26 @@
+{
+    "Archons": {
+        "Kether": "Hierarchy",
+        "Binah": "Community",
+        "Chokmah": "Submission",
+        "Geburah": "Law",
+        "Chesed": "Safety",
+        "Tiphareth": "Allure",
+        "Hod": "Honor",
+        "Netzach": "Victory",
+        "Yesod": "Avarice",
+        "Malkuth": "Conformity"
+    },
+    "Death Angels": {
+        "Thaumiel": "Power",
+        "Sathariel": "Exclusion",
+        "Chagidiel": "Abuse",
+        "Golab": "Torment",
+        "Gamichicoth": "Fear",
+        "Togarini": "Compulsion",
+        "Samael": "Vengence",
+        "Hareb-Seraph": "Conflict",
+        "Gamaliel": "Lust",
+        "Nahemoth": "Discord"
+    }
+}

@@ -21,7 +21,7 @@ Code of conduct, Visions and Credits and so on will soon be created aswell when 
 - - - [x] Make Traditional Kult Intrigue Map Theme
 - - - [x] Replace session time with scene time
 - - - [ ] Populate hub and links with more properties related to Kult
-- - - [ ] Add Kult Influences to map
+- - - [x] Add Kult Influences to map
 - - [ ] Help
 - - - [x] Interaction
 - - - [ ] Shortcuts
