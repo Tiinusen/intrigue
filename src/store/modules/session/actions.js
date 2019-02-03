@@ -1,6 +1,7 @@
 import { Hub } from '../../../models/Hub'
 import { Link } from '../../../models/Link'
 import { Scene } from '../../../models/Scene'
+import exampleIntrigueMapJSON from './example.json'
 
 export default {
     async clear({ commit, state }, filename) {
@@ -26,6 +27,10 @@ export default {
     },
     async deleteScene({ commit, state }, scene) {
         await commit('deleteScene', scene);
+    },
+    async loadExample({ commit, state, dispatch, rootState }) {
+        await dispatch('load', exampleIntrigueMapJSON);
+        rootState.preferences.kultStyle = true;
     },
     async load({ commit, state, dispatch, rootState }, data) {
         if (typeof data !== 'object' || !('hubs' in data) || !('links' in data) || !('version' in data)) {

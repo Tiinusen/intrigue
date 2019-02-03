@@ -1,0 +1,600 @@
+{
+    "version": 3,
+    "hubs": [
+        {
+            "id": "65c1d979-584f-3390-0adf-6d85c0927229",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": true,
+            "name": "The Avenger",
+            "hubType": "PC",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "1676bf73-dd31-9175-9c76-a77931945517",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": true,
+            "name": "The Seeker",
+            "hubType": "PC",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "2948d3d8-ba2d-5521-af37-f8ff1a2d08a1",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": true,
+            "name": "The Artist",
+            "hubType": "PC",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "ed8b072c-825c-2029-cb7d-e6d91dd95078",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "LongHairStraight2",
+                "accessoriesType": null,
+                "clotheType": "CollarSweater",
+                "graphicType": null,
+                "clotheColor": "Black",
+                "eyeType": "Side",
+                "eyebrowType": "AngryNatural",
+                "facialHairColor": "Platinum",
+                "facialHairType": "BeardLight",
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": "Pale"
+            },
+            "useAvatar": true,
+            "name": "The Detective",
+            "hubType": "PC",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "bda83789-c42b-acd5-4535-5ef87b614928",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Captain Ramirez",
+            "hubType": "Leader",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "371f62cf-cd6e-0391-7ff9-1310e7e4c81d",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Dr Masrov",
+            "hubType": "Monster",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "0b9b66e4-4520-8e41-e874-8cf5b8b798bf",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Medical Experiment",
+            "hubType": "Event.Dark Secret",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "9b2bd900-e4b1-9e66-b06a-99d200efbd61",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Occult Experience",
+            "hubType": "Event.Dark Secret",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "a5e0a787-a760-936d-a29c-3cedfd9d9090",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Sister",
+            "hubType": "Contact",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "7ce4484a-3a99-c35b-c265-d68972a95856",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "The House on 33rd Lewis St.",
+            "hubType": "Place.Building",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "0f977fec-d005-2576-85f3-03ff6152fd4d",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Entity",
+            "hubType": "Monster",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "de9c2992-fd1d-f37a-25d1-da14b325a99e",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Pact with Dark Forces",
+            "hubType": "Event.Dark Secret",
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "e62e64ba-8ae5-46cb-bdc5-87104a395afd",
+            "avatar": {
+                "avatarStyle": "Circle",
+                "topType": "NoHair",
+                "accessoriesType": null,
+                "clotheType": null,
+                "graphicType": null,
+                "clotheColor": null,
+                "eyeType": null,
+                "eyebrowType": null,
+                "facialHairColor": null,
+                "facialHairType": null,
+                "hairColor": null,
+                "hatColor": null,
+                "mouthType": null,
+                "skinColor": null
+            },
+            "useAvatar": false,
+            "name": "Forbidden Knowledge",
+            "hubType": "Event.Dark Secret",
+            "created": 1542782700000,
+            "expired": null
+        }
+    ],
+    "links": [
+        {
+            "id": "d358fb71-09ca-9344-d8f3-8a7d2050df6f",
+            "hubA": "Hub#65c1d979-584f-3390-0adf-6d85c0927229",
+            "hubB": "Hub#1676bf73-dd31-9175-9c76-a77931945517",
+            "AtoB": "gets help from",
+            "BtoA": "looks up to and helps",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "299e5c63-66cc-0eac-61fb-922660defb7a",
+            "hubA": "Hub#65c1d979-584f-3390-0adf-6d85c0927229",
+            "hubB": "Hub#bda83789-c42b-acd5-4535-5ef87b614928",
+            "AtoB": "wanted by",
+            "BtoA": "wanted",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "32707df8-ef27-107e-1eb3-7ea939482251",
+            "hubA": "Hub#65c1d979-584f-3390-0adf-6d85c0927229",
+            "hubB": "Hub#ed8b072c-825c-2029-cb7d-e6d91dd95078",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "dd3746db-185b-f71a-b3ce-f38a21b82506",
+            "hubA": "Hub#1676bf73-dd31-9175-9c76-a77931945517",
+            "hubB": "Hub#2948d3d8-ba2d-5521-af37-f8ff1a2d08a1",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "293c841b-eb90-7b93-bdeb-c25f25a3f473",
+            "hubA": "Hub#ed8b072c-825c-2029-cb7d-e6d91dd95078",
+            "hubB": "Hub#2948d3d8-ba2d-5521-af37-f8ff1a2d08a1",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "9c2d841a-8164-e0ea-b585-c9035823cde9",
+            "hubA": "Hub#65c1d979-584f-3390-0adf-6d85c0927229",
+            "hubB": "Hub#0b9b66e4-4520-8e41-e874-8cf5b8b798bf",
+            "AtoB": "victim",
+            "BtoA": "Military 1991-97",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "e12ed6a4-f4ee-5547-9092-113e53265615",
+            "hubA": "Hub#0b9b66e4-4520-8e41-e874-8cf5b8b798bf",
+            "hubB": "Hub#371f62cf-cd6e-0391-7ff9-1310e7e4c81d",
+            "AtoB": "was performed by",
+            "BtoA": "performed",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "d8bacb8f-a614-fcb6-591f-476fd0d89af2",
+            "hubA": "Hub#0b9b66e4-4520-8e41-e874-8cf5b8b798bf",
+            "hubB": "Hub#bda83789-c42b-acd5-4535-5ef87b614928",
+            "AtoB": "was escaped by",
+            "BtoA": "escaped",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "f057bd51-d776-3722-e614-e6e600f37b52",
+            "hubA": "Hub#1676bf73-dd31-9175-9c76-a77931945517",
+            "hubB": "Hub#9b2bd900-e4b1-9e66-b06a-99d200efbd61",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "fa4e87f5-d002-0ff6-f9f6-3b478703bf18",
+            "hubA": "Hub#a5e0a787-a760-936d-a29c-3cedfd9d9090",
+            "hubB": "Hub#9b2bd900-e4b1-9e66-b06a-99d200efbd61",
+            "AtoB": "participated",
+            "BtoA": "was participated by",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "76cf75ee-08f5-9c3b-1641-243fd78a57ae",
+            "hubA": "Hub#9b2bd900-e4b1-9e66-b06a-99d200efbd61",
+            "hubB": "Hub#7ce4484a-3a99-c35b-c265-d68972a95856",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "ff28f97b-85fd-f8a2-93b3-e52778fc84a2",
+            "hubA": "Hub#0f977fec-d005-2576-85f3-03ff6152fd4d",
+            "hubB": "Hub#7ce4484a-3a99-c35b-c265-d68972a95856",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "dd5af18b-1ae4-0401-69cd-b3b5c67200b9",
+            "hubA": "Hub#0f977fec-d005-2576-85f3-03ff6152fd4d",
+            "hubB": "Hub#1676bf73-dd31-9175-9c76-a77931945517",
+            "AtoB": "haunted",
+            "BtoA": "haunted by",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "328a8175-dabb-3ab6-9bc4-60a330e75398",
+            "hubA": "Hub#de9c2992-fd1d-f37a-25d1-da14b325a99e",
+            "hubB": "Hub#2948d3d8-ba2d-5521-af37-f8ff1a2d08a1",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        },
+        {
+            "id": "a794a5d5-d797-0944-81f7-0a1b51707fbe",
+            "hubA": "Hub#e62e64ba-8ae5-46cb-bdc5-87104a395afd",
+            "hubB": "Hub#ed8b072c-825c-2029-cb7d-e6d91dd95078",
+            "AtoB": "",
+            "BtoA": "",
+            "linkType": "Input",
+            "color": "#000000",
+            "linkThickness": 1,
+            "created": 1542782700000,
+            "expired": null
+        }
+    ],
+    "scenes": [
+        {
+            "id": "MAIN",
+            "hubs": [
+                {
+                    "hub": "65c1d979-584f-3390-0adf-6d85c0927229",
+                    "latlng": {
+                        "lat": -0.000037720692489234735,
+                        "lng": -0.00016702692221315377
+                    }
+                },
+                {
+                    "hub": "1676bf73-dd31-9175-9c76-a77931945517",
+                    "latlng": {
+                        "lat": -0.000042915344236620943,
+                        "lng": 0.0001502037048339844
+                    }
+                },
+                {
+                    "hub": "2948d3d8-ba2d-5521-af37-f8ff1a2d08a1",
+                    "latlng": {
+                        "lat": -0.00025346875189992787,
+                        "lng": 0.00014215707778930667
+                    }
+                },
+                {
+                    "hub": "ed8b072c-825c-2029-cb7d-e6d91dd95078",
+                    "latlng": {
+                        "lat": -0.00024898705304821637,
+                        "lng": -0.00017033724702741893
+                    }
+                },
+                {
+                    "hub": "bda83789-c42b-acd5-4535-5ef87b614928",
+                    "latlng": {
+                        "lat": 0.00017970800399880158,
+                        "lng": -0.0002239644527435303
+                    }
+                },
+                {
+                    "hub": "371f62cf-cd6e-0391-7ff9-1310e7e4c81d",
+                    "latlng": {
+                        "lat": 0.00035673379898440465,
+                        "lng": -0.00031784176826477056
+                    }
+                },
+                {
+                    "hub": "0b9b66e4-4520-8e41-e874-8cf5b8b798bf",
+                    "latlng": {
+                        "lat": 0.00023335218430093886,
+                        "lng": -0.0005592405796051026
+                    }
+                },
+                {
+                    "hub": "9b2bd900-e4b1-9e66-b06a-99d200efbd61",
+                    "latlng": {
+                        "lat": 0.0001260638236966643,
+                        "lng": 0.00022798776626586917
+                    }
+                },
+                {
+                    "hub": "a5e0a787-a760-936d-a29c-3cedfd9d9090",
+                    "latlng": {
+                        "lat": 0.00021860003471562472,
+                        "lng": 0.0004613399505615235
+                    }
+                },
+                {
+                    "hub": "7ce4484a-3a99-c35b-c265-d68972a95856",
+                    "latlng": {
+                        "lat": 0.000048279762263018,
+                        "lng": 0.0004224479198455811
+                    }
+                },
+                {
+                    "hub": "0f977fec-d005-2576-85f3-03ff6152fd4d",
+                    "latlng": {
+                        "lat": -0.00007912516594024555,
+                        "lng": 0.00042781233787536627
+                    }
+                },
+                {
+                    "hub": "de9c2992-fd1d-f37a-25d1-da14b325a99e",
+                    "latlng": {
+                        "lat": -0.0003862380981423107,
+                        "lng": 0.0002789497375488282
+                    }
+                },
+                {
+                    "hub": "e62e64ba-8ae5-46cb-bdc5-87104a395afd",
+                    "latlng": {
+                        "lat": -0.0003889203071555092,
+                        "lng": -0.0004586577415466309
+                    }
+                }
+            ],
+            "time": 1542782700000,
+            "created": null,
+            "expired": null
+        }
+    ]
+}
