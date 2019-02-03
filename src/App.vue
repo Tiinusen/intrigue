@@ -3,6 +3,7 @@
     <save-load ref="SaveLoad"/>
     <privacy-policy ref="PrivacyPolicy"/>
     <preferences ref="Preferences"/>
+    <welcome ref="Welcome" @click:blank="onBlankClick" @click:example="onExampleClick"/>
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
         <span style="color:red;">Intrigue</span>
@@ -66,6 +67,9 @@
           <v-list-tile @click="onToggleFullscreen">
             <v-list-tile-title>{{ fullscreen ? "Exit" : "Enter" }} Fullscreen</v-list-tile-title>
           </v-list-tile>
+          <v-list-tile @click="onHelpClick">
+            <v-list-tile-title>Help</v-list-tile-title>
+          </v-list-tile>
         </v-list>
       </v-menu>
     </v-toolbar>
@@ -84,6 +88,7 @@ import { mapGetters } from "vuex";
 import SaveLoad from "./dialogs/SaveLoad";
 import PrivacyPolicy from "./dialogs/PrivacyPolicy";
 import Preferences from "./dialogs/Preferences";
+import Welcome from "./dialogs/Welcome";
 
 function launchIntoFullscreen(element) {
   if (element.requestFullscreen) {
@@ -112,7 +117,8 @@ export default {
   components: {
     SaveLoad,
     PrivacyPolicy,
-    Preferences
+    Preferences,
+    Welcome
   },
   data() {
     return {
@@ -146,6 +152,15 @@ export default {
     })
   },
   methods: {
+    onBlankClick(){
+      
+    },
+    onExampleClick(){
+      this.$store.dispatch("session/loadExample");
+    },
+    onHelpClick(){
+      alert("The help dialog hasn't been implemented yet, feel free to experiment a bit, hover of for tooltips and such");
+    },
     onToggleFullscreen() {
       this.fullscreen = !this.fullscreen;
       if (this.fullscreen) {
@@ -220,6 +235,7 @@ export default {
       this.$root.SaveLoad = this.$refs.SaveLoad;
       this.$root.PrivacyPolicy = this.$refs.PrivacyPolicy;
       this.$root.Preferences = this.$refs.Preferences;
+      this.$root.Welcome = this.$refs.Welcome;
     });
     this.$root.UpdateModifiedOnSession = () => {
       this.$store.commit("google/setSessionLastModified", new Date());
@@ -235,6 +251,8 @@ export default {
       } else if (this.hasFiles && !this.isFileLoaded) {
         await this.$root.SaveLoad.open();
       }
+    }else{
+      this.$root.Welcome.open();
     }
   }
 };
